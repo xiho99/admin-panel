@@ -7,31 +7,32 @@ use Illuminate\Support\Facades\Auth;
 
 class BaseResponseController extends Controller
 {
+    public function getMsecTime()
+    {
+        list($msec, $sec) = explode(' ', microtime());
+        $msecTime = sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
+        return (float)$msecTime;
+    }
     public function responseSuccess($result, $errorCode = 0, $status = 200): Response
     {
         $response = [
             'code' => $errorCode,
             'message' => 'Success',
             'data' => $result,
+            'server_time' => $this->getMsecTime(),
         ];
         return Response($response, $status);
     }
 
-    public function responseFail($errorMessage = 'Failed', $errorCode = 1, $status = 200): Response
+    public function responseFail($message = 'error', $code = -10001, $data = []): Response
     {
         $response = [
-            'message' => $errorMessage,
-            'errorCode' => $errorCode,
+            'message' => $message,
+            'code' => $code,
+            'data' => $data,
+            'server_time' => $this->getMsecTime(),
         ];
-        return Response($response, $status);
-    }
-    public function responseUnAuthorize() : Response
-    {
-        $response = [
-            'message' => 'Unauthorize',
-            'errorCode' => 1,
-        ];
-        return Response($response, 200);
+        return Response($response);
     }
     public function createdBy() {
         return auth()->user()->name;

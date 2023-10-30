@@ -22,9 +22,7 @@ class BaseModel extends Model
     // 分页
     protected $page = 1;
     protected $pageSize = 20;
-
     // 验证数据
-
     // 数组转为条件
     // $where = [
     // ['id' , '=', 1],
@@ -115,7 +113,7 @@ class BaseModel extends Model
    /**
      * 获取列表数据
      * @param array $condition
-     * @param bool $field
+     * @param array|bool $field
      * @param string $order
      * @param string $alias
      * @param array $join
@@ -123,7 +121,7 @@ class BaseModel extends Model
      * @param null $limit
      * @return array
      */
-    public static function getList($condition = [], $field = ['*'], $order = 'id desc', $limit = null, $from = null, $join = [], $group = '',$cache = true)
+    public static function getList(array $condition = [], array|bool $field = ['*'], string $order = 'id desc', $limit = null, $from = null, array $join = [], string $group = '', $cache = true)
     {
         $model = self::initBase();
         if($cache){
@@ -175,16 +173,16 @@ class BaseModel extends Model
     /**
      * 获取分页列表数据
      * @param unknown $where
-     * @param string $field
+     * @param array|string $field
      * @param string $order
-     * @param number $page
+     * @param int $page
      * @param string $list_rows
      * @param string $alias
      * @param unknown $join
      * @param string $group
      * @param string $limit
      */
-    public static function pageList($condition = [], $field = ['*'],$page = 0,$pageSize = 0, $order = 'id desc',  $join = [], $group = null, $limit = null){
+    public static function pageList(array $condition = [], array|string $field = ['*'], int $page = 0, $pageSize = 0, string $order = 'id desc', array $join = [], $group = null, $limit = null){
         $model = self::initBase();
         // 首先尝试从 Redis 缓存获取数据
         $result = Redis::get('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []),$field]).$page.$pageSize);
