@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http;
+namespace App\Models;
 
-use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-class Admin extends BaseModel
+class AdminUser extends BaseModel
 {
     use HasFactory;
+    protected $table = 'admins';
+
     protected $fillable = [
         'username',
         'password' ,
@@ -21,8 +21,12 @@ class Admin extends BaseModel
         'username' => 'required',
         'password' => 'required',
     ];
+    protected $hidden = [
+        'password'
+    ];
     protected static $initBase;
-    public static function initBase(){
+    public static function initBase(): static
+    {
         if(!self::$initBase){
             self::$initBase = new static();
         }

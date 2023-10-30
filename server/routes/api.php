@@ -22,6 +22,13 @@ Route::prefix('auth')->controller(\App\Http\Controllers\API\AdminController::cla
 
 });
 
+//Route::controller(\App\Http\Controllers\MonthlyController::class)->group(function () {
+//    Route::post('getMonthly', 'get');
+//    Route::post('storeMonthly', 'store');
+//    Route::put('updateMonthly/{id}', 'update');
+//});
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

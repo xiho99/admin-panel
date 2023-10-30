@@ -9,4 +9,13 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+    protected $uid = 0;
+
+    public function __construct(Request $request) {
+        $this->user =  auth('admin')->user();
+        if ($this->user) {
+            $this->uid = $this->user->id;
+        }
+    }
+
 }
