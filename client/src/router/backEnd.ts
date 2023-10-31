@@ -9,7 +9,7 @@ import { dynamicRoutes, notFoundAndNoPower } from '/@/router/route';
 import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/index';
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-import { useMenuApi } from '/@/api/menu/index';
+import { useMenuApi } from '/@/api/menu';
 
 // 后端控制路由
 
@@ -21,9 +21,9 @@ const menuApi = useMenuApi();
  * @method import.meta.glob
  * @link 参考：https://cn.vitejs.dev/guide/features.html#json
  */
-const layouModules: any = import.meta.glob('../layout/routerView/*.{vue,tsx}');
+const layoutModules: any = import.meta.glob('../layout/routerView/*.{vue,tsx}');
 const viewsModules: any = import.meta.glob('../views/**/*.{vue,tsx}');
-const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...layouModules }, { ...viewsModules });
+const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...layoutModules }, { ...viewsModules });
 
 /**
  * 后端控制路由：初始化方法，防止刷新时路由丢失
@@ -107,13 +107,13 @@ export async function setAddRoute() {
  * @returns 返回后端路由菜单数据
  */
 export function getBackEndControlRoutes() {
-	// 模拟 admin 与 test
+	// Simulate admin and test
 	const stores = useUserInfo(pinia);
 	const { userInfos } = storeToRefs(stores);
 	const auth = userInfos.value.roles[0];
-	// 管理员 admin
+	// administrator admin
 	if (auth === 'admin') return menuApi.getAdminMenu();
-	// 其它用户 test
+	// other users test
 	else return menuApi.getTestMenu();
 }
 

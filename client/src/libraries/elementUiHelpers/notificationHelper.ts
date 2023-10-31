@@ -1,14 +1,21 @@
 import enumMessageStatus from '../../models/enums/enumMessageType';
-import { ElNotification } from 'element-plus';
+import { ElNotification, ElMessage } from 'element-plus';
 
-const notification = ( message: string, type: enumMessageStatus, title?:string ): void => {
-  ElNotification( {
-    title,
-    message: message,
-    type,
-    duration: 3000,
-  } );
+const notification = (message: string, type: enumMessageStatus, title?: string): void => {
+    ElNotification({
+        title,
+        message: message,
+        type,
+        duration: 3000,
+    });
 };
-export default {
-  notification,
+const messageNotification = (message: string, type: enumMessageStatus) => {
+    ElMessage({
+        message: message,
+        type: type,
+    });
+}
+export {
+    notification,
+    messageNotification
 };

@@ -7,18 +7,18 @@ import request from '/@/utils/request';
  * @method signIn 用户登录
  * @method signOut 用户退出登录
  */
-export function useLoginApi() {
+export default function useLoginApi() {
 	return {
 		signIn: (data: object) => {
 			return request({
-				url: '/user/signIn',
+				url: '/auth/login',
 				method: 'post',
 				data,
 			});
 		},
 		signOut: (data: object) => {
 			return request({
-				url: '/user/signOut',
+				url: '/auth/logout',
 				method: 'post',
 				data,
 			});
