@@ -18,7 +18,7 @@ class AuthController extends BaseResponseController
     {
         $credentials = request(['username', 'password']);
         if (!$token = auth()->attempt($credentials)) {
-            return $this->responseFail(null, null, 401);
+            return $this->fail(null, null, 401);
         }
         return $this->responseToken($token);
     }
@@ -39,12 +39,12 @@ class AuthController extends BaseResponseController
     }
     public function me(): Response
     {
-        return $this->responseSuccess(auth()->user());
+        return $this->success(auth()->user());
     }
     public function logout(): Response
     {
         auth()->logout();
-        return $this->responseSuccess(null);
+        return $this->success(null);
     }
 
     public function refresh(): Response
@@ -59,6 +59,6 @@ class AuthController extends BaseResponseController
             'expires_in' => auth()->factory()->getTTL() * 60,
 //                'expires_at' => Carbon::parse($token->token->expires_at)->toDateString(),
         ];
-        return $this->responseSuccess($data, 0, 200);
+        return $this->success($data, 0, 200);
     }
 }

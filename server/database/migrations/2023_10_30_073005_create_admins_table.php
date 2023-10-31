@@ -21,8 +21,6 @@ return new class extends Migration
             $table->string('describe')->nullable();
             $table->boolean('status')->default(0);
             $table->date('overdue_time')->nullable();
-            $table->string('create_time')->nullable();
-            $table->string('update_time')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->timestamps();

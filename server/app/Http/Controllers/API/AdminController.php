@@ -25,16 +25,16 @@ class AdminController extends BaseResponseController
             'password' => 'required',
         ]);
         if ($validator->fails()) {
-            return $this->responseFail('Username and password are required');
+            return $this->fail('Username and password are required');
         }
         $credentials = $request->only('username', 'password');
         if (!$token = auth('admin')->attempt($credentials)) {
-            return $this->responseFail( 'Account password is wrong');
+            return $this->fail( 'Account password is wrong');
         }
         $user = auth('admin')->user();
         if ($user->status !== 0) {
             auth('admin')->logout();
-            return $this->responseFail('User has been disabled');
+            return $this->fail('User has been disabled');
         }
         // Add log to database
         $from = [
@@ -48,29 +48,29 @@ class AdminController extends BaseResponseController
         ];
         OperationLog::saveInfo($from);
 
-        return $this->responseSuccess(['access_token' => 'Bearer '.$token,'userName'=>$user['nickname']]);
+        return $this->success(['access_token' => 'Bearer '.$token,'userName'=>$user['nickname']]);
     }
 
     public function logout(): Response
     {
         auth('admin')->logout();
 
-        return $this->responseSuccess(null);
+        return $this->success(null);
     }
     public function saveAdmin(Request $request){
         $data = $request->all();
         $fail = AdminUser::getNotPassValidator($data);
         if($fail){
-            return $this->responseFail('Username and password are required!');
+            return $this->fail('Username and password are required!');
         }
         if(!$data['nickname'] ){
-            return $this->responseFail('Required for nickname');
+            return $this->fail('Required for nickname');
         }
         if(!isset($data['id']) || !AdminUser::getInfo([['id' , '=' , $data['id'] ] ])){
             $info = AdminUser::getInfo([['username' , '=' , $data['username'] ] ]);
 
             if($info){
-                return $this->responseFail('Cannot add role with same name');
+                return $this->fail('Cannot add role with same name');
             }
         }
         $from = [
@@ -84,6 +84,6 @@ class AdminController extends BaseResponseController
             'nickname' =>  $data['nickname'] ?? '',
         ];
         $id = AdminUser::saveInfo($from);
-        return $this->responseSuccess($id);
+        return $this->success($id);
     }
 }

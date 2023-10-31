@@ -13,34 +13,45 @@ class BaseResponseController extends Controller
         $msecTime = sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
         return (float)$msecTime;
     }
-    public function responseSuccess($result, $errorCode = 0, $status = 200): Response
+
+    public function success($result, $errorCode = 0, $status = 200): Response
     {
         $response = [
-            'code' => $errorCode,
-            'message' => 'Success',
-            'data' => $result,
-            'server_time' => $this->getMsecTime(),
+            'data' => [
+                'code' => $errorCode,
+                'message' => 'Success',
+                'data' => $result,
+                'server_time' => $this->getMsecTime(),
+            ],
         ];
         return Response($response, $status);
     }
 
-    public function responseFail($message = 'error', $code = -10001, $data = []): Response
+    public function fail($message = 'error', $code = 1, $data = []): Response
     {
         $response = [
-            'message' => $message,
-            'code' => $code,
-            'data' => $data,
-            'server_time' => $this->getMsecTime(),
+            'data' => [
+                'message' => $message,
+                'code' => $code,
+                'data' => $data,
+                'server_time' => $this->getMsecTime(),
+            ],
         ];
         return Response($response);
     }
-    public function createdBy() {
+
+    public function createdBy()
+    {
         return auth()->user()->name;
     }
-    public function getUser() {
+
+    public function getUser()
+    {
         return auth()->user();
     }
-    public function getAuthId() {
+
+    public function getAuthId()
+    {
         return auth()->user()->id;
     }
 }

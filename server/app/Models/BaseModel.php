@@ -15,8 +15,8 @@ class BaseModel extends Model
     protected $rules = []; // 添加字段时，需要的规则
     protected $customAttributes = []; // 缺少字段放回的提示（未使用）
 
-    const CREATED_AT = 'create_time';
-    const UPDATED_AT = 'update_time';
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
     // 分页
     protected $page = 1;
     protected $pageSize = 20;

@@ -4,7 +4,7 @@ namespace App\Models;
 
 class OperationLog extends BaseModel
 {
-    protected $fillable = ['id', 'controller', 'method', 'parameters', 'start_time', 'end_time', 'nickname', 'admin_id', 'create_time', 'update_time'];
+    protected $fillable = ['id', 'controller', 'method', 'parameters', 'start_time', 'end_time', 'nickname', 'admin_id'];
     protected static $initBase;
     public static function initBase(): static
     {
