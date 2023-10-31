@@ -17,25 +17,21 @@ class BaseResponseController extends Controller
     public function success($result, $errorCode = 0, $status = 200): Response
     {
         $response = [
-            'data' => [
-                'code' => $errorCode,
-                'message' => 'Success',
-                'data' => $result,
-                'server_time' => $this->getMsecTime(),
-            ],
+            'code' => $errorCode,
+            'message' => 'Success',
+            'data' => $result,
+            'server_time' => $this->getMsecTime(),
         ];
         return Response($response, $status);
     }
 
-    public function fail($message = 'error', $code = 1, $data = []): Response
+    public function error($message = 'error', $code = 1, $data = []): Response
     {
         $response = [
-            'data' => [
-                'message' => $message,
-                'code' => $code,
-                'data' => $data,
-                'server_time' => $this->getMsecTime(),
-            ],
+            'message' => $message,
+            'code' => $code,
+            'data' => $data,
+            'server_time' => $this->getMsecTime(),
         ];
         return Response($response);
     }

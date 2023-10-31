@@ -25,16 +25,16 @@ class AdminController extends BaseResponseController
             'password' => 'required',
         ]);
         if ($validator->fails()) {
-            return $this->fail('Username and password are required');
+            return $this->error('Username and password are required');
         }
         $credentials = $request->only('username', 'password');
         if (!$token = auth('admin')->attempt($credentials)) {
-            return $this->fail( 'Account password is wrong');
+            return $this->error( 'Account password is wrong');
         }
         $user = auth('admin')->user();
         if ($user->status !== 0) {
             auth('admin')->logout();
-            return $this->fail('User has been disabled');
+            return $this->error('User has been disabled');
         }
         // Add log to database
         $from = [
@@ -61,16 +61,16 @@ class AdminController extends BaseResponseController
         $data = $request->all();
         $fail = AdminUser::getNotPassValidator($data);
         if($fail){
-            return $this->fail('Username and password are required!');
+            return $this->error('Username and password are required!');
         }
         if(!$data['nickname'] ){
-            return $this->fail('Required for nickname');
+            return $this->error('Required for nickname');
         }
         if(!isset($data['id']) || !AdminUser::getInfo([['id' , '=' , $data['id'] ] ])){
             $info = AdminUser::getInfo([['username' , '=' , $data['username'] ] ]);
 
             if($info){
-                return $this->fail('Cannot add role with same name');
+                return $this->error('Cannot add role with same name');
             }
         }
         $from = [

@@ -11,7 +11,7 @@
 			@selection-change="onSelectionChange"
 		>
 			<el-table-column type="selection" :reserve-selection="true" width="30" v-if="config.isSelection" />
-			<el-table-column type="index" label="序号" width="60" v-if="config.isSerialNo" />
+			<el-table-column type="index" label="序号" width="60" />
 			<el-table-column
 				v-for="(item, index) in setHeader"
 				:key="index"
@@ -31,18 +31,35 @@
 							fit="cover"
 						/>
 					</template>
+					<template v-else-if="item.type === 'switch'">
+						<el-switch @change="item?.fun && item?.fun(scope.row,$event)" v-model="scope.row[item.key]" inline-prompt :active-text="item.activeText || '是'" :inactive-text="item.activeText || '否'" :active-value="item.activeValue || 1" :inactive-value="item.inactiveValue || 0"></el-switch>
+					</template>
+					<template v-else-if="item.type === 'date'">
+							<div v-if="scope.row[item.key]">{{dayjs(scope.row[item.key]).format('YYYY-MM-DD')}}</div>
+					</template>
+					<template v-else-if="item.type === 'tag'">
+						<el-tag type="success" v-if="scope.row[item.key] == item.activeValue">是</el-tag>
+						<el-tag type="info" v-else>否</el-tag>
+					</template>
 					<template v-else>
-						{{ scope.row[item.key] }}
+						<div @click="item?.fun && item?.fun(scope.row)" :class="{haveFun:item?.fun}" :style="{color:item.keyArray ? ['blue','green','red'][scope.row[item.key]] : ''}">
+							{{ (item.keyArray && item.keyArray[scope.row[item.key]])?item.keyArray[scope.row[item.key]]: scope.row[item.key] }}
+						</div>
 					</template>
 				</template>
 			</el-table-column>
-			<el-table-column label="操作" width="100" v-if="config.isOperate">
+			<el-table-column label="操作" min-width="200" v-if="config.isOperate?.length">
 				<template v-slot="scope">
-					<el-popconfirm title="确定删除吗？" @confirm="onDelRow(scope.row)">
-						<template #reference>
-							<el-button text type="primary">删除</el-button>
-						</template>
-					</el-popconfirm>
+					<div style="display: flex;">
+							<div v-for="item in config.isOperate" class="mr10">
+								<el-popconfirm v-if="item.type == 'tip'" :title="item.tipTitle" @confirm="onSystem(scope.row,item.key)">
+									<template #reference>
+										<el-button text type="primary">{{item.label}}</el-button>
+									</template>
+								</el-popconfirm>
+								<el-button v-else text type="primary" @click="onSystem(scope.row,item.key)">{{item.label}}</el-button>
+							</div>
+					</div>
 				</template>
 			</el-table-column>
 			<template #empty>
@@ -51,15 +68,16 @@
 		</el-table>
 		<div class="table-footer mt15">
 			<el-pagination
-				v-model:current-page="state.page.pageNum"
-				v-model:page-size="state.page.pageSize"
-				:pager-count="5"
-				:page-sizes="[10, 20, 30]"
-				:total="config.total"
-				layout="total, sizes, prev, pager, next, jumper"
-				background
 				@size-change="onHandleSizeChange"
 				@current-change="onHandleCurrentChange"
+				class="table-footer ml15"
+				:pager-count="5"
+				:page-sizes="[10, 20, 30]"
+				v-model:current-page="state.page.pageNum"
+				background
+				v-model:page-size="state.page.pageSize"
+				layout="total, sizes, prev, pager, next, jumper"
+				:total="total"
 			>
 			</el-pagination>
 			<div class="table-footer-tool">
@@ -117,6 +135,7 @@ import Sortable from 'sortablejs';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import '/@/theme/tableTool.scss';
+import dayjs from 'dayjs';
 
 // 定义父组件传过来的值
 const props = defineProps({
@@ -135,6 +154,10 @@ const props = defineProps({
 		type: Object,
 		default: () => {},
 	},
+	total: {
+		type: Number,
+		default: () => {},
+	},
 	// 打印标题
 	printName: {
 		type: String,
@@ -143,7 +166,7 @@ const props = defineProps({
 });
 
 // 定义子组件向父组件传值/事件
-const emit = defineEmits(['delRow', 'pageChange', 'sortHeader']);
+const emit = defineEmits(['onSystem', 'pageChange', 'sortHeader']);
 
 // 定义变量内容
 const toolSetRef = ref();
@@ -151,7 +174,7 @@ const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const state = reactive({
 	page: {
-		pageNum: 1,
+		page: 1,
 		pageSize: 10,
 	},
 	selectlist: [] as EmptyObjectType[],
@@ -188,8 +211,8 @@ const onSelectionChange = (val: EmptyObjectType[]) => {
 	state.selectlist = val;
 };
 // 删除当前项
-const onDelRow = (row: EmptyObjectType) => {
-	emit('delRow', row);
+const onSystem = (row: EmptyObjectType,key:string) => {
+	emit('onSystem', row,key);
 };
 // 分页改变
 const onHandleSizeChange = (val: number) => {
@@ -198,12 +221,12 @@ const onHandleSizeChange = (val: number) => {
 };
 // 分页改变
 const onHandleCurrentChange = (val: number) => {
-	state.page.pageNum = val;
+	state.page.page = val;
 	emit('pageChange', state.page);
 };
 // 搜索时，分页还原成默认
 const pageReset = () => {
-	state.page.pageNum = 1;
+	state.page.page = 1;
 	state.page.pageSize = 10;
 	emit('pageChange', state.page);
 };
@@ -241,7 +264,13 @@ const onPrintTable = () => {
 // 导出
 const onImportTable = () => {
 	if (state.selectlist.length <= 0) return ElMessage.warning('请先选择要导出的数据');
-	table2excel(props.header, state.selectlist, `${themeConfig.value.globalTitle} ${new Date().toLocaleString()}`);
+	let data = [];
+	props.header?.forEach(e => {
+		let info = e;
+		info.type = info.type == 'image' ? 'image' : 'text';
+		data.push(e);
+	})
+	table2excel(data, state.selectlist, `${themeConfig.value.globalTitle} ${new Date().toLocaleString()}`);
 };
 // 刷新
 const onRefreshTable = () => {
@@ -297,5 +326,8 @@ defineExpose({
 			}
 		}
 	}
+}
+.haveFun{
+	cursor: pointer;
 }
 </style>

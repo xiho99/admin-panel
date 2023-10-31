@@ -14,15 +14,22 @@ export function useMenuApi() {
 	return {
 		getAdminMenu: (params?: object) => {
 			return request({
-				url: '/gitee/lyt-top/vue-next-admin-images/raw/master/menu/adminMenu.json',
+				url: '/getMenu',
 				method: 'get',
 				params,
 			});
 		},
-		getTestMenu: (params?: object) => {
+		saveMenu: (params?: object) => {
 			return request({
-				url: '/gitee/lyt-top/vue-next-admin-images/raw/master/menu/testMenu.json',
-				method: 'get',
+				url: 'saveMenu',
+				method: 'post',
+				params,
+			});
+		},
+		deleteMenu: (params?: object) => {
+			return request({
+				url: 'deleteMenu',
+				method: 'post',
 				params,
 			});
 		},

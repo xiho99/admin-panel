@@ -29,10 +29,14 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			hmr: true,
 			proxy: {
 				'/api': {
-					target: 'http://192.168.1.117:8000/api',
-					ws: true,
+					target: 'http://192.168.1.117:8000/api/',
 					changeOrigin: true,
-					rewrite: (path) => path.replace(/^\/api/, ''),
+					rewrite: (path) => path.replace(/^\/api/, ''), // 移除/api前缀
+				},
+				'/uploads': {
+					target: 'http://192.168.1.117:8000/api/uploads',
+					changeOrigin: true,
+					rewrite: (path) => path.replace(/^\/uploads/, ''), // 移除/api前缀
 				},
 			},
 		},

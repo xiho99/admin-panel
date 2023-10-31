@@ -12,13 +12,13 @@ class AuthController extends BaseResponseController
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login','register','refresh','logout']]);
     }
     public function login(): Response
     {
         $credentials = request(['username', 'password']);
         if (!$token = auth()->attempt($credentials)) {
-            return $this->fail(null, null, 401);
+            return $this->error(null, null, 401);
         }
         return $this->responseToken($token);
     }

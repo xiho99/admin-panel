@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\API\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,11 +23,13 @@ Route::prefix('auth')->controller(\App\Http\Controllers\API\AdminController::cla
 
 });
 
-//Route::controller(\App\Http\Controllers\MonthlyController::class)->group(function () {
-//    Route::post('getMonthly', 'get');
-//    Route::post('storeMonthly', 'store');
-//    Route::put('updateMonthly/{id}', 'update');
-//});
+Route::controller(MenuController::class)->group(function () {
+    Route::group(['middleware' => 'jwt'], function ($router) {
+        Route::get('getMenu', 'adminMenu');
+        Route::post('addMenu', 'saveMenu');
+        Route::post('deleteMenu', 'deleteMenu');
+    });
+});
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

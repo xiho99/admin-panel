@@ -7,7 +7,7 @@
 				:closable="false"
 				class="mb15"
 			></el-alert>
-			<Editor v-model:get-html="state.editor.htmlVal" v-model:get-text="state.editor.textVal" :disable="state.editor.disable" />
+			<Editor v-model:get-html="state.editor.htmlVal" v-model:get-text="state.editor.textVal"  />
 		</el-card>
 	</div>
 </template>

@@ -119,7 +119,7 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="是否外链">
 								<el-radio-group v-model="state.ruleForm.isLink" :disabled="state.ruleForm.meta.isIframe">
-									<el-radio :label="true">是</el-radio>
+									<el-radio label="1">是</el-radio>
 									<el-radio :label="false">否</el-radio>
 								</el-radio-group>
 							</el-form-item>
@@ -146,7 +146,7 @@
 </template>
 
 <script setup lang="ts" name="systemMenuDialog">
-import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
+import { defineAsyncComponent, reactive, onMounted, ref,watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoutesList } from '/@/stores/routesList';
 import { i18n } from '/@/i18n/index';
@@ -194,7 +194,6 @@ const state = reactive({
 		submitTxt: '',
 	},
 });
-
 // 获取 pinia 中的路由
 const getMenuData = (routes: RouteItems) => {
 	const arr: RouteItems = [];
@@ -240,6 +239,7 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = () => {
+console.log(state.ruleForm,'debugmmg')
 	closeDialog(); // 关闭弹窗
 	emit('refresh');
 	// if (state.dialog.type === 'add') { }
