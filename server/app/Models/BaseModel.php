@@ -168,18 +168,6 @@ class BaseModel extends Model
         return $result;
     }
 
-    /**
-     * 获取分页列表数据
-     * @param unknown $where
-     * @param array|string $field
-     * @param string $order
-     * @param int $page
-     * @param string $list_rows
-     * @param string $alias
-     * @param unknown $join
-     * @param string $group
-     * @param string $limit
-     */
     public static function pageList(array $condition = [], array|string $field = ['*'], int $page = 0, $pageSize = 0, string $order = 'id desc', array $join = [], $group = null, $limit = null){
         $model = self::initBase();
         // 首先尝试从 Redis 缓存获取数据

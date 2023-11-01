@@ -16,13 +16,12 @@ class MenuController extends BaseResponseController
         // 验证信息
         $fail = Menu::getNotPassValidator($data);
         if($fail){
-            return $this->error('缺少必填字段');
+            return $this->error('Missing required fields');
         }
         if(!isset($data['id']) || !Menu::getInfo([['id' , '=' , $data['id'] ] ])){
-
             $info = Menu::getInfo([['name' , '=' , $data['name'] ] ]);
             if($info){
-                return $this->error('无法添加相同名称的路由');
+                return $this->error('Unable to add route with same name');
             }
         }
         $data['component'] = $data['path'] ? $data['path'].'/index' : '';

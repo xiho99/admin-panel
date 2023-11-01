@@ -12,13 +12,12 @@ class RoleController extends BaseResponseController
         // 验证信息
         $fail = Role::getNotPassValidator($data);
         if($fail){
-            return $this->error('缺少必填字段');
+            return $this->error('Missing required fields');
         }
         if(!isset($data['id']) || !Role::getInfo([['id' , '=' , $data['id'] ] ])){
-
             $info = Role::getInfo([['roleName' , '=' , $data['roleName'] ] ]);
             if($info){
-                return $this->error('无法添加相同名称的角色');
+                return $this->error('Cannot add role with same name');
             }
         }
         $from = [

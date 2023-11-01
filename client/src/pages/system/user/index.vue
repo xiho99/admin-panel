@@ -18,7 +18,11 @@
       </div>
       <el-table :data="state.tableData.data" v-loading.lock="state.tableData.loading" style="width: 100%">
         <el-table-column type="index" label="序号" width="60"/>
-        <el-table-column prop="username" label="账户名称" show-overflow-tooltip></el-table-column>
+        <el-table-column label="账户名称" show-overflow-tooltip>
+          <template #default="scope">
+            <div> {{ scope.row }}asdasd</div>
+          </template>
+        </el-table-column>
         <el-table-column prop="nickname" label="用户昵称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="role_ids" center label="关联角色" show-overflow-tooltip>
           <template #default="scope">
@@ -71,7 +75,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="/systemUser">
+<script setup lang="ts" name="systemUser">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { adminList } from '/@/api/admin';
@@ -101,6 +105,7 @@ const getTableData = async () => {
   state.tableData.loading = true;
   let row = await adminList(state.tableData.param);
   state.tableData.data = row.data?.list;
+  console.log(state.tableData.data);
   state.tableData.total = row.data?.count || 0;
   state.tableData.loading = false;
 };
