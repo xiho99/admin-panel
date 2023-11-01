@@ -9,7 +9,6 @@ import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
 import { useMenuApi } from '/@/api/menu/index';
-import sysRoute from './sys'
 
 // 引入 api 请求接口
 const menuApi = useMenuApi();

@@ -12,7 +12,8 @@ export default {
 		roles: ['admin'],
 		icon: 'iconfont icon-xitongshezhi',
 	},
-	children: [{
+	children: [
+		{
 			path: '/home',
 			name: 'home',
 			component: () => import('/@/views/home/index.vue'),

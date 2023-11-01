@@ -99,9 +99,8 @@ watch(
 	}
 );
 </script>
-<style>
-	
-.table-demo-padding.layout-padding-view.layout-padding-auto{
-	    overflow: auto;
-}
-</style>
+<!--<style scoped>-->
+<!--:deep(.table-demo-padding.layout-padding-view.layout-padding-auto) {-->
+<!--	    overflow: auto;-->
+<!--}-->
+<!--</style>-->

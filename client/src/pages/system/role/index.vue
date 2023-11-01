@@ -32,10 +32,10 @@
 				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="100">
 					<template #default="scope">
-						<el-button :disabled="scope.row.roleName === '超级管理员'" size="small" text type="primary" @click="onOpenEditRole('edit', scope.row)"
-							>修改</el-button
+						<el-button :disabled="scope.row.roleName === '超级管理员'" size="small" text type="warning" @click="onOpenEditRole('edit', scope.row)"
+							>{{ $t('message.table.edit') }}</el-button
 						>
-						<el-button :disabled="scope.row.roleName === '超级管理员'" size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button :disabled="scope.row.roleName === '超级管理员'" size="small" text type="danger" @click="onRowDel(scope.row)">{{ $t('message.table.delete') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

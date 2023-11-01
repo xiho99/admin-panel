@@ -53,9 +53,9 @@
 				</el-table-column>
 				<el-table-column label="操作" show-overflow-tooltip width="140">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="onOpenAddMenu('add')">新增</el-button>
-						<el-button size="small" text type="primary" @click="onOpenEditMenu('edit', scope.row)">修改</el-button>
-						<el-button size="small" text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="primary" @click="onOpenAddMenu('add')">{{ $t('message.table.add') }}</el-button>
+						<el-button size="small" text type="warning" @click="onOpenEditMenu('edit', scope.row)">{{ $t('message.table.edit') }}</el-button>
+						<el-button size="small" text type="danger" @click="onTabelRowDel(scope.row)">{{ $t('message.table.delete') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -73,6 +73,7 @@ import { useRoutesList } from '/@/stores/routesList';
 import { useMenuApi } from '/@/api/menu/index';
 import {initBackEndControlRoutes} from '/@/router/backEnd'
 const menuApi = useMenuApi();
+
 // import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
 
 // 引入组件

@@ -23,7 +23,8 @@ export const dynamicRoutes : Array<RouteRecordRaw> = [
 		meta: {
 			isKeepAlive: true,
 		},
-		children: [{
+		children: [
+			{
 				path: '/index',
 				name: 'index',
 				component: () => import('/@/pages/index/index.vue'),

@@ -42,13 +42,13 @@
         </el-table-column>
         <el-table-column label="操作" width="100">
           <template #default="scope">
-            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary"
+            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="warning"
                        @click="onOpenEditUser('edit', scope.row)"
-            >修改
+            >{{ $t('message.table.edit') }}
             </el-button
             >
-            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary"
-                       @click="onRowDel(scope.row)">删除
+            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="danger"
+                       @click="onRowDel(scope.row)">{{ $t('message.table.delete') }}
             </el-button>
           </template>
         </el-table-column>

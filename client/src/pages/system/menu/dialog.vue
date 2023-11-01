@@ -4,7 +4,7 @@
 			<el-form ref="menuDialogFormRef" :model="state.ruleForm" size="default" label-width="120px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="上级菜单">
+						<el-form-item :label="$t('message.menuCategory')">
 							<el-cascader
 								:options="state.menuData"
 								:props="{ checkStrictly: true, value: 'path', label: 'title' }"
@@ -21,41 +21,41 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="菜单类型">
+						<el-form-item :label="$t('message.menuType')">
 							<el-radio-group v-model="state.ruleForm.menuType">
-								<el-radio label="menu">菜单</el-radio>
-								<el-radio label="btn">按钮</el-radio>
+								<el-radio label="menu">{{ $t('message.menu') }}</el-radio>
+								<el-radio label="btn">{{ $t('message.button') }}</el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="菜单名称">
+						<el-form-item :label="$t('message.menuName')">
 							<el-input v-model="state.ruleForm.meta.title" placeholder="格式：message.router.xxx" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<template v-if="state.ruleForm.menuType === 'menu'">
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="路由名称">
+							<el-form-item :label="$t('message.routeName')">
 								<el-input v-model="state.ruleForm.name" placeholder="路由中的 name 值" clearable></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="路由路径">
+							<el-form-item :label="$t('message.routePath')">
 								<el-input v-model="state.ruleForm.path" placeholder="路由中的 path 值" clearable></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="重定向">
+							<el-form-item :label="$t('message.redirect')">
 								<el-input v-model="state.ruleForm.redirect" placeholder="请输入路由重定向" clearable></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="菜单图标">
+							<el-form-item :label="$t('message.menuIcon')">
 								<IconSelector placeholder="请输入菜单图标" v-model="state.ruleForm.meta.icon" />
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="链接地址">
+							<el-form-item :label="$t('message.linkAddress')">
 								<el-input
 									v-model="state.ruleForm.meta.isLink"
 									placeholder="外链/内嵌时链接地址（http:xxx.com）"
@@ -74,7 +74,7 @@
 						</el-col>
 					</template>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="菜单排序">
+						<el-form-item :label="$t('message.menuSort')">
 							<el-input-number v-model="state.ruleForm.menuSort" controls-position="right" placeholder="请输入排序" class="w100" />
 						</el-form-item>
 					</el-col>
@@ -82,40 +82,40 @@
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="是否隐藏">
 								<el-radio-group v-model="state.ruleForm.meta.isHide">
-									<el-radio :label="true">隐藏</el-radio>
-									<el-radio :label="false">不隐藏</el-radio>
+									<el-radio :label="true">{{ $t('message.hide') }}</el-radio>
+									<el-radio :label="false">{{ $t('message.notHide') }}</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="页面缓存">
+							<el-form-item :label="$t('message.pageCache')">
 								<el-radio-group v-model="state.ruleForm.meta.isKeepAlive">
-									<el-radio :label="true">缓存</el-radio>
-									<el-radio :label="false">不缓存</el-radio>
+									<el-radio :label="true">{{ $t('message.cache') }}</el-radio>
+									<el-radio :label="false">{{ $t('message.doNotCache') }}</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="是否固定">
+							<el-form-item :label="$t('message.isItFix')">
 								<el-radio-group v-model="state.ruleForm.meta.isAffix">
-									<el-radio :label="true">固定</el-radio>
-									<el-radio :label="false">不固定</el-radio>
+									<el-radio :label="true">{{ $t('message.fix') }}</el-radio>
+									<el-radio :label="false">{{ $t('message.notFix') }}</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="是否外链">
+							<el-form-item :label="$t('message.whetherToExternalLink')">
 								<el-radio-group v-model="state.ruleForm.isLink" :disabled="state.ruleForm.meta.isIframe">
-									<el-radio :label="true">是</el-radio>
-									<el-radio :label="false">否</el-radio>
+									<el-radio :label="true">{{ $t('message.yes') }}</el-radio>
+									<el-radio :label="false">{{ $t('message.no') }}}</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="是否内嵌">
+							<el-form-item :label="$t('message.whetherToEmbed')">
 								<el-radio-group v-model="state.ruleForm.meta.isIframe" @change="onSelectIframeChange">
-									<el-radio :label="true">是</el-radio>
-									<el-radio :label="false">否</el-radio>
+									<el-radio :label="true">{{ $t('message.yes') }}</el-radio>
+									<el-radio :label="false">{{ $t('message.no') }}</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
@@ -124,7 +124,7 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default" :loading="state.dialog.loading">取 消</el-button>
+					<el-button @click="onCancel" size="default" :loading="state.dialog.loading">{{ $t('message.cancel') }}</el-button>
 					<el-button type="primary" @click="onSubmit" :loading="state.dialog.loading" size="default">{{ state.dialog.submitTxt }}</el-button>
 				</span>
 			</template>
@@ -139,8 +139,9 @@ import { useRoutesList } from '/@/stores/routesList';
 import { i18n } from '/@/i18n/index';
 import { useMenuApi } from '/@/api/menu/index';
 import { ElMessage } from 'element-plus';
+import { useI18n } from "vue-i18n";
 const menuApi = useMenuApi();
-// import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
+const { t } = useI18n();
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -221,10 +222,10 @@ const openDialog = (type: string, row?: any) => {
 		// row.menuSort = Math.floor(Math.random() * 100);
 		state.ruleForm = JSON.parse(JSON.stringify(row));
 		state.dialog.title = '修改菜单';
-		state.dialog.submitTxt = '修 改';
+		state.dialog.submitTxt = t('message.submit');
 	} else {
 		state.dialog.title = '新增菜单';
-		state.dialog.submitTxt = '新 增';
+		state.dialog.submitTxt = t('message.submit');
 		initRuleFrom(); // 	清空表单
 	}
 	state.dialog.type = type;

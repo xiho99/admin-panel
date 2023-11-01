@@ -44,8 +44,9 @@ function mergeArrObj<T>(list: T, key: string) {
 
 // 处理最终格式
 for (const key in itemize) {
+
 	messages[key] = {
-		name: key,
+		name: key, // @ts-ignore
 		el: element[key].el,
 		message: mergeArrObj(itemize, key),
 	};
