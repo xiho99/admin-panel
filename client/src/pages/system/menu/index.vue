@@ -64,21 +64,17 @@
 	</div>
 </template>
 
-<script setup lang="ts" name="/systemMenu">
+<script setup lang="ts" name="systemMenu">
 import { defineAsyncComponent, ref, onMounted, reactive } from 'vue';
 import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { storeToRefs } from 'pinia';
 import { useRoutesList } from '/@/stores/routesList';
-import { useMenuApi } from '/@/api/menu/index';
+import { useMenuApi } from '/@/api/menu';
 import {initBackEndControlRoutes} from '/@/router/backEnd'
 const menuApi = useMenuApi();
 
-// import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
-
-// 引入组件
 const MenuDialog = defineAsyncComponent(() => import('/@/pages/system/menu/dialog.vue'));
-
 // 定义变量内容
 const stores = useRoutesList();
 const { routesList } = storeToRefs(stores);
@@ -89,8 +85,6 @@ const state = reactive({
 		loading: true,
 	},
 });
-
-// 获取路由数据，真实请从接口获取
 const getTableData = async () => {
 	state.tableData.loading = true;
 	await initBackEndControlRoutes();
@@ -116,7 +110,6 @@ const onTabelRowDel = (row: RouteRecordRaw) => {
 			ElMessage.success('删除成功');
 			await menuApi.deleteMenu({id:row.id});
 			getTableData();
-			//await setBackEndControlRefreshRoutes() // 刷新菜单，未进行后端接口测试
 		})
 		.catch(() => {});
 };

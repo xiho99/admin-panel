@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class MenuController extends BaseResponseController
 {
-
     // 存储角色信息
     public function saveMenu(Request $request) {
 
@@ -56,7 +55,7 @@ class MenuController extends BaseResponseController
     // 存储角色信息
     public function deleteMenu(Request $request){
         $id = $request->input('id' , null);
-        $info = Menu::getInfo([['id' , '=' , $id ] ]);
+        $info = Menu::getInfo([['id' , '=' , $id ]]);
         if(!$info) return $this->error();
         Menu::deleteInfo($id);
         // 查看他的父级还有没有子级
@@ -119,6 +118,5 @@ class MenuController extends BaseResponseController
             $v['menuType'] = $v['menuType'] ? 'menu' : 'btn';
         }
         return $this->success($list);
-
     }
 }
