@@ -1,7 +1,7 @@
 <template>
 	<div class="system-role-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
-			<el-form ref="roleDialogFormRef" :model="state.ruleForm" size="default" label-width="90px">
+		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" >
+			<el-form ref="roleDialogFormRef" :model="state.ruleForm" size="default" label-width="120px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="角色名称">
@@ -56,7 +56,7 @@ import { saveRole } from '/@/api/role';
 import { useRoutesList } from '/@/stores/routesList';
 import { i18n } from '/@/i18n/index';
 import { storeToRefs } from 'pinia';
-import { ElMessageBox, ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -92,7 +92,7 @@ const getCheckedKeys = () => {
 const stores = useRoutesList();
 const { routesList } = storeToRefs(stores);
 // 打开弹窗
-const openDialog = (type: string, row: object) => {
+const openDialog = (type: string, row: any) => {
 	if (type === 'edit') {
 		state.ruleForm = row;
 		state.dialog.title = '修改角色';

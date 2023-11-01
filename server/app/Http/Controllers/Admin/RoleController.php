@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class RoleController extends BaseResponseController
 {
     // 存储角色信息
-    function saveRole(Request $request){
+    public function saveRole(Request $request){
         $data = $request->all();
         // 验证信息
         $fail = Role::getNotPassValidator($data);
@@ -35,7 +35,7 @@ class RoleController extends BaseResponseController
         return $this->success($id);
     }
     // 存储角色信息
-    function getList(Request $request){
+    public function getList(Request $request){
         $name = $request->input('name' , null);
         $page = $request->input('page' , 1);
         $pageSize = $request->input('pageSize' , 20);
@@ -50,14 +50,14 @@ class RoleController extends BaseResponseController
         return $this->success($data);
     }
     // 存储角色信息
-    function getAllRole(){
+    public function getAllRole(){
 
         $data = Role::select('id','roleName')->get()->pluck(null, 'id');
         $data[0] = ['id' => 0 , 'roleName' => '超级管理员'];
         return $this->success($data);
     }
     // 存储角色信息
-    function deleteRole(Request $request){
+    public function deleteRole(Request $request){
         $id = $request->input('id' , null);
         Role::deleteInfo($id);
         return $this->success($id);
