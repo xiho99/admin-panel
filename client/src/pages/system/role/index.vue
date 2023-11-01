@@ -18,7 +18,7 @@
 				
 			</div>
 			<el-table :data="state.tableData.data" v-loading.lock="state.tableData.loading" style="width: 100%">
-				<el-table-column type="index" label="序号" width="60" />
+				<el-table-column type="index" label="序号" min-width="60" />
 				<el-table-column prop="roleName" label="角色名称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="roleSign" label="角色标识" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="sort" label="排序" show-overflow-tooltip></el-table-column>

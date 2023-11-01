@@ -8,7 +8,7 @@ import request from '/@/utils/request';
 
 export async function  adminList(params = null) {
 	return await request({
-		url: 'adminList',
+		url: 'getAdmin',
 		method: 'post',
 		data: params,
 	});

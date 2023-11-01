@@ -31,6 +31,21 @@ Route::controller(MenuController::class)->group(function () {
     });
 });
 
+Route::controller(\App\Http\Controllers\Admin\RoleController::class)->group(function () {
+    Route::group(['middleware' => 'jwt'], function ($router) {
+        Route::post('roleList', 'getList');
+        Route::post('saveRole', 'saveRole')->middleware(['LogOperation']);
+        Route::post('deleteRole', 'deleteRole')->middleware(['LogOperation']);
+        Route::post('getAllRole', 'getAllRole');
+    });
+});
+Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
+    Route::group(['middleware' => 'jwt'], function ($router) {
+        Route::post('getAdmin', 'adminList');
+        Route::post('saveAdmin', 'saveAdmin')->middleware(['LogOperation']);
+        Route::post('deleteAdmin', 'deleteAdmin')->middleware(['LogOperation']);
+    });
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

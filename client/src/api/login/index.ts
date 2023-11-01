@@ -6,7 +6,7 @@ import request from '/@/utils/request';
  * @method signOut 用户退出登录
  */
 
-export async function  login(params = object) {
+export async function  login(params?: object) {
 	return await request({
 		url: 'auth/login',
 		method: 'post',
@@ -14,7 +14,7 @@ export async function  login(params = object) {
 	});
 }
 
-export async function  logout(params = object) {
+export async function  logout(params?: object) {
 	return await request({
 		url: 'auth/logout',
 		method: 'post',

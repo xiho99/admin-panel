@@ -12,7 +12,7 @@ class Admin extends Authenticatable implements JWTSubject
     use Notifiable;
 
     protected $rules = [
-        'username' => 'required',
+        'userName' => 'required',
         'password' => 'required',
     ];
     protected $hidden = [

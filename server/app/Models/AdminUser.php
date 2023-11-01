@@ -9,7 +9,7 @@ class AdminUser extends BaseModel
     protected $table = 'admins';
 
     protected $fillable = [
-        'username',
+        'userName',
         'password' ,
         'role_ids',
         'overdue_time',
@@ -18,7 +18,7 @@ class AdminUser extends BaseModel
         'nickname',
     ];
     protected $rules = [
-        'username' => 'required',
+        'userName' => 'required',
         'password' => 'required',
     ];
     protected $hidden = [

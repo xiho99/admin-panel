@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseResponseController;
-use App\Http\Controllers\Controller;
 use App\Models\Menu;
-use App\Models\SearchWord;
+use App\Models\Role;
 use Illuminate\Http\Request;
-use JetBrains\PhpStorm\NoReturn;
 
 class MenuController extends BaseResponseController
 {

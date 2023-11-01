@@ -106,19 +106,16 @@ export async function getBackEndControlRoutes() {
 	// const { userInfos } = storeToRefs(stores);
 	// const auth = userInfos.value.roles[0];
 	// 管理员 admin
-	return menuApi.getAdminMenu();
+	return await menuApi.getAdminMenu();
 }
 export function generateMenuTree(menuData: any) {
 	const menuMap: any = {}; // 用于构建菜单映射，以便查找父级菜单
 	const menuTree: any = []; // 最终生成的菜单树
-
 	// 首先，将所有菜单项添加到菜单映射中
 	menuData.forEach((menu: any) => {
 		menuMap[menu.name] = menu;
 		menu.children = []; // 初始化子菜单
-	});
-
-	// 然后，遍历菜单项，将子菜单插入到其父级的 children 中
+	});// 然后，遍历菜单项，将子菜单插入到其父级的 children 中
 	menuData.forEach((menu: any) => {
 		if (menu.menuSuperior && menuMap[menu.menuSuperior]) {
 			menuMap[menu.menuSuperior].children.push(menu);
@@ -126,7 +123,6 @@ export function generateMenuTree(menuData: any) {
 			menuTree.push(menu); // 如果没有父级，将其作为根级菜单
 		}
 	});
-
 	return menuTree;
 }
 /**

@@ -21,13 +21,13 @@ class AdminController extends BaseResponseController
     {
         // Verify the username and password provided by the user
         $validator = Validator::make($request->all(), [
-            'username' => 'required',
+            'userName' => 'required',
             'password' => 'required',
         ]);
         if ($validator->fails()) {
             return $this->error('Username and password are required');
         }
-        $credentials = $request->only('username', 'password');
+        $credentials = $request->only('userName', 'password');
         if (!$token = auth('admin')->attempt($credentials)) {
             return $this->error( 'Account password is wrong');
         }
@@ -67,7 +67,7 @@ class AdminController extends BaseResponseController
             return $this->error('Required for nickname');
         }
         if(!isset($data['id']) || !AdminUser::getInfo([['id' , '=' , $data['id'] ] ])){
-            $info = AdminUser::getInfo([['username' , '=' , $data['username'] ] ]);
+            $info = AdminUser::getInfo([['userName' , '=' , $data['userName'] ] ]);
 
             if($info){
                 return $this->error('Cannot add role with same name');
@@ -75,7 +75,7 @@ class AdminController extends BaseResponseController
         }
         $from = [
             'id' => $data['id'] ?? null,
-            'username' => $data['username'] ?? '',
+            'userName' => $data['userName'] ?? '',
             'password' =>  bcrypt($data['password']) ?? '',
             'role_ids' =>  $data['role_ids'] ?? '',
             'overdue_time' =>  $data['overdue_time'] ?? null,

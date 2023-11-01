@@ -21,7 +21,7 @@ export function useMenuApi() {
 		},
 		saveMenu: (params?: object) => {
 			return request({
-				url: 'saveMenu',
+				url: 'addMenu',
 				method: 'post',
 				params,
 			});

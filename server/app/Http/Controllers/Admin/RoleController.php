@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseResponseController;
-use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
 // 角色控制器

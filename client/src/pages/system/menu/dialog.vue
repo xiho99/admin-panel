@@ -1,7 +1,7 @@
 <template>
 	<div class="system-menu-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
-			<el-form ref="menuDialogFormRef" :model="state.ruleForm" size="default" label-width="80px">
+		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog">
+			<el-form ref="menuDialogFormRef" :model="state.ruleForm" size="default" label-width="120px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="上级菜单">
@@ -133,12 +133,12 @@
 </template>
 
 <script setup lang="ts" name="systemMenuDialog">
-import { defineAsyncComponent, reactive, onMounted, ref,watch } from 'vue';
+import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoutesList } from '/@/stores/routesList';
 import { i18n } from '/@/i18n/index';
 import { useMenuApi } from '/@/api/menu/index';
-import { ElMessageBox, ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus';
 const menuApi = useMenuApi();
 // import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
 
@@ -193,8 +193,9 @@ const getMenuData = (routes: RouteItems) => {
 	return arr;
 };
 const initRuleFrom  = () =>{
-	state.ruleForm= {
+	state.ruleForm = {
 			menuSuperiorPath: [], // 上级菜单
+      btnPower: "",
 			menuType: 'menu', // 菜单类型
 			name: '', // 路由名称
 			isLink: false, // 是否外链
@@ -217,7 +218,7 @@ const openDialog = (type: string, row?: any) => {
 	if (type === 'edit') {
 		// 模拟数据，实际请走接口
 		row.menuType = 'menu';
-		row.menuSort = Math.floor(Math.random() * 100);
+		// row.menuSort = Math.floor(Math.random() * 100);
 		state.ruleForm = JSON.parse(JSON.stringify(row));
 		state.dialog.title = '修改菜单';
 		state.dialog.submitTxt = '修 改';
@@ -235,8 +236,7 @@ const closeDialog = () => {
 };
 // 是否内嵌下拉改变
 const onSelectIframeChange = () => {
-	if (state.ruleForm.meta.isIframe) state.ruleForm.isLink = true;
-	else state.ruleForm.isLink = false;
+	state.ruleForm.isLink = !!state.ruleForm.meta.isIframe;
 };
 // 取消
 const onCancel = () => {
@@ -248,7 +248,7 @@ const onSubmit = async () => {
 	try{
 		let data = JSON.parse(JSON.stringify(state.ruleForm));
 		data.meta = JSON.stringify(data.meta);
-		let row = await menuApi.saveMenu(data);
+		await menuApi.saveMenu(data);
 		ElMessage.success('操作成功');
 	}catch(e){
 		//TODO handle the exception
