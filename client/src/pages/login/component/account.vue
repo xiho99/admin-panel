@@ -67,7 +67,7 @@ import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
-import { login } from '/@/api/login/index';
+import { login } from '/@/api/login';
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
 import EnumMessageType from "/@/models/enums/enumMessageType";
 

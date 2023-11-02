@@ -1,5 +1,5 @@
 import { createI18n } from 'vue-i18n';
-import pinia from '/@/stores/index';
+import pinia from '/@/stores';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 

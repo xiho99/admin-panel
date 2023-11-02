@@ -1,11 +1,11 @@
 <template>
 	<div class="system-user-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
-			<el-form ref="userDialogFormRef" :model="state.ruleForm" size="default" label-width="90px">
+		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" >
+			<el-form ref="userDialogFormRef" :model="state.ruleForm" size="default" label-width="120px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="账户名称">
-							<el-input v-model="state.ruleForm.username" placeholder="请输入账户名称" clearable></el-input>
+							<el-input v-model="state.ruleForm.userName" placeholder="请输入账户名称" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">

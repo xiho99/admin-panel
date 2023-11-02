@@ -20,7 +20,7 @@
         <el-table-column type="index" label="序号" width="60"/>
         <el-table-column label="账户名称" show-overflow-tooltip>
           <template #default="scope">
-            <div> {{ scope.row }}asdasd</div>
+            <div> {{ scope.row.userName }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="nickname" label="用户昵称" show-overflow-tooltip></el-table-column>
