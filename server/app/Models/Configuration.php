@@ -7,18 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class Configuration extends BaseModel
 {
+    use HasFactory;
     protected $fillable = [
         'appName',
         'key' ,
         'type',
         'value',
         'sort',
+        'is_delete',
     ];
     protected $rules = [
-        'appNane' => 'required',
+        'appName' => 'required',
         'key' => 'required',
         'type' => 'required',
-        'value' => 'required',
+//        'value' => 'required',
     ];
-    use HasFactory;
+
+    protected static $initBase;
+    public static function initBase(): static
+    {
+        if(!self::$initBase){
+            self::$initBase = new static();
+        }
+        return self::$initBase;
+    }
 }

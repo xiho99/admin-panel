@@ -48,9 +48,10 @@ Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(fun
 });
 Route::controller(\App\Http\Controllers\Admin\ConfigurationController::class)->group(function () {
     Route::group(['middleware' => 'jwt'], function ($router) {
-        Route::post('getConfiguration', 'get');
-        Route::post('saveConfiguration', 'store')->middleware(['saveConfiguration']);
-        Route::post('deleteConfiguration', 'deleteAdmin')->middleware(['deleteConfiguration']);
+        Route::get('getConfiguration', 'get');
+        Route::post('saveConfiguration', 'saveConfiguration');
+        Route::post('updateConfiguration', 'updateConfiguration');
+        Route::post('deleteConfiguration', 'deleteConfiguration');
     });
 });
 

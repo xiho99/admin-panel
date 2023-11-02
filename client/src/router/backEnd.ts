@@ -8,7 +8,8 @@ import { dynamicRoutes, notFoundAndNoPower } from '/@/router/route';
 import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/index';
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-import { useMenuApi } from '/@/api/menu/index';
+import { useMenuApi } from '/@/api/menu';
+import sysRoute from '/@/router/sys';
 
 // 引入 api 请求接口
 const menuApi = useMenuApi();
@@ -31,9 +32,9 @@ export async function initBackEndControlRoutes() {
 	await useRequestOldRoutes().setRequestOldRoutes(JSON.parse(JSON.stringify(res.data)));
 	// 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
 	dynamicRoutes[0].children = await backEndComponent(res.data);
-	// if(import.meta.env.MODE == 'development') { // @ts-ignore
-	// 	dynamicRoutes[0].children.push(sysRoute);
-	// }
+	if(import.meta.env.MODE == 'development') { // @ts-ignore
+		dynamicRoutes[0].children.push(sysRoute);
+	}
 	// 添加动态路由
 	await setAddRoute();
 	await setFilterMenuAndCacheTagsViewRoutes();

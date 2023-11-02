@@ -39,7 +39,7 @@ service.interceptors.response.use(
 			// `token` 过期或者账号已在别处登录
 			if (res.code === -10004 || res.code === -20004) {
 				Session.clear(); // 清除浏览器全部临时缓存
-				ElMessageBox.alert('你已被登出，请重新登录', '提示', {})
+				ElMessageBox.alert('You have been logged out, please log in again', 'hint', {})
 					.then(() => {window.location.href = '/';})
 					.catch(() => {});
 			}else if(res.code === -10001){
@@ -53,12 +53,12 @@ service.interceptors.response.use(
 	(error) => {
 		// 对响应错误做点什么
 		if (error.message.indexOf('timeout') != -1) {
-			ElMessage.error('网络超时');
+			ElMessage.error('network timeout');
 		} else if (error.message == 'Network Error') {
-			ElMessage.error('网络连接错误');
+			ElMessage.error('Network connection error');
 		} else {
 			if (error.response.data) ElMessage.error(error.response.statusText);
-			else ElMessage.error('接口路径找不到');
+			else ElMessage.error('Interface path not found');
 		}
 		return Promise.reject(error);
 	}

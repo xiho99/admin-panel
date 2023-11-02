@@ -1,7 +1,7 @@
+import { ref, reactive } from 'vue';
 import { ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile } from 'element-plus';
 // @ts-ignore
 import imageCompression from 'browser-image-compression';
-import { reactive, ref } from "vue";
 const upload = ref<UploadInstance>();
 const imageName = ref('');
 interface IOptions {
@@ -83,10 +83,10 @@ const multiChange: UploadProps['onChange'] = async (uploadFile, uploadFiles) => 
     files.value = uploadFiles.map((item) => item.raw);
 };
 const handleExceed: UploadProps['onExceed'] = async (files) => {
-  upload.value!.clearFiles();
-  const file = files[0] as UploadRawFile;
-  file.uid = genFileId();
-  upload.value!.handleStart(file);
+    upload.value!.clearFiles();
+    const file = files[0] as UploadRawFile;
+    file.uid = genFileId();
+    upload.value!.handleStart(file);
 };
 const fileForRemove = ref<any>([]);
 const handleRemove: UploadProps['onRemove'] = async (uploadFile) => {
@@ -106,6 +106,7 @@ const handlePreview: UploadProps['onPreview'] = (uploadFile) => {
 }
 // const fileUpload = ref<any>()
 const imageProcessing = ref(false);
+
 export default {
     handlePreview,
     handleExceed,

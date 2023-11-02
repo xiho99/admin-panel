@@ -1,11 +1,14 @@
 import IBase from "../models/users/IBase";
 
 interface IConfiguration extends IBase{
-    configuration_name: string,
+    id: number,
+    appName: string,
     key: string,
     input: string,
-    content: string,
+    value: string,
+    sort: number,
+    type: string,
 }
-export {
-    IConfiguration,
+export type {
+    IConfiguration
 }

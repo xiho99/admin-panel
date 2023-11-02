@@ -34,7 +34,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 					rewrite: (path) => path.replace(/^\/api/, ''), // 移除/api前缀
 				},
 				'/uploads': {
-					target: 'http://192.168.1.117:8000/api/uploads',
+					target: 'http://192.168.1.117:8000/uploads',
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/uploads/, ''), // 移除/api前缀
 				},

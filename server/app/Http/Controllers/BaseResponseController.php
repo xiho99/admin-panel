@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-
-class BaseResponseController extends Controller
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
+class BaseResponseController extends FileHelperController
 {
     public function getMsecTime()
     {

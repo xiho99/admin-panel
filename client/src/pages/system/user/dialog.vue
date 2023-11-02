@@ -62,7 +62,7 @@
 	import { reactive, ref } from 'vue';
 	import { saveAdmin } from '/@/api/admin';
 	import { getAllRole } from '/@/api/role';
-	import { ElMessageBox, ElMessage } from 'element-plus';
+	import { ElMessage } from 'element-plus';
 
 	// 定义子组件向父组件传值/事件
 	const emit = defineEmits(['refresh']);

@@ -1,6 +1,5 @@
 import enumMessageStatus from '../../models/enums/enumMessageType';
 import { ElNotification, ElMessage } from 'element-plus';
-
 const notification = (message: string, type: enumMessageStatus, title?: string): void => {
     ElNotification({
         title,
@@ -17,5 +16,5 @@ const messageNotification = (message: string, type: enumMessageStatus) => {
 }
 export {
     notification,
-    messageNotification
+    messageNotification,
 };

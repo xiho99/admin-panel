@@ -15,7 +15,6 @@
 					</el-icon>
 					新增角色
 				</el-button>
-				
 			</div>
 			<el-table :data="state.tableData.data" v-loading.lock="state.tableData.loading" style="width: 100%">
 				<el-table-column type="index" label="序号" min-width="60" />
@@ -57,7 +56,7 @@
 	</div>
 </template>
 
-<script setup lang="ts" name="/systemRole">
+<script setup lang="ts" name="systemRole">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { roleList,deleteRole } from '/@/api/role';
@@ -67,7 +66,7 @@ const RoleDialog = defineAsyncComponent(() => import('/@/pages/system/role/dialo
 
 // 定义变量内容
 const roleDialogRef = ref();
-const state = reactive<SysRoleState>({
+const state = reactive({
 	tableData: {
 		data: [],
 		total: 0,
@@ -82,7 +81,6 @@ const state = reactive<SysRoleState>({
 // 初始化表格数据
 const getTableData = async () => {
 	state.tableData.loading = true;
-	const data = [];
 	let row = await roleList(state.tableData.param);
 	state.tableData.data = row.data?.list;
 	state.tableData.total = row.data?.count || 0;
