@@ -1,6 +1,6 @@
 <template>
   <div class=" layout-pd">
-    <div class="shadow bg-white rounded">
+    <div class="shadow bg-white rounded p-5">
       <div class="system-user-search p-3 flex justify-end">
         <el-button type="success" @click="onOpenAddDialog('add')">
           <el-icon>
@@ -10,25 +10,8 @@
         </el-button>
       </div>
       <el-table :data="formData.data">
-        <el-table-column :label="$t('message.image')">
-          <template #default="prop">
-            <el-image  v-show="prop.row.type === 'icon'" class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
-          </template>
-        </el-table-column>
         <el-table-column prop="name" :label="$t('message.name')"/>
-        <el-table-column prop="link" :label="$t('message.router.link')">
-          <template #default="prop">
-            <el-link type="primary" :underline="false"> {{ prop.row.link }}</el-link>
-          </template>
-        </el-table-column>
-        <el-table-column prop="color" :label="$t('message.color')">
-          <template #default="prop">
-            <span :style="{ color: prop.row.color }">
-              {{ prop.row.color }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="type" :label="$t('message.type')"/>
+        <el-table-column prop="key" :label="$t('message.key')"/>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
         <el-table-column  :label="$t('message.is_visible')">
           <template #default="prop">
@@ -38,7 +21,6 @@
             <div v-else>
               <el-tag class="ml-2" type="info">{{ $t('message.disabled') }}</el-tag>
             </div>
-
           </template>
         </el-table-column>
         <el-table-column :label="$t('message.created_at')">

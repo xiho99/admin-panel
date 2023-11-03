@@ -88,7 +88,7 @@ class AdminController extends BaseResponseController
             'id' => $data['id'] ?? null,
             'userName' => $data['userName'] ?? '',
             'password' =>  bcrypt($data['password']) ?? '',
-            'role_ids' =>  $data['role_ids'] ?? 0,
+            'role_ids' =>  $data['role_ids'] ?? '',
             'overdue_time' =>  $data['overdue_time'] ?? null,
             'describe' =>  $data['describe'] ?? '',
             'status' =>  $data['status'] ?? 0,

@@ -60,7 +60,7 @@ export default function  useApi() {
 			});
 		},
 		addCategory: (params?: object) => {
-			return service.post('/addCategory', params);
+			return service.post('/saveCategory', params);
 		},
 		updateCategory: (params?: object) => {
 			return service.post('/updateCategory', params);

@@ -27,7 +27,7 @@ class CategoryController extends BaseResponseController
             return $this->error('Missing required fields');
         }
         if (isset($data['id']) && $data['id'] || !Category::getInfo([['id', '=', $data['id']]])) {
-            $info = Category::getInfo([['title', '=', $data['title']]]);
+            $info = Category::getInfo([['key', '=', $data['key']]]);
             if ($info) {
                 return $this->error('Cannot add name with same name');
             }

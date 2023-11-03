@@ -26,7 +26,7 @@
         <el-table-column prop="nickname" label="用户昵称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="role_ids" center label="关联角色" show-overflow-tooltip>
           <template #default="scope">
-            <span v-for="(ite, index) in (scope.row.role_ids?.split(',') || [])" :key="index"
+            <span v-for="(ite, index) in (scope.row?.role_ids?.split(',') || [])" :key="index"
                   style="background:#f9d83a;margin:0 5px;padding:3px 5px;border-radius: 4px;">
               {{ state.roleList[ite]?.roleName }}
             </span>
@@ -34,6 +34,7 @@
         </el-table-column>
         <el-table-column prop="status" label="用户状态" show-overflow-tooltip>
           <template #default="scope">
+            {{ scope.row.status }}
             <el-tag type="success" v-if="scope.row.status">启用</el-tag>
             <el-tag type="info" v-else>禁用</el-tag>
           </template>
@@ -61,7 +62,7 @@
           @size-change="onHandleSizeChange"
           @current-change="onHandleCurrentChange"
           class="mt15"
-          :pager-count="5"
+          :pager-count="10"
           :page-sizes="[10, 20, 30]"
           v-model:current-page="state.tableData.param.pageNum"
           background

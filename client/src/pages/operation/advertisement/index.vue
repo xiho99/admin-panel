@@ -1,6 +1,6 @@
 <template>
   <div class=" layout-pd">
-    <div class="shadow bg-white rounded">
+    <div class="shadow bg-white rounded p-5">
       <div class="system-user-search p-3 flex justify-end">
         <el-button type="success" @click="onOpenAddDialog('add')">
           <el-icon>

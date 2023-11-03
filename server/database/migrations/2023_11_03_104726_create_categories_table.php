@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('key');
             $table->string('sort');
-            $table->boolean('is_visible');
-            $table->boolean('is_delete');
+            $table->boolean('is_visible')->default(0);
+            $table->boolean('is_delete')->default(0);
             $table->timestamps();
         });
     }
