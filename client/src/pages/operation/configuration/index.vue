@@ -15,10 +15,10 @@
         <el-table-column prop="key" :label="$t('message.key')"/>
         <el-table-column :label="$t('message.type')">
           <template #default="prop">
-              <div v-if="prop.row.type === 'image'">
-                <el-image class="w-24 rounded" :src="prop.row.value" alt="loading.."/>
-              </div>
-              <div v-else> {{ prop.row.value }}</div>
+            <div v-if="prop.row.type === 'image'">
+              <el-image class="w-24 rounded" :src="prop.row.value" alt="loading.."/>
+            </div>
+            <div v-else> {{ prop.row.value }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
@@ -27,8 +27,12 @@
             <el-input v-model="data.search" size="default" :placeholder="$t('message.name')"/>
           </template>
           <template #default="scope">
-            <el-button link type="primary" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">{{ $t('message.table.edit') }}</el-button>
-            <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row)">{{ $t('message.table.delete') }}</el-button>
+            <el-button link type="primary" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
+              {{ $t('message.table.edit') }}
+            </el-button>
+            <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row)">
+              {{ $t('message.table.delete') }}
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -44,7 +48,7 @@
             @current-change="handleCurrentChange"
             :total="data.total"/>
       </div>
-      <configurationDialog  ref="openDialogRef" @refresh="getConfiguration()"/>
+      <configurationDialog ref="openDialogRef" @refresh="getConfiguration()"/>
     </div>
   </div>
 </template>

@@ -42,9 +42,9 @@
               </el-icon>
             </el-upload>
           </div>
-           <div v-if="configuration.type === 'text'" class="w-full">
-             <el-input type="text" v-model="configuration.value"/>
-           </div>
+          <div v-if="configuration.type === 'text'" class="w-full">
+            <el-input type="text" v-model="configuration.value"/>
+          </div>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -69,7 +69,6 @@ import EnumMessageType from "/@/models/enums/enumMessageType";
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
 import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
 
-const fileList = ref([]);
 const api = useApi();
 const { t } = useI18n();
 const {
@@ -77,6 +76,7 @@ const {
   handleChange, handleRemove,
   renderFile,
 } = uploadFileHelper;
+const { isProcessing, ruleFormRef, fileList } = useVariable();
 const configuration = reactive({
   id: 0,
   appName: '',
@@ -104,18 +104,17 @@ const options = ref([
   },
 ]);
 const resetFields = () => {
-     configuration.appName = '';
-     configuration.key = '';
-     configuration.type = '';
-     configuration.value = '';
-     configuration.sort = 0;
-     configuration.dialog.isShowDialog = false;
-     file.value = '';
-     fileList.value = []
+  configuration.appName = '';
+  configuration.key = '';
+  configuration.type = '';
+  configuration.value = '';
+  configuration.sort = 0;
+  configuration.dialog.isShowDialog = false;
+  file.value = '';
+  fileList.value = []
 }
-const { isProcessing, ruleFormRef } = useVariable();
 const rules: Record<string, IRule> = ({
-  appName: {required: true},
+  appName: { required: true },
   key: { required: true },
   type: { required: true },
   value: { required: true }
@@ -124,7 +123,7 @@ const openDialog = async (type: string, row: IConfiguration) => {
   if (type === 'edit') {
     fileList.value = [];
     // 模拟数据，实际请走接口
-    fileList.value.push( { name: row.appName, url: row.value});
+    fileList.value.push({ name: row.appName, url: row.value });
     Object.assign(configuration, row)
     configuration.dialog.title = t('message.table.edit');
     configuration.dialog.submit = t('message.table.submit');
@@ -138,8 +137,8 @@ const openDialog = async (type: string, row: IConfiguration) => {
 
 const submitProcess = async () => {
   isProcessing.value = true;
-  await renderFile ()
-  try{
+  await renderFile()
+  try {
     const request = {
       id: configuration.id,
       appName: configuration.appName,
@@ -153,7 +152,7 @@ const submitProcess = async () => {
       messageNotification(t('message.success'), EnumMessageType.Success);
       resetFields();
     }
-  }catch(e){
+  } catch (e) {
     //TODO handle the exception
   }
   isProcessing.value = false;

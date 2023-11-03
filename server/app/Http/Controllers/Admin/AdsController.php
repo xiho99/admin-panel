@@ -24,9 +24,9 @@ class AdsController extends BaseResponseController
             return $this->error('Missing required fields');
         }
         if(isset($data['id']) && $data['id'] || !Ads::getInfo([['id' , '=' , $data['id'] ] ])){
-            $info = Ads::getInfo([['key' , '=' , $data['key'] ] ]);
+            $info = Ads::getInfo([['title' , '=' , $data['title'] ] ]);
             if($info){
-                return $this->error('Cannot add key with same name');
+                return $this->error('Cannot add name with same name');
             }
         }
         $from = [

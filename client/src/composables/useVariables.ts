@@ -10,12 +10,16 @@ const useVariable = () => {
         if (!formEl) return
         formEl.resetFields();
     };
+    const openDialogRef = ref();
+    const fileList = ref([]);
     return {
         isLoading,
         isProcessing,
         ruleFormRef,
         dialog,
         resetForm,
+        openDialogRef,
+        fileList,
     };
 };
 
