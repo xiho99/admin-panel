@@ -80,6 +80,7 @@ export default {
 		ads: 'Ads',
 		link: 'Link',
 		category: 'Category',
+		groupCategory: 'Group category',
 	},
 	staticRoutes: {
 		signIn: 'signIn',

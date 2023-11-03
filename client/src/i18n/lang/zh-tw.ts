@@ -80,6 +80,7 @@ export default {
 		ads: '广告',
 		link: '关联',
 		category: '类别',
+		groupCategory: '团体类别',
 	},
 	staticRoutes: {
 		signIn: '登入',

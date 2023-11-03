@@ -68,5 +68,21 @@ export default function  useApi() {
 		deleteCategory: (params?: object) => {
 			return service.post('/deleteCategory', params);
 		},
+		getGroupCategory: (params?: object) => {
+			return request({
+				url: '/getGroupCategory',
+				method: 'get',
+				params,
+			});
+		},
+		addGroupCategory: (params?: object) => {
+			return service.post('/addGroupCategory', params);
+		},
+		updateGroupCategory: (params?: object) => {
+			return service.post('/updateGroupCategory', params);
+		},
+		deleteGroupCategory: (params?: object) => {
+			return service.post('/deleteGroupCategory', params);
+		},
 	};
 }
