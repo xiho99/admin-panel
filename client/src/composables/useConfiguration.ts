@@ -6,8 +6,6 @@ import { IConfiguration } from "/@/models/IConfiguration";
 import messageBoxHelper from "/@/libraries/elementUiHelpers/messageBoxHelper";
 import { useI18n } from "vue-i18n";
 import EnumMessageType from "/@/models/enums/enumMessageType";
-
-
 export default function useConfiguration() {
     const { isLoading} = useVariable();
 
@@ -62,6 +60,13 @@ export default function useConfiguration() {
         deleteId.value = item.id
         messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
     };
+    const handleSizeChange = (val: number) => {
+        console.log(`${val} items per page`)
+    }
+    const handleCurrentChange = (val: number) => {
+        data.currentPage = val;
+        getConfiguration();
+    }
     onMounted(() => {
         getConfiguration();
     })
@@ -74,5 +79,7 @@ export default function useConfiguration() {
         getConfiguration,
         filterTableData,
         deleteRow,
+        handleSizeChange,
+        handleCurrentChange,
     }
 }

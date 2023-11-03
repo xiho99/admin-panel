@@ -1,5 +1,5 @@
 <template>
-  <div class="home-container layout-pd">
+  <div class=" layout-pd">
     <div class="shadow bg-white rounded">
       <div class="system-user-search p-3 flex justify-end">
         <el-button type="success" @click="onOpenAddDialog('add')">
@@ -9,16 +9,10 @@
           {{ $t('message.table.new') }}
         </el-button>
       </div>
-      <el-table :data="filterTableData" v-loading="isLoading">
-        <el-table-column type="index" :label="$t('No')" width="80"/>
-        <el-table-column prop="appName" :label="$t('message.appName')"/>
-        <el-table-column prop="key" :label="$t('message.key')"/>
+      <el-table :data="formData.data" v-loading="isLoading">
         <el-table-column :label="$t('message.type')">
           <template #default="prop">
-              <div v-if="prop.row.type === 'image'">
-                <el-image class="w-24 rounded" :src="prop.row.value" alt="loading.."/>
-              </div>
-              <div v-else> {{ prop.row.value }}</div>
+            <el-image class="w-24 rounded" :src="prop.row.value" alt="loading.."/>
           </template>
         </el-table-column>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
@@ -32,24 +26,23 @@
           </template>
         </el-table-column>
       </el-table>
-      <configurationDialog  ref="openDialogRef" @refresh="getConfiguration()"/>
+<!--      <adsDialog ref="openDialogRef" @refresh="getAds()"/>-->
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import useConfiguration from "/@/composables/useConfiguration";
+import useAds from "/@/composables/useAds";
 import { defineAsyncComponent } from "vue";
 
-const configurationDialog = defineAsyncComponent(() => import('/@/pages/operation/configuration/dialog.vue'));
-
+// const adsDialog = defineAsyncComponent(() => import('/@/pages/operation/ads/dialog.vue'));
 const {
   isLoading,
   data,
   onOpenAddDialog,
   onOpenEditDialog,
-  openDialogRef,
-  getConfiguration,
-  filterTableData,
+  // openDialogRef,
+  // getAds,
+  formData,
   deleteRow,
-} = useConfiguration();
+} = useAds();
 </script>

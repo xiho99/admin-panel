@@ -2,9 +2,9 @@
   <div class="system-user-dialog-container">
     <el-dialog @close="resetFields" v-model="configuration.dialog.isShowDialog" :title="configuration.dialog.title">
       <el-form :label-position="'top'"
-               :model="configuration"
-               :rules="formRule"
                ref="ruleFormRef"
+               :model="configuration"
+               :rules="configRules"
                class="grid md:grid-cols-2 grid-cols-1 gap-5"
       >
         <el-form-item prop="appName" :label="$t('message.appName')">
@@ -23,7 +23,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="value" :label="$t('message.value')">
+        <el-form-item prop="value" :label="configuration.type? $t('message.value') : null">
           <div v-if="configuration.type === 'image'">
             <el-upload
                 v-model:file-list="fileList"
@@ -42,14 +42,14 @@
               </el-icon>
             </el-upload>
           </div>
-           <div v-else class="w-full">
+           <div v-if="configuration.type === 'text'" class="w-full">
              <el-input type="text" v-model="configuration.value"/>
            </div>
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="onSubmit()" :loading="isProcessing">
+          <el-button type="primary" @click="onSubmit(ruleFormRef)" :loading="isProcessing">
             {{ $t(configuration.dialog.submit) }}
           </el-button>
         </div>
@@ -81,7 +81,7 @@ const configuration = reactive({
   id: 0,
   appName: '',
   key: '',
-  type: 'image',
+  type: '',
   value: '',
   sort: 0,
   dialog: {
@@ -110,15 +110,16 @@ const resetFields = () => {
      configuration.value = '';
      configuration.sort = 0;
      configuration.dialog.isShowDialog = false;
+     file.value = '';
+     fileList.value = []
 }
-const { isProcessing } = useVariable();
+const { isProcessing, ruleFormRef } = useVariable();
 const rules: Record<string, IRule> = ({
   appName: {required: true},
-  key: {required: true},
-  type: {required: true},
-  value: {required: false}
+  key: { required: true },
+  type: { required: true },
+  value: { required: true }
 });
-const formRule = formHelper.getRules(rules);
 const openDialog = async (type: string, row: IConfiguration) => {
   if (type === 'edit') {
     fileList.value = [];
@@ -135,7 +136,7 @@ const openDialog = async (type: string, row: IConfiguration) => {
   configuration.dialog.isShowDialog = true;
 };
 
-const onSubmit = async () => {
+const submitProcess = async () => {
   isProcessing.value = true;
   await renderFile ()
   try{
@@ -151,13 +152,15 @@ const onSubmit = async () => {
     if (response.code === EnumApiErrorCode.success) {
       messageNotification(t('message.success'), EnumMessageType.Success);
       resetFields();
-      isProcessing.value = false;
     }
   }catch(e){
     //TODO handle the exception
   }
+  isProcessing.value = false;
   emit('refresh');
 };
+const configRules = formHelper.getRules(rules);
+const onSubmit = formHelper.getSubmitFunction(submitProcess);
 defineExpose({
   openDialog,
 });

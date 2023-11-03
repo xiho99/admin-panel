@@ -107,7 +107,7 @@
 							<el-form-item :label="$t('message.whetherToExternalLink')">
 								<el-radio-group v-model="state.ruleForm.isLink" :disabled="state.ruleForm.meta.isIframe">
 									<el-radio :label="true">{{ $t('message.yes') }}</el-radio>
-									<el-radio :label="false">{{ $t('message.no') }}}</el-radio>
+									<el-radio :label="false">{{ $t('message.no') }}</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
@@ -136,8 +136,8 @@
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoutesList } from '/@/stores/routesList';
-import { i18n } from '/@/i18n/index';
-import { useMenuApi } from '/@/api/menu/index';
+import { i18n } from '/@/i18n';
+import { useMenuApi } from '/@/api/menu';
 import { ElMessage } from 'element-plus';
 import { useI18n } from "vue-i18n";
 const menuApi = useMenuApi();

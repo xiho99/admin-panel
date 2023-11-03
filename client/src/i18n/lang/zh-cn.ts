@@ -76,7 +76,9 @@ export default {
 		layoutIframeViewTwo: '内嵌 iframe2',
 		operation: '手术',
 		configuration: '配置',
+		advertisement: '广告',
 		ads: '广告',
+		link: '关联',
 	},
 	staticRoutes: {
 		signIn: '登录',

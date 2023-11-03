@@ -1,7 +1,7 @@
 <template>
   <div class="home-container layout-pd">
-    <div class="shadow bg-white rounded">
-      <div class="system-user-search p-3 flex justify-end">
+    <div class="shadow bg-white rounded p-5">
+      <div class="system-user-search pr-3 flex justify-end">
         <el-button type="success" @click="onOpenAddDialog('add')">
           <el-icon>
             <ele-FolderAdd/>
@@ -32,6 +32,18 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class=" mt-5 flex justify-between text-2xl items-center">
+        <el-pagination
+            v-model:current-page="data.currentPage"
+            v-model:page-size="data.perPage"
+            :page-sizes="[10, 25, 50, 75, 100]"
+            :small="true"
+            :background="true"
+            layout="sizes, prev, pager, next"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :total="data.total"/>
+      </div>
       <configurationDialog  ref="openDialogRef" @refresh="getConfiguration()"/>
     </div>
   </div>
@@ -51,5 +63,7 @@ const {
   getConfiguration,
   filterTableData,
   deleteRow,
+  handleSizeChange,
+  handleCurrentChange
 } = useConfiguration();
 </script>

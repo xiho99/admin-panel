@@ -1,17 +1,17 @@
-import { computed, onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import useVariable from "/@/composables/useVariables";
 import useApi from "/@/api/api";
 import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
-import { IConfiguration } from "/@/models/IConfiguration";
+import { IAds } from "/@/models/IAds";
 import messageBoxHelper from "/@/libraries/elementUiHelpers/messageBoxHelper";
 import { useI18n } from "vue-i18n";
 import EnumMessageType from "/@/models/enums/enumMessageType";
-export default function useConfiguration() {
+export default function useAdvertisment() {
     const { isLoading} = useVariable();
-
     const api = useApi();
-    const data = reactive({
-        configurations: <IConfiguration[]>[],
+    const { t } = useI18n();
+    const formData = reactive({
+        data: <IAds[]>[],
         currentPage: 1,
         perPage: 10,
         search: '',
@@ -24,28 +24,20 @@ export default function useConfiguration() {
     const onOpenEditDialog = (type: string, row: Object) => {
         openDialogRef.value.openDialog(type, row);
     };
-    const { t } = useI18n();
-    const getConfiguration = async () => {
+    const getAds = async () => {
         isLoading.value = true;
-        const response = await api.getConfiguration();
+        const response = await api.getAds();
         if (response.code === EnumApiErrorCode.success) {
-            data.configurations = response.data.data;
-            data.currentPage = response.data.current_page;
-            data.perPage = response.data.per_page;
-            data.total = response.data.total;
+            formData.data = response.data.data;
+            formData.currentPage = response.data.current_page;
+            formData.perPage = response.data.per_page;
+            formData.total = response.data.total;
         } else {
             // eslint-disable-next-line no-console
             console.log(response);
         }
         isLoading.value = false;
     };
-    const filterTableData = computed(() =>
-        data.configurations.filter(
-            (item) =>
-                !data.search ||
-                item.appName.toLowerCase().includes(data.search.toLowerCase())
-        )
-    );
     const deleteId = ref(0);
     const deleteProcess = async () => {
         const request = {
@@ -53,24 +45,23 @@ export default function useConfiguration() {
         }
         const response = await api.deleteConfiguration(request)
         if (response.code === EnumApiErrorCode.success) {
-            getConfiguration();
+            getAds();
         }
     };
-    const deleteRow = (item: IConfiguration) => {
+    const deleteRow = (item: IAds) => {
         deleteId.value = item.id
         messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
     };
     onMounted(() => {
-        getConfiguration();
+        getAds();
     })
     return {
         isLoading,
         onOpenAddDialog,
         onOpenEditDialog,
         openDialogRef,
-        data,
-        getConfiguration,
-        filterTableData,
+        formData,
+        getAds,
         deleteRow,
     }
 }

@@ -76,7 +76,9 @@ export default {
 		layoutIframeViewTwo: 'IframeViewTwo',
 		operation: 'Operation',
 		configuration: 'Configuration',
+		advertisement: 'Advertisement',
 		ads: 'Ads',
+		link: 'Link',
 	},
 	staticRoutes: {
 		signIn: 'signIn',
