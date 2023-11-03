@@ -27,7 +27,7 @@
             <el-input v-model="data.search" size="default" :placeholder="$t('message.name')"/>
           </template>
           <template #default="scope">
-            <el-button link type="primary" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
+            <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
               {{ $t('message.table.edit') }}
             </el-button>
             <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row)">

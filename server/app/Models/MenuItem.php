@@ -13,6 +13,7 @@ class MenuItem extends BaseModel
         'image',
         'link',
         'sort',
+        'color',
         'type',
         'is_visible',
         'is_delete',
@@ -22,6 +23,9 @@ class MenuItem extends BaseModel
         'type' => 'required',
         'sort' => 'required',
         'link' => 'required',
+    ];
+    protected $casts = [
+        'is_visible' => 'boolean',
     ];
     protected static $initBase;
     public static function initBase(): static

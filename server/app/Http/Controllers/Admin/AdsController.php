@@ -11,7 +11,7 @@ use Illuminate\Http\Response;
 class AdsController extends BaseResponseController
 {
     public function get(): Response {
-        $configurations = Ads::orderBy('created_at', 'desc')
+        $configurations = Ads::orderBy('sort', 'asc')
             ->where('is_delete', 0)
             ->paginate(10);
         return $this->success($configurations);

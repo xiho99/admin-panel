@@ -21,7 +21,7 @@ export async function  saveAdmin(params = null) {
 		data: params,
 	});
 }
-export async function  deleteAdmin(params = null) {
+export async function  deleteAdmin(params?: object) {
 	return await request({
 		url: 'deleteAdmin',
 		method: 'post',

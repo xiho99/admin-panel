@@ -15,7 +15,6 @@
             <el-image class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
           </template>
         </el-table-column>
-        <el-table-column prop="sort" :label="$t('message.sort')"/>
         <el-table-column  :label="$t('message.is_visible')">
           <template #default="prop">
             <div v-if="prop.row.is_visible">
@@ -24,9 +23,9 @@
             <div v-else>
               <el-tag class="ml-2" type="info">{{ $t('message.disabled') }}</el-tag>
             </div>
-
           </template>
         </el-table-column>
+        <el-table-column prop="sort" :label="$t('message.sort')"/>
         <el-table-column :label="$t('message.created_at')">
           <template #default="prop">
             {{ prop.row.created_at.split('T')[0] }}
@@ -37,7 +36,7 @@
             <el-input v-model="formData.search" size="default" :placeholder="$t('message.name')"/>
           </template>
           <template #default="scope">
-            <el-button link type="primary" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
+            <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
               {{ $t('message.table.edit') }}
             </el-button>
             <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row.id)">

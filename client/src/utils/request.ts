@@ -14,7 +14,6 @@ const service: AxiosInstance = axios.create({
 		},
 	},
 });
-
 // 添加请求拦截器
 service.interceptors.request.use(
 	(config) => {

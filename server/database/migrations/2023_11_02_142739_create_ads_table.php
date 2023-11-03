@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('link')->nullable();
             $table->string('image')->nullable();
             $table->integer('sort')->nullable(0);
+            $table->boolean('is_visible')->default(0);
             $table->boolean('is_delete')->default(0);
             $table->timestamps();
         });

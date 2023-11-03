@@ -11,12 +11,12 @@ use Illuminate\Http\Response;
 class MenuItemController extends BaseResponseController
 {
     public function get(): Response {
-        $configurations = MenuItem::orderBy('created_at', 'desc')
+        $configurations = MenuItem::orderBy('sort', 'asc')
             ->where('is_delete', 0)
             ->paginate(10);
         return $this->success($configurations);
     }
-    public function saveMenuCategory(Request $request): Response {
+    public function saveMenuItem(Request $request): Response {
         $data = $request->all();
         // 验证信息
         $fail = MenuItem::getNotPassValidator($data);
@@ -33,38 +33,40 @@ class MenuItemController extends BaseResponseController
             'name' => $data['name'],
             'link' => $data['link'],
             'type' => $data['type'],
+            'color' => $data['color'],
+            'is_visible' => $data['is_visible'],
             'sort' => (int)$data['sort'] ?? 1,
         ];
-        if ($data['type'] == 'image') {
-            $address = $this->fileUpload($data['value'], 'uploads/');
+        if ($data['image']) {
+            $address = $this->fileUpload($data['image'], 'uploads/');
             $item['image'] = $address;
-        } else {
-            $item['image'] = $data['image'];
         }
         $id = MenuItem::saveInfo($item);
         return $this->success($id);
     }
-    public function updateMenuCategory(Request $request) {
+    public function updateMenuItem(Request $request) {
         $data = $request->all();
         // 验证信息
         $fail = MenuItem::getNotPassValidator($data);
         if($fail){
             return $this->error('Missing required fields');
         }
-        $menuCat = MenuItem::findOrFail($data['id']);
+        $menuItem = MenuItem::findOrFail($data['id']);
         if ($data['image']) {
             $address = $this->fileUpload($data['image'], 'uploads/');
-            $menuCat->image = $address;
+            $menuItem->image = $address;
         }
-        $menuCat->name = $data['name'];
-        $menuCat->link = $data['link'];
-        $menuCat->type = $data['type'];
-        $menuCat->sort = $data['sort'];
-        $menuCat->update();
-        return $this->success($menuCat, 0, 201);
+        $menuItem->name = $data['name'];
+        $menuItem->link = $data['link'];
+        $menuItem->type = $data['type'];
+        $menuItem->color = $data['color'];
+        $menuItem->is_visible = $data['is_visible'];
+        $menuItem->sort = $data['sort'];
+        $menuItem->update();
+        return $this->success($menuItem, 0, 201);
     }
 
-    public function deleteMenuCategory(Request $request)
+    public function deleteMenuItem(Request $request)
     {
         $id = $request->input('id' , null);
         MenuItem::deleteInfo($id);

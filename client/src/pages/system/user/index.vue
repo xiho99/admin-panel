@@ -78,9 +78,11 @@
 <script setup lang="ts" name="systemUser">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { adminList } from '/@/api/admin';
+import { adminList, deleteAdmin } from '/@/api/admin';
 import { getAllRole } from '/@/api/role';
 import dayjs from 'dayjs';
+import { useI18n } from "vue-i18n";
+import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
 
 // 引入组件
 const UserDialog = defineAsyncComponent(() => import('/@/pages/system/user/dialog.vue'));
@@ -99,7 +101,7 @@ const state = reactive({
   },
   roleList: {},
 });
-
+const { t } = useI18n();
 // 初始化表格数据
 const getTableData = async () => {
   state.tableData.loading = true;
@@ -118,14 +120,20 @@ const onOpenEditUser = (type: string, row: RowUserType) => {
 };
 // 删除用户
 const onRowDel = (row: RowUserType) => {
-  ElMessageBox.confirm(`此操作将永久删除账户名称：“${row?.username}”，是否继续?`, '提示', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(`此操作将永久删除账户名称：“${row?.userName}”，是否继续?`, '提示', {
+    confirmButtonText: t('message.yes'),
+    cancelButtonText: t('message.no'),
     type: 'warning',
   })
-      .then(() => {
+      .then( async () => {
+
+        const response = await deleteAdmin(row);
+        if (response.code === EnumApiErrorCode.success) {
+          ElMessage.success(t('message.success'));
+        } else {
+          ElMessage.success(t('message.fail'));
+        }
         getTableData();
-        ElMessage.success('删除成功');
       })
       .catch(() => {
       });

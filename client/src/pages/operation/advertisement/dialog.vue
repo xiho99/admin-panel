@@ -13,7 +13,7 @@
         <el-form-item prop="link" :label="$t('message.router.link')">
           <el-input type="text" v-model="formData.link"/>
         </el-form-item>
-        <el-form-item prop="sort" :label="$t('message.router.link')">
+        <el-form-item prop="sort" :label="$t('message.sort')">
           <el-input type="number" v-model="formData.sort"/>
         </el-form-item>
         <el-form-item :label="$t('message.is_visible')">

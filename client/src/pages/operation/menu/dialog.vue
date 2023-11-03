@@ -1,22 +1,44 @@
 <template>
   <div class="system-user-dialog-container">
-    <el-dialog @close="resetFields" v-model="formDialog.isShowDialog" :title="formDialog.title">
+    <el-dialog @close="resetFields" destroy-on-close v-model="formDialog.isShowDialog" :title="formDialog.title">
       <el-form :label-position="'top'"
                ref="ruleFormRef"
                :model="formData"
-               :rules="adsRules"
+               :rules="menuItemRules"
                class="grid md:grid-cols-2 grid-cols-1 gap-5"
       >
-        <el-form-item prop="title" :label="$t('message.name')">
-          <el-input type="text" v-model="formData.title"/>
+        <el-form-item prop="name" :label="$t('message.name')">
+          <el-input type="text" v-model="formData.name"/>
+        </el-form-item>
+        <el-form-item prop="type" :label="$t('message.type')">
+          <el-select v-model="formData.type" class="w-full" :placeholder="$t('select')">
+            <el-option :label="$t('icon')" value="icon"> {{ $t('message.icon') }}</el-option>
+            <el-option :label="$t('button')" value="button"> {{ $t('message.button') }}</el-option>
+          </el-select>
         </el-form-item>
         <el-form-item prop="link" :label="$t('message.router.link')">
           <el-input type="text" v-model="formData.link"/>
         </el-form-item>
-        <el-form-item prop="sort" :label="$t('message.router.link')">
+        <el-form-item prop="sort" :label="$t('message.sort')">
           <el-input type="number" v-model="formData.sort"/>
         </el-form-item>
-        <el-form-item :label="$t('message.image')">
+        <el-form-item>
+          <div class="flex gap-10">
+            <div class="flex gap-5">
+              <span>{{ $t('message.is_visible') }}</span>
+              <el-switch
+                  v-model="formData.is_visible"
+                  :active-action-icon="View"
+                  :inactive-action-icon="Hide"
+              />
+            </div>
+            <div class="flex gap-5" v-if="formData.type === 'button'">
+              <span>{{ $t('message.buttonColor') }}</span>
+              <el-color-picker v-model="formData.color" />
+            </div>
+          </div>
+        </el-form-item>
+        <el-form-item :label="$t('message.image')" v-if="formData.type === 'icon'">
           <el-upload
               v-model:file-list="fileList"
               ref="upload"
@@ -55,7 +77,8 @@ import useApi from "/src/api/api";
 import EnumMessageType from "/src/models/enums/enumMessageType";
 import { messageNotification } from "/src/libraries/elementUiHelpers/notificationHelper";
 import EnumApiErrorCode from "/src/models/enums/enumApiErrorCode";
-import { IAds } from "/@/models/IAds";
+import { IMenu } from "/@/models/IMenu";
+import { Hide, View } from '@element-plus/icons-vue'
 
 const api = useApi();
 const { isProcessing, ruleFormRef, fileList } = useVariable();
@@ -67,9 +90,12 @@ const {
 } = uploadFileHelper;
 const formData = reactive({
   id: 0,
-  title: '',
+  name: '',
   link: '',
+  type: '',
   image: '',
+  color: '#409EFF',
+  is_visible: true,
   sort: 0,
 });
 const formDialog = reactive({
@@ -82,25 +108,29 @@ const formDialog = reactive({
 const emit = defineEmits(['refresh']);
 const resetFields = () => {
   formData.id = 0;
-  formData.title = '';
+  formData.name = '';
   formData.link = '';
   formData.image = '';
+  formData.type = '';
   formData.sort = 0;
-  // formDialog.isShowDialog = false;
+  formData.is_visible = true;
   file.value = '';
   fileList.value = [];
 }
 const rules: Record<string, IRule> = ({
-  title: { required: true },
+  name: { required: true },
   link: { required: true },
+  type: { required: true },
+  sort: { required: true },
   image: { required: true },
 });
-const openDialog = async (type: string, row: IAds) => {
+const openDialog = async (type: string, row: IMenu) => {
   if (type === 'edit') {
     fileList.value = [];
     // 模拟数据，实际请走接口
-    fileList.value.push({ name: row.title, url: row.image });
-    Object.assign(formData, row)
+    fileList.value.push({ name: row.name, url: row.image });
+    Object.assign(formData, row);
+    formData.image = '';
     formDialog.title = t('message.table.edit');
     formDialog.submit = t('message.table.submit');
   } else {
@@ -113,7 +143,7 @@ const openDialog = async (type: string, row: IAds) => {
 
 const submitProcess = async () => {
   isProcessing.value = true;
-  if (!file.value && formDialog.type !== 'edit') {
+  if ((!file.value && formDialog.type !== 'edit') && formData.type === 'icon') {
     isProcessing.value = false;
     return messageNotification(t('message.imageRequired'), EnumMessageType.Error);
   }
@@ -123,12 +153,15 @@ const submitProcess = async () => {
   try {
     const request = {
       id: formData.id,
-      title: formData.title,
+      name: formData.name,
+      type: formData.type,
       link: formData.link,
+      is_visible: formData.is_visible,
       image: file.value ?? formData.image,
       sort: formData.sort,
+      color: formData.color,
     };
-    const response = request.id !== 0 ? await api.addMenuItem(request) : await api.updateMenuItem(request);
+    const response = request.id !== 0 ? await api.updateMenuItem(request) : await api.addMenuItem(request);
     if (response.code === EnumApiErrorCode.success) {
       messageNotification(t('message.success'), EnumMessageType.Success);
       resetFields();
@@ -141,7 +174,7 @@ const submitProcess = async () => {
   isProcessing.value = false;
 };
 
-const adsRules = formHelper.getRules(rules);
+const menuItemRules = formHelper.getRules(rules);
 const onSubmit = formHelper.getSubmitFunction(submitProcess);
 defineExpose({
   openDialog,

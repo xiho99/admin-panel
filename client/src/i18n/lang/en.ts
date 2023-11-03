@@ -243,5 +243,14 @@ export default {
 	ok: "Ok",
 	imageRequired: "Image required",
 	created_at: "Create at",
-	updated_at: "Update at"
+	updated_at: "Update at",
+	icon: "Icon",
+	is_visible: "Is visible",
+	enabled: "Enabled",
+	disabled: "Disabled",
+	buttonColor: "Button color",
+	color: "Color",
+	hint: "Hint",
+	fail: "Fail!",
+	youHaveBeenLogOut: "You have been logged out, please log in again!",
 };

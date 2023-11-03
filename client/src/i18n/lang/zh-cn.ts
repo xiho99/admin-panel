@@ -243,5 +243,13 @@ export default {
 	warning: "警告",
 	imageRequired: "需要图片",
 	created_at: "创建于",
-	updated_at: "更新于"
+	updated_at: "更新于",
+	icon: "图标",
+	is_visible: "可见（是/否）",
+	enabled: "启用",
+	disabled: "残疾人",
+	buttonColor: "按钮颜色",
+	color: "颜色",
+	fail: "失败!",
+	youHaveBeenLogOut: "您已退出，请重新登录！",
 };

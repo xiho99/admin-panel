@@ -10,12 +10,37 @@
         </el-button>
       </div>
       <el-table :data="formData.data">
-        <el-table-column :label="$t('message.router.ads')">
+        <el-table-column :label="$t('message.image')">
           <template #default="prop">
-            <el-image class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
+            <el-image  v-show="prop.row.type === 'icon'" class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
           </template>
         </el-table-column>
+        <el-table-column prop="name" :label="$t('message.name')"/>
+        <el-table-column prop="link" :label="$t('message.router.link')">
+          <template #default="prop">
+            <el-link type="primary" :underline="false"> {{ prop.row.link }}</el-link>
+          </template>
+        </el-table-column>
+        <el-table-column prop="color" :label="$t('message.color')">
+          <template #default="prop">
+            <span :style="{ color: prop.row.color }">
+              {{ prop.row.color }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="type" :label="$t('message.type')"/>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
+        <el-table-column  :label="$t('message.is_visible')">
+          <template #default="prop">
+            <div v-if="prop.row.is_visible">
+              <el-tag class="ml-2" type="success">{{ $t('message.enabled') }}</el-tag>
+            </div>
+            <div v-else>
+              <el-tag class="ml-2" type="info">{{ $t('message.disabled') }}</el-tag>
+            </div>
+
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('message.created_at')">
            <template #default="prop">
              {{ prop.row.created_at.split('T')[0] }}
@@ -26,7 +51,7 @@
             <el-input v-model="formData.search" size="default" :placeholder="$t('message.name')"/>
           </template>
           <template #default="scope">
-            <el-button link type="primary" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
+            <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
               {{ $t('message.table.edit') }}
             </el-button>
             <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row.id)">
