@@ -14,6 +14,7 @@ class MenuItem extends BaseModel
         'link',
         'sort',
         'type',
+        'is_visible',
         'is_delete',
     ];
     protected $rules = [

@@ -32,6 +32,7 @@ class AdsController extends BaseResponseController
         $from = [
             'title' => $data['title'],
             'link' => $data['link'],
+            'is_visible' => $data['is_visible'],
             'image' => $data['image'] ?? 1,
             'sort' => (int)$data['sort'] ?? 1,
         ];
@@ -56,6 +57,7 @@ class AdsController extends BaseResponseController
         }
         $ads->title = $data['title'];
         $ads->link = $data['link'];
+        $ads->is_visible = $data['is_visible'];
         $ads->sort = $data['sort'];
         $ads->update();
         return $this->success($ads, 0, 201);

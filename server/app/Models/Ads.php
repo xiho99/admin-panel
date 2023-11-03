@@ -14,11 +14,15 @@ class Ads extends BaseModel
         'link' ,
         'image',
         'sort',
+        'is_visible',
         'is_delete',
     ];
     protected $rules = [
         'title' => 'required',
         'link' => 'required',
+    ];
+    protected $casts = [
+        'is_visible' => 'boolean',
     ];
     public static function initBase(): static
     {

@@ -16,10 +16,21 @@
           </template>
         </el-table-column>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
+        <el-table-column  :label="$t('message.is_visible')">
+          <template #default="prop">
+            <div v-if="prop.row.is_visible">
+              <el-tag class="ml-2" type="success">{{ $t('message.enabled') }}</el-tag>
+            </div>
+            <div v-else>
+              <el-tag class="ml-2" type="info">{{ $t('message.disabled') }}</el-tag>
+            </div>
+
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('message.created_at')">
-           <template #default="prop">
-             {{ prop.row.created_at.split('T')[0] }}
-           </template>
+          <template #default="prop">
+            {{ prop.row.created_at.split('T')[0] }}
+          </template>
         </el-table-column>
         <el-table-column>
           <template #header>

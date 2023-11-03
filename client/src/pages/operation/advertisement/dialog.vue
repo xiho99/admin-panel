@@ -16,6 +16,13 @@
         <el-form-item prop="sort" :label="$t('message.router.link')">
           <el-input type="number" v-model="formData.sort"/>
         </el-form-item>
+        <el-form-item :label="$t('message.is_visible')">
+          <el-switch
+              v-model="formData.is_visible"
+              :active-action-icon="View"
+              :inactive-action-icon="Hide"
+          />
+        </el-form-item>
         <el-form-item :label="$t('message.image')">
           <el-upload
               v-model:file-list="fileList"
@@ -56,6 +63,7 @@ import EnumMessageType from "/src/models/enums/enumMessageType";
 import { messageNotification } from "/src/libraries/elementUiHelpers/notificationHelper";
 import EnumApiErrorCode from "/src/models/enums/enumApiErrorCode";
 import { IAds } from "/@/models/IAds";
+import { Hide, View } from '@element-plus/icons-vue'
 
 const api = useApi();
 const { isProcessing, ruleFormRef, fileList } = useVariable();
@@ -73,6 +81,7 @@ const formData = reactive({
   sort: 0,
   type: '',
   color: 0,
+  is_visible: true,
 });
 const formDialog = reactive({
   title: '',
@@ -89,6 +98,7 @@ const resetFields = () => {
   formData.image = '';
   formData.type = '';
   formData.sort = 0;
+  formData.is_visible = true;
   file.value = '';
   fileList.value = [];
 }
@@ -103,6 +113,7 @@ const openDialog = async (type: string, row: IAds) => {
     // 模拟数据，实际请走接口
     fileList.value.push({ name: row.title, url: row.image });
     Object.assign(formData, row)
+    formData.image = ''
     formDialog.title = t('message.table.edit');
     formDialog.submit = t('message.table.submit');
   } else {
@@ -130,6 +141,7 @@ const submitProcess = async () => {
       type: formData.type,
       image: file.value ?? formData.image,
       sort: formData.sort,
+      is_visible: formData.is_visible,
     };
     const response = request.id !== 0 ? await api.updateAds(request) : await api.addAds(request);
     if (response.code === EnumApiErrorCode.success) {
