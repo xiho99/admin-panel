@@ -1,4 +1,4 @@
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive } from "vue";
 import useVariable from "/@/composables/useVariables";
 import useApi from "/@/api/api";
 import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
@@ -6,8 +6,9 @@ import { IAds } from "/@/models/IAds";
 import messageBoxHelper from "/@/libraries/elementUiHelpers/messageBoxHelper";
 import { useI18n } from "vue-i18n";
 import EnumMessageType from "/@/models/enums/enumMessageType";
-export default function useAdvertisment() {
-    const { isLoading} = useVariable();
+import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
+export default function useAdvertisement() {
+    const { isLoading, openDialogRef, } = useVariable();
     const api = useApi();
     const { t } = useI18n();
     const formData = reactive({
@@ -16,12 +17,12 @@ export default function useAdvertisment() {
         perPage: 10,
         search: '',
         total: 0,
+        id: 0
     });
-    const openDialogRef = ref();
     const onOpenAddDialog = (type: string) => {
         openDialogRef.value.openDialog(type);
     };
-    const onOpenEditDialog = (type: string, row: Object) => {
+    const onOpenEditDialog = (type: string, row: object) => {
         openDialogRef.value.openDialog(type, row);
     };
     const getAds = async () => {
@@ -38,18 +39,18 @@ export default function useAdvertisment() {
         }
         isLoading.value = false;
     };
-    const deleteId = ref(0);
     const deleteProcess = async () => {
         const request = {
-            id: deleteId.value
+            id: formData.id
         }
-        const response = await api.deleteConfiguration(request)
+        const response = await api.deleteAds(request)
         if (response.code === EnumApiErrorCode.success) {
+            messageNotification(t('message.success'), EnumMessageType.Success);
             getAds();
         }
     };
-    const deleteRow = (item: IAds) => {
-        deleteId.value = item.id
+    const deleteRow = (id: number) => {
+        formData.id = id
         messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
     };
     onMounted(() => {

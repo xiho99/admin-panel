@@ -238,6 +238,10 @@ export default {
 	text: "文本",
 	success: "成功",
 	name: "姓名",
+	areYouSure: "你确定吗?",
 	ok: "好的",
-	warning: "警告"
+	warning: "警告",
+	imageRequired: "需要图片",
+	created_at: "创建于",
+	updated_at: "更新于"
 };

@@ -241,5 +241,7 @@ export default {
 	areYouSure: "Are you sure?",
 	warning: "Warning",
 	ok: "Ok",
-
+	imageRequired: "Image required",
+	created_at: "Create at",
+	updated_at: "Update at"
 };

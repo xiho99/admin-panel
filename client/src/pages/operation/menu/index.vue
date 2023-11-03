@@ -35,21 +35,21 @@
           </template>
         </el-table-column>
       </el-table>
-      <adsDialog ref="openDialogRef" @refresh="getAds()"/>
+      <menuDialog ref="openDialogRef" @refresh="getMenuItem()"/>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import useAdvertisement from "/@/composables/useAdvertisement";
 import { defineAsyncComponent } from "vue";
+import UseMenuItem from "/@/composables/useMenuItem";
 
-const adsDialog = defineAsyncComponent(() => import('/@/pages/operation/advertisement/dialog.vue'));
+const menuDialog = defineAsyncComponent(() => import('/@/pages/operation/menu/dialog.vue'));
 const {
   onOpenAddDialog,
   onOpenEditDialog,
   openDialogRef,
-  getAds,
+  getMenuItem,
   formData,
   deleteRow,
-} = useAdvertisement();
+} = UseMenuItem();
 </script>

@@ -5,6 +5,4 @@ interface IAds extends IBase {
     link: string,
     image: string | undefined,
 }
-export {
-    IAds,
-}
+export type { IAds }

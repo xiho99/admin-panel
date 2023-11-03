@@ -5,21 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ads extends BaseModel
+class MenuItem extends BaseModel
 {
     use HasFactory;
-    protected static $initBase;
     protected $fillable = [
-        'title',
-        'link' ,
+        'name',
         'image',
+        'link',
         'sort',
+        'type',
         'is_delete',
     ];
     protected $rules = [
-        'title' => 'required',
+        'name' => 'required',
+        'type' => 'required',
+        'sort' => 'required',
         'link' => 'required',
     ];
+    protected static $initBase;
     public static function initBase(): static
     {
         if(!self::$initBase){

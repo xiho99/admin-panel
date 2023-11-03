@@ -51,7 +51,7 @@ class AdsController extends BaseResponseController
         }
         $ads = Ads::findOrFail($data['id']);
         if ($data['image']) {
-            $address = $this->fileUpload($data['value'], 'uploads/');
+            $address = $this->fileUpload($data['image'], 'uploads/');
             $ads->image = $address;
         }
         $ads->title = $data['title'];
@@ -62,9 +62,9 @@ class AdsController extends BaseResponseController
     }
     public function deleteAds(Request $request)
     {
-        $category = Ads::findOrFail($request->id);
-        $category->is_delete = 1;
-        $category->update();
+        $ads = Ads::findOrFail($request['id']);
+        $ads->is_delete = 1;
+        $ads->update();
         return $this->success(null,  0);
     }
 }

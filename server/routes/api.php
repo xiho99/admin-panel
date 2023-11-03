@@ -54,6 +54,22 @@ Route::controller(\App\Http\Controllers\Admin\ConfigurationController::class)->g
         Route::post('deleteConfiguration', 'deleteConfiguration');
     });
 });
+Route::controller(\App\Http\Controllers\Admin\AdsController::class)->group(function () {
+    Route::group(['middleware' => 'jwt'], function ($router) {
+        Route::get('getAds', 'get');
+        Route::post('saveAds', 'saveAds');
+        Route::post('updateAds', 'updateAds');
+        Route::post('deleteAds', 'deleteAds');
+    });
+});
+Route::controller(\App\Http\Controllers\Admin\MenuItemController::class)->group(function () {
+    Route::group(['middleware' => 'jwt'], function ($router) {
+        Route::get('getMenuItem', 'get');
+        Route::post('saveMenuItem', 'saveMenuItem');
+        Route::post('updateMenuItem', 'updateMenuItem');
+        Route::post('deleteMenuItem', 'deleteMenuItem');
+    });
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
