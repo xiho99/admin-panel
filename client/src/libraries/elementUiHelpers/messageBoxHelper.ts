@@ -18,7 +18,24 @@ const confirm = async (type: EnumMessageType, callback: () => void, content = 'A
     },
   });
 };
-
+const confirmDelete = async (type: EnumMessageType, content = 'Are you sure?', confirmButton= 'Yes') => {
+  await ElMessageBox.confirm(content, {
+    dangerouslyUseHTMLString: true,
+    confirmButtonText: confirmButton,
+    type,
+    showCancelButton: false,
+    beforeClose: async (action, instance, done) => {
+      if (action === 'confirm') {
+        instance.confirmButtonLoading = true;
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  });
+};
 export default {
-  confirm
+  confirm,
+  confirmDelete
 };

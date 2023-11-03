@@ -52,5 +52,21 @@ export default function  useApi() {
 		deleteMenuItem: (params?: object) => {
 			return service.post('/deleteMenuItem', params);
 		},
+		getCategory: (params?: object) => {
+			return request({
+				url: '/getCategory',
+				method: 'get',
+				params,
+			});
+		},
+		addCategory: (params?: object) => {
+			return service.post('/addCategory', params);
+		},
+		updateCategory: (params?: object) => {
+			return service.post('/updateCategory', params);
+		},
+		deleteCategory: (params?: object) => {
+			return service.post('/deleteCategory', params);
+		},
 	};
 }

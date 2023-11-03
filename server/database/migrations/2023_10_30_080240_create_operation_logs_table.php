@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('controller');
             $table->string('method');
             $table->string('parameters');
-            $table->string('start_time');
-            $table->string('end_time');
+            $table->string('end_time')->nullable();
+            $table->string('start_time')->nullable();
             $table->string('nickname');
             $table->integer('admin_id');
             $table->timestamps();

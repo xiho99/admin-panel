@@ -31,8 +31,8 @@ class LogOperation
             'controller' => $controller,
             'method' => $method,
             'parameters' => $parameters,
-//            'start_time' => $startTime,
-//            'end_time' => $endTime,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
             'admin_id' => $user['id'],
             'nickname' => $user['nickname'],
         ]);

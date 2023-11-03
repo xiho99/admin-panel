@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('menuSuperiorPath')->nullable();
             $table->integer('menuType')->default(1)->comment('Routing type, 1. Menu 2. Button');
             $table->string('name')->nullable()->comment('Route name');
-            $table->string('component')->comment('component path');
+            $table->string('component')->comment('component path')->nullable();
             $table->integer('isLink')->default(0)->comment('Is it an external link?');
             $table->integer('menuSort')->comment('sort');
             $table->string('redirect')->nullable()->comment('Redirect');

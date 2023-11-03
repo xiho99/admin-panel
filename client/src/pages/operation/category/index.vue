@@ -54,27 +54,27 @@
             <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
               {{ $t('message.table.edit') }}
             </el-button>
-            <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row.id)">
+            <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row)">
               {{ $t('message.table.delete') }}
             </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <menuDialog ref="openDialogRef" @refresh="getMenuItem()"/>
+      <categoryDialog ref="openDialogRef" @refresh="getCategory()"/>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { defineAsyncComponent } from "vue";
-import useMenuItem from "/@/composables/useMenuItem";
+import userCategory from "/@/composables/userCategory";
 
-const menuDialog = defineAsyncComponent(() => import('/@/pages/operation/menu/dialog.vue'));
+const categoryDialog = defineAsyncComponent(() => import('/@/pages/operation/category/dialog.vue'));
 const {
   onOpenAddDialog,
   onOpenEditDialog,
   openDialogRef,
-  getMenuItem,
+  getCategory,
   formData,
   deleteRow,
-} = useMenuItem();
+} = userCategory();
 </script>

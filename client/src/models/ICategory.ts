@@ -5,6 +5,6 @@ interface ICategory extends IBase{
     name: string,
     slug: string | null,
 }
-export {
+export type {
     ICategory,
 }

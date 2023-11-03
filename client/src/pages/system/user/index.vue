@@ -126,7 +126,6 @@ const onRowDel = (row: RowUserType) => {
     type: 'warning',
   })
       .then( async () => {
-
         const response = await deleteAdmin(row);
         if (response.code === EnumApiErrorCode.success) {
           ElMessage.success(t('message.success'));

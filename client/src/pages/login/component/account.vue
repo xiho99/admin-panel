@@ -108,21 +108,20 @@ const onSignIn = async () => {
       const isNoPower = await initBackEndControlRoutes();
       signInSuccess(isNoPower);
     }catch(e){
-      return ;
+      return state.loading.signIn = false;
     }
-    state.loading.signIn = false;
   }
 };
 // 登录成功后的跳转
 const signInSuccess = (isNoPower: boolean | undefined) => {
 	if (isNoPower) {
-		ElMessage.warning('抱歉，您没有登录权限');
+		ElMessage.warning('Sorry, you do not have login permission');
 		Session.clear();
 	} else {
-		// 初始化登录成功时间问候语
+		// Initialization login success time greeting
 		let currentTimeInfo = currentTime.value;
-		// 登录成功，跳到转首页
-		// 如果是复制粘贴的路径，非首页/登录页，那么登录成功后重定向到对应的路径中
+		// Login successful, jump to the home page
+		// If it is a copy-pasted path and is not the homepage/login page, then you will be redirected to the corresponding path after successful login.
 		if (route.query?.redirect) {
 			router.push({
 				path: <string>route.query?.redirect,

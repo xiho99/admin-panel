@@ -46,7 +46,7 @@ export default {
 			children: [{
 					path: '/system/menu',
 					name: 'systemMenu',
-					component: () => import('/@/views/system/menu/index.vue'),
+					component: () => import('/@/pages/system/menu/index.vue'),
 					meta: {
 						title: 'message.router.systemMenu',
 						isLink: '',

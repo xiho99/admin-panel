@@ -17,7 +17,7 @@ declare module 'vue-router' {
 export const dynamicRoutes : Array<RouteRecordRaw> = [
 	{
 		path: '/',
-		name: '/',
+		name: '/home',
 		component: () => import('/@/layout/index.vue'),
 		redirect: '/home',
 		meta: {

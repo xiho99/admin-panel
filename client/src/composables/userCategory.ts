@@ -2,22 +2,21 @@ import { onMounted, reactive } from "vue";
 import useVariable from "/@/composables/useVariables";
 import useApi from "/@/api/api";
 import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
-import { IAds } from "/@/models/IAds";
 import messageBoxHelper from "/@/libraries/elementUiHelpers/messageBoxHelper";
 import { useI18n } from "vue-i18n";
 import EnumMessageType from "/@/models/enums/enumMessageType";
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
-export default function useMenuItem() {
+import { ICategory } from "/@/models/ICategory";
+export default function userCategory() {
 	const { isLoading, openDialogRef, } = useVariable();
 	const api = useApi();
 	const { t } = useI18n();
 	const formData = reactive({
-		data: <IAds[]>[],
+		data: <ICategory[]>[],
 		currentPage: 1,
 		perPage: 10,
 		search: '',
 		total: 0,
-		id: 0
 	});
 	const onOpenAddDialog = (type: string) => {
 		openDialogRef.value.openDialog(type);
@@ -25,36 +24,32 @@ export default function useMenuItem() {
 	const onOpenEditDialog = (type: string, row: object) => {
 		openDialogRef.value.openDialog(type, row);
 	};
-	const getMenuItem = async () => {
+	const getCategory = async () => {
 		isLoading.value = true;
-		const response = await api.getMenuItem();
+		const response = await api.getCategory();
 		if (response.code === EnumApiErrorCode.success) {
 			formData.data = response.data.data;
 			formData.currentPage = response.data.current_page;
 			formData.perPage = response.data.per_page;
 			formData.total = response.data.total;
 		} else {
-			// eslint-disable-next-line no-console
-			console.log(response);
+			messageNotification(response.message, EnumMessageType.Error);
 		}
 		isLoading.value = false;
 	};
-	const deleteProcess = async () => {
-		const request = {
-			id: formData.id
-		}
-		const response = await api.deleteMenuItem(request)
-		if (response.code === EnumApiErrorCode.success) {
-			messageNotification(t('message.success'), EnumMessageType.Success);
-			getMenuItem();
-		}
-	};
-	const deleteRow = (id: number) => {
-		formData.id = id
-		messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
+	const deleteRow = (row: Object) => {
+		messageBoxHelper.confirmDelete(EnumMessageType.Warning, t('message.areYouSure', t('message.yes'))).then( async () => {
+			const response = await api.deleteMenuItem(row)
+			if (response.code === EnumApiErrorCode.success) {
+				messageNotification(t('message.success'), EnumMessageType.Success);
+				getCategory();
+			} else {
+				messageNotification(response.message, EnumMessageType.Error);
+			}
+		})
 	};
 	onMounted(() => {
-		getMenuItem();
+		getCategory();
 	})
 	return {
 		isLoading,
@@ -62,7 +57,7 @@ export default function useMenuItem() {
 		onOpenEditDialog,
 		openDialogRef,
 		formData,
-		getMenuItem,
+		getCategory,
 		deleteRow,
 	}
 }

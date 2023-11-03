@@ -70,6 +70,14 @@ Route::controller(\App\Http\Controllers\Admin\MenuItemController::class)->group(
         Route::post('deleteMenuItem', 'deleteMenuItem');
     });
 });
+Route::controller(\App\Http\Controllers\Admin\CategoryController::class)->group(function () {
+    Route::group(['middleware' => 'jwt'], function () {
+        Route::get('getCategory', 'get');
+        Route::post('saveCategory', 'saveCategory');
+        Route::post('updateCategory', 'updateCategory');
+        Route::post('deleteCategory', 'deleteCategory');
+    });
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

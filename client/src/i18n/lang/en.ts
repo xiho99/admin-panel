@@ -79,6 +79,7 @@ export default {
 		advertisement: 'Advertisement',
 		ads: 'Ads',
 		link: 'Link',
+		category: 'Category',
 	},
 	staticRoutes: {
 		signIn: 'signIn',

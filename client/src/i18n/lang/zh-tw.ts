@@ -79,6 +79,7 @@ export default {
 		advertisement: '广告',
 		ads: '广告',
 		link: '关联',
+		category: '类别',
 	},
 	staticRoutes: {
 		signIn: '登入',
