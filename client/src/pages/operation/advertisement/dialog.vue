@@ -1,6 +1,6 @@
 <template>
   <div class="system-user-dialog-container">
-    <el-dialog @close="resetFields" v-model="formDialog.isShowDialog" :title="formDialog.title">
+    <el-dialog @close="resetFields" destroy-on-close v-model="formDialog.isShowDialog" :title="formDialog.title">
       <el-form :label-position="'top'"
                ref="ruleFormRef"
                :model="formData"
@@ -55,7 +55,7 @@ import useApi from "/src/api/api";
 import EnumMessageType from "/src/models/enums/enumMessageType";
 import { messageNotification } from "/src/libraries/elementUiHelpers/notificationHelper";
 import EnumApiErrorCode from "/src/models/enums/enumApiErrorCode";
-import { IMenu } from "/@/models/IMenu";
+import { IAds } from "/@/models/IAds";
 
 const api = useApi();
 const { isProcessing, ruleFormRef, fileList } = useVariable();
@@ -67,7 +67,7 @@ const {
 } = uploadFileHelper;
 const formData = reactive({
   id: 0,
-  name: '',
+  title: '',
   link: '',
   image: '',
   sort: 0,
@@ -84,12 +84,11 @@ const formDialog = reactive({
 const emit = defineEmits(['refresh']);
 const resetFields = () => {
   formData.id = 0;
-  formData.name = '';
+  formData.title = '';
   formData.link = '';
   formData.image = '';
   formData.type = '';
   formData.sort = 0;
-  // formDialog.isShowDialog = false;
   file.value = '';
   fileList.value = [];
 }
@@ -98,11 +97,11 @@ const rules: Record<string, IRule> = ({
   link: { required: true },
   image: { required: true },
 });
-const openDialog = async (type: string, row: IMenu) => {
+const openDialog = async (type: string, row: IAds) => {
   if (type === 'edit') {
     fileList.value = [];
     // 模拟数据，实际请走接口
-    fileList.value.push({ name: row.name, url: row.image });
+    fileList.value.push({ name: row.title, url: row.image });
     Object.assign(formData, row)
     formDialog.title = t('message.table.edit');
     formDialog.submit = t('message.table.submit');
@@ -126,7 +125,7 @@ const submitProcess = async () => {
   try {
     const request = {
       id: formData.id,
-      title: formData.name,
+      title: formData.title,
       link: formData.link,
       type: formData.type,
       image: file.value ?? formData.image,

@@ -1,6 +1,6 @@
 <template>
   <div class="system-user-dialog-container">
-    <el-dialog @close="resetFields" v-model="configuration.dialog.isShowDialog" :title="configuration.dialog.title">
+    <el-dialog @close="resetFields"  destroy-on-close v-model="configuration.dialog.isShowDialog" :title="configuration.dialog.title">
       <el-form :label-position="'top'"
                ref="ruleFormRef"
                :model="configuration"
