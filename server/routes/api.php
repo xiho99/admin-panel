@@ -87,6 +87,21 @@ Route::controller(\App\Http\Controllers\Admin\GroupCategoryController::class)->g
         Route::post('deleteGroupCategory', 'deleteGroupCategory');
     });
 });
+Route::controller(\App\Http\Controllers\Admin\GroupCategoryController::class)->group(function () {
+    Route::group(['middleware' => 'jwt'], function () {
+        Route::get('getGroupCategory ', 'get');
+        Route::post('saveGroupCategory', 'saveGroupCategory');
+        Route::post('updateGroupCategory', 'updateGroupCategory');
+        Route::post('deleteGroupCategory', 'deleteGroupCategory');
+    });
+});
+// todo ** API for front-site **
+Route::controller(\App\Http\Controllers\API\FrontEndController::class)->group(function () {
+    Route::get('getConfigurations ', 'getConfigurations');
+    Route::get('getMenuList', 'getMenuList');
+    Route::get('getGroupList', 'getGroupList');
+    Route::get('getAds', 'getAds');
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
