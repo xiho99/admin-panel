@@ -15,6 +15,7 @@ class AdminController extends BaseController
 {
     public function login(Request $request): Response
     {
+
         $data = $request->all();
         $fail = AdminUser::getNotPassValidator($data);
         if ($fail) {
@@ -43,10 +44,10 @@ class AdminController extends BaseController
 
         return $this->success(['access_token' => 'Bearer '.$token,'userName'=>$user['nickname']]);
     }
-    public function logout ()
+    public function logout (): Response
     {
         auth('admin')->logout();
-        return response()->json('success');
+        return $this->success(null);
     }
     // 存储角色信息
     function adminList(Request $request){

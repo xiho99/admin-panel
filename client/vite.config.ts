@@ -31,12 +31,12 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 				'/api': {
 					target: 'http://admin-adsposition.hgsoog.com/api',
 					changeOrigin: true,
-					rewrite: (path) => path.replace(/^\/api/, ''), // 移除/api前缀
+					rewrite: (path: string) => path.replace(/^\/api/, ''), // 移除/api前缀
 				},
 				'/uploads': {
 					target: 'http://admin-adsposition.hgsoog.com/uploads',
 					changeOrigin: true,
-					rewrite: (path) => path.replace(/^\/uploads/, ''), // 移除/api前缀
+					rewrite: (path: string) => path.replace(/^\/uploads/, ''), // 移除/api前缀
 				},
 			},
 		},
