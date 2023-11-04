@@ -29,11 +29,11 @@
                 <el-table-column :label="$t('message.sort')" prop="sort" />
                 <el-table-column :label="$t('message.created_at')" prop="created_at" />
                 <el-table-column>
-                  <template #default="scope">
-                    <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
+                  <template #default="prop">
+                    <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', prop.row)">
                       {{ $t('message.table.edit') }}
                     </el-button>
-                    <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row.id)">
+                    <el-button link type="danger" size="small" @click.prevent="deleteRow(prop.row)">
                       {{ $t('message.table.delete') }}
                     </el-button>
                   </template>

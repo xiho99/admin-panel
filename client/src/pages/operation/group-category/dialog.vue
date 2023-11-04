@@ -75,8 +75,8 @@ import useApi from "/src/api/api";
 import EnumMessageType from "/src/models/enums/enumMessageType";
 import { messageNotification } from "/src/libraries/elementUiHelpers/notificationHelper";
 import EnumApiErrorCode from "/src/models/enums/enumApiErrorCode";
-import { IAds } from "/@/models/IAds";
 import { Hide, View } from '@element-plus/icons-vue'
+import { IGroup } from "/@/models/IGroupCategory";
 
 const api = useApi();
 const { isProcessing, ruleFormRef, fileList } = useVariable();
@@ -122,12 +122,13 @@ const rules: Record<string, IRule> = ({
   sort: { required: true },
   image: { required: false },
 });
-const openDialog = async (type: string, row: IAds) => {
+const openDialog = async (type: string, row: IGroup) => {
   if (type === 'edit') {
     fileList.value = [];
     // 模拟数据，实际请走接口
-    fileList.value.push({ name: row.title, url: row.image });
+    fileList.value.push({ name: row.name, url: row.image });
     Object.assign(formData, row)
+    console.log(formData);
     formData.image = ''
     formDialog.title = t('message.table.edit');
     formDialog.submit = t('message.table.submit');

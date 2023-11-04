@@ -25,6 +25,7 @@ class Group implements IGroup {
     created_at: string;
     updated_at: string;
     constructor(init: IGroup) {
+        this.id = init.id;
         this.cat_id = init.cat_id;
         this.name = init.name;
         this.image = init.image;
@@ -57,5 +58,6 @@ class GroupCategory implements IGroupCategory {
 }
 export {
     type IGroupCategory,
+    type IGroup,
     GroupCategory,
 }
