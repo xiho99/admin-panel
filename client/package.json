@@ -27,6 +27,7 @@
 		"js-table2excel": "^1.0.3",
 		"jsplumb": "^2.15.6",
 		"mitt": "^3.0.0",
+		"moment": "^2.29.4",
 		"nprogress": "^0.2.0",
 		"pinia": "^2.0.34",
 		"print-js": "^1.6.0",
