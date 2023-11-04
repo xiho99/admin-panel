@@ -79,6 +79,15 @@ Route::controller(\App\Http\Controllers\Admin\CategoryController::class)->group(
     });
 });
 
+Route::controller(\App\Http\Controllers\Admin\GroupCategoryController::class)->group(function () {
+    Route::group(['middleware' => 'jwt'], function () {
+        Route::get('getGroupCategory ', 'get');
+        Route::post('saveGroupCategory', 'saveGroupCategory');
+        Route::post('updateGroupCategory', 'updateGroupCategory');
+        Route::post('deleteGroupCategory', 'deleteGroupCategory');
+    });
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

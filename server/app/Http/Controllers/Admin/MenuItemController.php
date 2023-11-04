@@ -29,7 +29,7 @@ class MenuItemController extends BaseController
                 return $this->error('Cannot add name with same name');
             }
         }
-        $item = [
+        $from = [
             'name' => $data['name'],
             'link' => $data['link'],
             'type' => $data['type'],
@@ -39,9 +39,9 @@ class MenuItemController extends BaseController
         ];
         if ($data['image']) {
             $address = $this->fileUpload($data['image'], 'uploads/');
-            $item['image'] = $address;
+            $from['image'] = $address;
         }
-        $id = MenuItem::saveInfo($item);
+        $id = MenuItem::saveInfo($from);
         return $this->success($id);
     }
     public function updateMenuItem(Request $request) {
