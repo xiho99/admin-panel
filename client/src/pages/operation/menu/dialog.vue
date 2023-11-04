@@ -159,7 +159,7 @@ const submitProcess = async () => {
       is_visible: formData.is_visible,
       image: file.value ?? formData.image,
       sort: formData.sort,
-      color: formData.color,
+      color: formData.type !== 'icon' ? formData.color : '',
     };
     const response = request.id !== 0 ? await api.updateMenuItem(request) : await api.addMenuItem(request);
     if (response.code === EnumApiErrorCode.success) {
