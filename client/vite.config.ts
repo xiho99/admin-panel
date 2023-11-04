@@ -29,12 +29,12 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			hmr: true,
 			proxy: {
 				'/api': {
-					target: 'http://admin-adsposition.hgsoog.com/api',
+					target: 'http://admin.hls69.co/api',
 					changeOrigin: true,
 					rewrite: (path: string) => path.replace(/^\/api/, ''), // 移除/api前缀
 				},
 				'/uploads': {
-					target: 'http://admin-adsposition.hgsoog.com/uploads',
+					target: 'http://admin.hls69.co//uploads',
 					changeOrigin: true,
 					rewrite: (path: string) => path.replace(/^\/uploads/, ''), // 移除/api前缀
 				},

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
+Route::prefix('auth')->controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'saveAdmin');
     Route::post('logout', 'logout');
