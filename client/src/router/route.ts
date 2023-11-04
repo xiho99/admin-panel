@@ -27,7 +27,7 @@ export const dynamicRoutes : Array<RouteRecordRaw> = [
 			{
 				path: '/index',
 				name: 'index',
-				component: () => import('/@/pages/index/index.vue'),
+				component: () => import('/@/pages/home/index.vue'),
 				meta: {
 					title: 'message.router.home',
 					isLink: '',
