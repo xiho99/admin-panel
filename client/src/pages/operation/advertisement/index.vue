@@ -9,7 +9,7 @@
           {{ $t('message.table.new') }}
         </el-button>
       </div>
-      <el-table :data="formData.data">
+      <el-table :data="formData.data" v-loading="isLoading">
         <el-table-column :label="$t('message.router.ads')">
           <template #default="prop">
             <el-image class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
@@ -55,6 +55,7 @@ import { defineAsyncComponent } from "vue";
 
 const adsDialog = defineAsyncComponent(() => import('/@/pages/operation/advertisement/dialog.vue'));
 const {
+  isLoading,
   onOpenAddDialog,
   onOpenEditDialog,
   openDialogRef,

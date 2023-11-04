@@ -10,7 +10,7 @@
         </el-button>
       </div>
       <el-table :data="formData.data">
-        <el-table-column type="expand">
+        <el-table-column type="expand" v-loading="isLoading">
           <template #default="props">
               <el-table :data="props.row.group">
                 <el-table-column :label="$t('message.image')">
@@ -66,6 +66,7 @@ import { defineAsyncComponent } from "vue";
 
 const groupCatDialog = defineAsyncComponent(() => import('/@/pages/operation/group-category/dialog.vue'));
 const {
+  isLoading,
   onOpenAddDialog,
   onOpenEditDialog,
   openDialogRef,

@@ -9,7 +9,7 @@
           {{ $t('message.table.new') }}
         </el-button>
       </div>
-      <el-table :data="filterTableData">
+      <el-table :data="filterTableData" v-loading="isLoading">
         <el-table-column type="index" :label="$t('No')" width="80"/>
         <el-table-column prop="appName" :label="$t('message.appName')"/>
         <el-table-column prop="key" :label="$t('message.key')"/>
@@ -59,6 +59,7 @@ import { defineAsyncComponent } from "vue";
 const configurationDialog = defineAsyncComponent(() => import('/@/pages/operation/configuration/dialog.vue'));
 
 const {
+  isLoading,
   data,
   onOpenAddDialog,
   onOpenEditDialog,

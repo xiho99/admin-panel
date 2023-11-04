@@ -9,7 +9,7 @@
           {{ $t('message.table.new') }}
         </el-button>
       </div>
-      <el-table :data="formData.data">
+      <el-table :data="formData.data" v-loading="isLoading">
         <el-table-column prop="name" :label="$t('message.name')"/>
         <el-table-column prop="key" :label="$t('message.key')"/>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
@@ -52,6 +52,7 @@ import userCategory from "/@/composables/userCategory";
 
 const categoryDialog = defineAsyncComponent(() => import('/@/pages/operation/category/dialog.vue'));
 const {
+  isLoading,
   onOpenAddDialog,
   onOpenEditDialog,
   openDialogRef,
