@@ -29,7 +29,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			hmr: true,
 			proxy: {
 				'/api': {
-					target: 'http://admin-adsposition.hgsoog.com/api/',
+					target: 'http://admin-adsposition.hgsoog.com/api',
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/api/, ''), // 移除/api前缀
 				},
