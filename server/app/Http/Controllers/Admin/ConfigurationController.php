@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\BaseResponseController;
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Models\Configuration;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class ConfigurationController extends BaseResponseController
+class ConfigurationController extends BaseController
 {
 
     public function get(): Response

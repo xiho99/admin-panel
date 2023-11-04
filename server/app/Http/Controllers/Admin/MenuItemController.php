@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\BaseResponseController;
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class MenuItemController extends BaseResponseController
+class MenuItemController extends BaseController
 {
     public function get(): Response {
         $configurations = MenuItem::orderBy('sort', 'asc')

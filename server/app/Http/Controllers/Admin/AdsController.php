@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\BaseResponseController;
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Models\Ads;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class AdsController extends BaseResponseController
+class AdsController extends BaseController
 {
     public function get(): Response {
         $configurations = Ads::orderBy('sort', 'asc')

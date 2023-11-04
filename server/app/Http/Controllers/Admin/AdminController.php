@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\BaseResponseController;
+use App\Http\Controllers\BaseController;
 use App\Models\Statistic;
 use App\Models\AdminUser;
 use App\Models\OperationLog;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
-class AdminController extends BaseResponseController
+class AdminController extends BaseController
 {
     public function login(Request $request): Response
     {

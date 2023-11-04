@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends BaseModel
 {
@@ -23,5 +24,8 @@ class Category extends BaseModel
             self::$initBase = new static();
         }
         return self::$initBase;
+    }
+    public function group(): HasMany {
+        return $this->hasMany(GroupCategory::class, 'cat_id', 'id');
     }
 }

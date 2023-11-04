@@ -6,7 +6,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
-class BaseResponseController extends FileHelperController
+class BaseController extends FileHelperController
 {
     public function getMsecTime()
     {

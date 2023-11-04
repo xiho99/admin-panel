@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\BaseResponseController;
+use App\Http\Controllers\BaseController;
 use App\Models\Menu;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
-class MenuController extends BaseResponseController
+class MenuController extends BaseController
 {
     // 存储角色信息
     public function saveMenu(Request $request) {
