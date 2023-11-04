@@ -15,11 +15,9 @@ class AdminController extends BaseController
 {
     public function login(Request $request): Response
     {
-        $validator = Validator::make($request->all(), [
-            'userName' => 'required',
-            'password' => 'required',
-        ]);
-        if ($validator->fails()) {
+        $data = $request->all();
+        $fail = AdminUser::getNotPassValidator($data);
+        if ($fail) {
             return $this->error('Username and password are required');
         }
         $credentials = $request->only('userName', 'password');

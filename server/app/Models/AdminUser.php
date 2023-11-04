@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 class AdminUser extends BaseModel
 {
-    use HasFactory;
     protected $table = 'admins';
 
     protected $fillable = [
