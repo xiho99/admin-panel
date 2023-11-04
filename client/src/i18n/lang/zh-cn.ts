@@ -254,4 +254,6 @@ export default {
 	color: "颜色",
 	fail: "失败!",
 	youHaveBeenLogOut: "您已退出，请重新登录！",
+	category: '类别',
+	groupName: '团队名字',
 };

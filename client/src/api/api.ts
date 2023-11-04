@@ -76,7 +76,7 @@ export default function  useApi() {
 			});
 		},
 		addGroupCategory: (params?: object) => {
-			return service.post('/addGroupCategory', params);
+			return service.post('/saveGroupCategory', params);
 		},
 		updateGroupCategory: (params?: object) => {
 			return service.post('/updateGroupCategory', params);

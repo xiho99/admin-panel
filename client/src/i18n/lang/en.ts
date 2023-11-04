@@ -255,4 +255,6 @@ export default {
 	hint: "Hint",
 	fail: "Fail!",
 	youHaveBeenLogOut: "You have been logged out, please log in again!",
+	category: 'Category',
+	groupName: 'Group name',
 };

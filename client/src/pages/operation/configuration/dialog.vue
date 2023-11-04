@@ -15,13 +15,12 @@
         </el-form-item>
         <el-form-item prop="type" :label="$t('message.type')">
           <el-select v-model="configuration.type" class="w-full" placeholder="Select">
-            <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-            />
+            <el-option value="text" :label="$t('message.text')"/>
+            <el-option value="image" :label="$t('message.image')"/>
           </el-select>
+        </el-form-item>
+        <el-form-item prop="sort" :label="$t('message.sort')">
+          <el-input type="number" v-model="configuration.sort"/>
         </el-form-item>
         <el-form-item prop="value" :label="configuration.type? $t('message.value') : null">
           <div v-if="configuration.type === 'image'">
@@ -93,16 +92,6 @@ const configuration = reactive({
   }
 });
 const emit = defineEmits(['refresh']);
-const options = ref([
-  {
-    value: 'image',
-    label: t('message.image'),
-  },
-  {
-    value: 'text',
-    label: t('message.text'),
-  },
-]);
 const resetFields = () => {
   configuration.appName = '';
   configuration.key = '';
@@ -117,11 +106,13 @@ const rules: Record<string, IRule> = ({
   appName: { required: true },
   key: { required: true },
   type: { required: true },
-  value: { required: true }
+  sort: { required: true },
+  value: { required: false }
 });
 const openDialog = async (type: string, row: IConfiguration) => {
   if (type === 'edit') {
     fileList.value = [];
+    file.value = '';
     // 模拟数据，实际请走接口
     fileList.value.push({ name: row.appName, url: row.value });
     Object.assign(configuration, row)

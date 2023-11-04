@@ -9,14 +9,14 @@
           {{ $t('message.table.new') }}
         </el-button>
       </div>
-      <el-table :data="filterTableData" v-loading="isLoading">
+      <el-table :data="filterTableData">
         <el-table-column type="index" :label="$t('No')" width="80"/>
         <el-table-column prop="appName" :label="$t('message.appName')"/>
         <el-table-column prop="key" :label="$t('message.key')"/>
         <el-table-column :label="$t('message.type')">
           <template #default="prop">
             <div v-if="prop.row.type === 'image'">
-              <el-image class="w-24 rounded" :src="prop.row.value" alt="loading.."/>
+              <el-image class="w-28 h-14 rounded" :src="prop.row.value" alt="loading.."/>
             </div>
             <div v-else> {{ prop.row.value }}</div>
           </template>
@@ -59,7 +59,6 @@ import { defineAsyncComponent } from "vue";
 const configurationDialog = defineAsyncComponent(() => import('/@/pages/operation/configuration/dialog.vue'));
 
 const {
-  isLoading,
   data,
   onOpenAddDialog,
   onOpenEditDialog,

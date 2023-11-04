@@ -10,11 +10,39 @@
         </el-button>
       </div>
       <el-table :data="formData.data">
-        <el-table-column :label="$t('message.router.ads')">
-          <template #default="prop">
-            <el-image class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
+        <el-table-column type="expand">
+          <template #default="props">
+              <el-table :data="props.row.group">
+                <el-table-column :label="$t('message.image')">
+                  <template #default="prop">
+                    <el-image class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('message.name')" prop="name" />
+                <el-table-column :label="$t('message.router.link')">
+                  <template #default="prop">
+                    <el-link :underline="false" type="primary" :href="prop.row.link" target="_blank">
+                      {{ prop.row.link }}
+                    </el-link>
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('message.sort')" prop="sort" />
+                <el-table-column :label="$t('message.created_at')" prop="created_at" />
+                <el-table-column>
+                  <template #default="scope">
+                    <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
+                      {{ $t('message.table.edit') }}
+                    </el-button>
+                    <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row.id)">
+                      {{ $t('message.table.delete') }}
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
           </template>
         </el-table-column>
+        <el-table-column prop="name" :label="$t('message.groupName')"/>
+        <el-table-column prop="key" :label="$t('message.key')"/>
         <el-table-column  :label="$t('message.is_visible')">
           <template #default="prop">
             <div v-if="prop.row.is_visible">
@@ -25,27 +53,10 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="sort" :label="$t('message.sort')"/>
-        <el-table-column :label="$t('message.created_at')">
-          <template #default="prop">
-            {{ prop.row.created_at.split('T')[0] }}
-          </template>
-        </el-table-column>
-        <el-table-column>
-          <template #header>
-            <el-input v-model="formData.search" size="default" :placeholder="$t('message.name')"/>
-          </template>
-          <template #default="scope">
-            <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
-              {{ $t('message.table.edit') }}
-            </el-button>
-            <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row.id)">
-              {{ $t('message.table.delete') }}
-            </el-button>
-          </template>
-        </el-table-column>
+        <el-table-column prop="sort" :label="$t('message.sort')" width="80"/>
+        <el-table-column prop="created_at" :label="$t('message.created_at')"/>
       </el-table>
-      <adsDialog ref="openDialogRef" @refresh="getGroupCategory()"/>
+      <groupCatDialog ref="openDialogRef" :categories="formData.data" @refresh="getGroupCategory()"/>
     </div>
   </div>
 </template>
@@ -53,7 +64,7 @@
 import useGroupCategory from "/@/composables/useGroupCategory";
 import { defineAsyncComponent } from "vue";
 
-const adsDialog = defineAsyncComponent(() => import('/@/pages/operation/advertisement/dialog.vue'));
+const groupCatDialog = defineAsyncComponent(() => import('/@/pages/operation/group-category/dialog.vue'));
 const {
   onOpenAddDialog,
   onOpenEditDialog,

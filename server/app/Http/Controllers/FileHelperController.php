@@ -18,9 +18,9 @@ class FileHelperController extends Controller
             $ext = explode('/', $sub)[1];
             $imageName = '_' . time() ;
             $img = Image::make($file);
-            $img->resize(500, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
+//            $img->resize(500, null, function ($constraint) {
+//                $constraint->aspectRatio();
+//            });
             $uploadPath = $location . $imageName . '.'. $ext;
         } else {
             $image_name = uniqid() . '.' . $file->getClientOriginalExtension();

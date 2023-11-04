@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\GroupCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -12,10 +13,9 @@ class GroupCategoryController extends BaseController
 {
     public function get(): Response
     {
-        $configurations = GroupCategory::orderBy('sort', 'asc')
-            ->where('is_delete', 0)
-            ->paginate(10);
-        return $this->success($configurations);
+        $catGroupWithSub = Category::with('group')
+            ->where('is_delete', 0)->paginate(10);
+        return $this->success($catGroupWithSub);
     }
     public function saveGroupCategory(Request $request): Response
     {

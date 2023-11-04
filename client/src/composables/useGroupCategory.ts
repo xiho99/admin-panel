@@ -6,7 +6,7 @@ import messageBoxHelper from "/@/libraries/elementUiHelpers/messageBoxHelper";
 import { useI18n } from "vue-i18n";
 import EnumMessageType from "/@/models/enums/enumMessageType";
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
-import { IGroupCategory } from "/@/models/IGroupCategory";
+import { GroupCategory, IGroupCategory } from "/@/models/IGroupCategory";
 export default function useGroupCategory() {
     const { isLoading, openDialogRef, } = useVariable();
     const api = useApi();
@@ -29,7 +29,7 @@ export default function useGroupCategory() {
         isLoading.value = true;
         const response = await api.getGroupCategory();
         if (response.code === EnumApiErrorCode.success) {
-            formData.data = response.data.data;
+            formData.data = response.data.data.map((item: IGroupCategory) => new GroupCategory(item));
             formData.currentPage = response.data.current_page;
             formData.perPage = response.data.per_page;
             formData.total = response.data.total;

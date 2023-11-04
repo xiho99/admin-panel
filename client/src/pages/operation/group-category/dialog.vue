@@ -4,24 +4,37 @@
       <el-form :label-position="'top'"
                ref="ruleFormRef"
                :model="formData"
-               :rules="adsRules"
+               :rules="groupCatRules"
                class="grid md:grid-cols-2 grid-cols-1 gap-5"
       >
-        <el-form-item prop="title" :label="$t('message.name')">
-          <el-input type="text" v-model="formData.title"/>
+        <el-form-item prop="cat_id" :label="$t('message.category')">
+          <el-select v-model="formData.cat_id" class="w-full" placeholder="Select">
+            <el-option
+                v-for="(item, index) in props.categories"
+                :key="index"
+                :label="`${item.name} (${item.key})`"
+                :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="name" :label="$t('message.name')">
+          <el-input type="text" v-model="formData.name"/>
         </el-form-item>
         <el-form-item prop="link" :label="$t('message.router.link')">
           <el-input type="text" v-model="formData.link"/>
         </el-form-item>
         <el-form-item prop="sort" :label="$t('message.sort')">
-          <el-input type="number" v-model="formData.sort"/>
-        </el-form-item>
-        <el-form-item :label="$t('message.is_visible')">
-          <el-switch
-              v-model="formData.is_visible"
-              :active-action-icon="View"
-              :inactive-action-icon="Hide"
-          />
+           <div class="flex gap-5">
+             <div><el-input type="number" v-model="formData.sort"/></div>
+             <div class="flex gap-5">
+               <span>{{ $t('message.is_visible') }}</span>
+                <el-switch
+                    v-model="formData.is_visible"
+                    :active-action-icon="View"
+                    :inactive-action-icon="Hide"
+                />
+              </div>
+           </div>
         </el-form-item>
         <el-form-item :label="$t('message.image')">
           <el-upload
@@ -75,12 +88,11 @@ const {
 } = uploadFileHelper;
 const formData = reactive({
   id: 0,
-  title: '',
+  cat_id: null,
+  name: '',
   link: '',
   image: '',
   sort: 0,
-  type: '',
-  color: 0,
   is_visible: true,
 });
 const formDialog = reactive({
@@ -90,22 +102,25 @@ const formDialog = reactive({
   isShowDialog: false,
   type: '',
 })
+const props = defineProps(['categories']);
 const emit = defineEmits(['refresh']);
 const resetFields = () => {
   formData.id = 0;
-  formData.title = '';
+  formData.cat_id = null;
+  formData.name = '';
   formData.link = '';
   formData.image = '';
-  formData.type = '';
   formData.sort = 0;
   formData.is_visible = true;
   file.value = '';
   fileList.value = [];
 }
 const rules: Record<string, IRule> = ({
-  title: { required: true },
+  name: { required: true },
   link: { required: true },
-  image: { required: true },
+  cat_id: { required: true },
+  sort: { required: true },
+  image: { required: false },
 });
 const openDialog = async (type: string, row: IAds) => {
   if (type === 'edit') {
@@ -136,14 +151,14 @@ const submitProcess = async () => {
   try {
     const request = {
       id: formData.id,
-      title: formData.title,
+      cat_id: formData.cat_id,
+      name: formData.name,
       link: formData.link,
-      type: formData.type,
       image: file.value ?? formData.image,
       sort: formData.sort,
       is_visible: formData.is_visible,
     };
-    const response = request.id !== 0 ? await api.updateAds(request) : await api.addAds(request);
+    const response = request.id !== 0 ? await api.updateGroupCategory(request) : await api.addGroupCategory(request);
     if (response.code === EnumApiErrorCode.success) {
       messageNotification(t('message.success'), EnumMessageType.Success);
       resetFields();
@@ -156,7 +171,7 @@ const submitProcess = async () => {
   isProcessing.value = false;
 };
 
-const adsRules = formHelper.getRules(rules);
+const groupCatRules = formHelper.getRules(rules);
 const onSubmit = formHelper.getSubmitFunction(submitProcess);
 defineExpose({
   openDialog,

@@ -13,7 +13,7 @@ class ConfigurationController extends BaseController
 
     public function get(): Response
     {
-        $configurations = Configuration::orderBy('created_at', 'desc')
+        $configurations = Configuration::orderBy('sort', 'asc')
             ->where('is_delete', 0)
             ->paginate(10);
         return $this->success($configurations);
@@ -44,6 +44,7 @@ class ConfigurationController extends BaseController
         } else {
             $item['value'] = $data['value'];
         }
+
         $id = Configuration::saveInfo($item);
         return $this->success($id);
     }
