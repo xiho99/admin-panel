@@ -100,7 +100,7 @@ Route::controller(\App\Http\Controllers\API\FrontEndController::class)->group(fu
     Route::get('getConfigurations ', 'getConfigurations');
     Route::get('getMenuList', 'getMenuList');
     Route::get('getGroupList', 'getGroupList');
-    Route::get('getAds', 'getAds');
+    Route::get('getAdsList', 'getAds');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

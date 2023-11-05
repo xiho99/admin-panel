@@ -8,8 +8,8 @@ import { useI18n } from "vue-i18n";
 import EnumMessageType from "/@/models/enums/enumMessageType";
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
 export default function useAdvertisement() {
-    const { isLoading, openDialogRef, } = useVariable();
     const api = useApi();
+    const { isLoading, openDialogRef, } = useVariable();
     const { t } = useI18n();
     const formData = reactive({
         data: <IAds[]>[],
