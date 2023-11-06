@@ -17,7 +17,7 @@
 						<el-form-item label="关联角色">
 							<el-select v-model="state.ruleForm.role_ids" multiple placeholder="请选择" clearable
 								class="w100">
-								<el-option v-for="ite in state.roleList" :label="ite.roleName" :value="ite.id+''"></el-option>
+								<el-option v-for="(ite, index) in state.roleList" :key="index" :label="ite.roleName" :value="ite.id+''"/>
 							</el-select>
 						</el-form-item>
 					</el-col>

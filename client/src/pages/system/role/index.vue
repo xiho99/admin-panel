@@ -2,18 +2,18 @@
 	<div class="system-role-container layout-padding">
 		<div class="system-role-padding layout-padding-auto layout-padding-view">
 			<div class="system-user-search mb15 ">
-				<el-input v-model="state.tableData.param.name" size="default" placeholder="请输入角色名称" style="max-width: 180px"> </el-input>
+				<el-input v-model="state.tableData.param.name" size="default" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"> </el-input>
 				<el-button size="default" type="primary" class="ml10">
 					<el-icon>
 						<ele-Search />
 					</el-icon>
-					查询
+          {{ $t('message.table.search') }}
 				</el-button>
 				<el-button size="default" type="success" class="ml10" @click="onOpenAddRole('add')">
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>
-					新增角色
+          {{ $t('message.table.newUser') }}
 				</el-button>
 			</div>
 			<el-table :data="state.tableData.data" v-loading.lock="state.tableData.loading" style="width: 100%">

@@ -2,18 +2,18 @@
 	<div class="system-menu-container layout-pd">
 		<el-card shadow="hover">
 			<div class="system-menu-search mb15">
-				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px"> </el-input>
+				<el-input size="default" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"> </el-input>
 				<el-button size="default" type="primary" class="ml10">
 					<el-icon>
 						<ele-Search />
 					</el-icon>
-					查询
+          {{ $t('message.table.search') }}
 				</el-button>
 				<el-button size="default" type="success" class="ml10" @click="onOpenAddMenu">
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>
-					新增菜单
+          {{ $t('message.table.newUser') }}
 				</el-button>
 			</div>
 			<el-table
@@ -23,35 +23,35 @@
 				row-key="path"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 			>
-				<el-table-column label="菜单名称" show-overflow-tooltip>
+				<el-table-column :label="$t('message.menuName')" show-overflow-tooltip>
 					<template #default="scope">
 						<SvgIcon :name="scope.row.meta.icon" />
 						<span class="ml10">{{ $t(scope.row.meta.title) }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="path" label="路由路径" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="name" label="路由名称" show-overflow-tooltip></el-table-column>
-				<el-table-column label="组件路径" show-overflow-tooltip>
+				<el-table-column prop="path" :label="$t('message.routePath')" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="name" :label="$t('message.routeName')" show-overflow-tooltip></el-table-column>
+				<el-table-column :label="$t('message.componentPath')" show-overflow-tooltip>
 					<template #default="scope">
 						<span>{{ scope.row.component }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="权限标识" show-overflow-tooltip>
+				<el-table-column :label="$t('message.permissionId')" show-overflow-tooltip>
 					<template #default="scope">
 						<span>{{ scope.row.meta.roles }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="排序" show-overflow-tooltip width="80">
+				<el-table-column :label="$t('message.sort')" show-overflow-tooltip width="80">
 					<template #default="scope">
 						{{ scope.$index }}
 					</template>
 				</el-table-column>
-				<el-table-column label="类型" show-overflow-tooltip width="80">
+				<el-table-column :label="$t('message.type')" show-overflow-tooltip width="100">
 					<template #default="scope">
-						<el-tag type="success" size="small">{{ scope.row.xx }}菜单</el-tag>
+						<el-tag type="success" size="small">{{ scope.row.menuType === 'menu' ? $t('message.menu') : $t('message.button') }}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" show-overflow-tooltip width="140">
+				<el-table-column :label="$t('message.operate')" show-overflow-tooltip width="140">
 					<template #default="scope">
 						<el-button size="small" text type="primary" @click="onOpenAddMenu('add')">{{ $t('message.table.add') }}</el-button>
 						<el-button size="small" text type="warning" @click="onOpenEditMenu('edit', scope.row)">{{ $t('message.table.edit') }}</el-button>
