@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\BaseResponseController;
+use App\Http\Controllers\BaseController;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-class AuthController extends BaseResponseController
+class AuthController extends BaseController
 {
     public function __construct()
     {

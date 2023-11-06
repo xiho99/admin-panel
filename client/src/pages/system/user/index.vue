@@ -2,53 +2,58 @@
   <div class="system-user-container layout-padding">
     <el-card shadow="hover" class="layout-padding-auto">
       <div class="system-user-search mb15">
-        <el-input size="default" placeholder="请输入用户名称" style="max-width: 180px"></el-input>
+        <el-input size="default" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"></el-input>
         <el-button size="default" type="primary" class="ml10">
           <el-icon>
             <ele-Search/>
           </el-icon>
-          查询
+          {{ $t('message.table.search') }}
         </el-button>
         <el-button size="default" type="success" class="ml10" @click="onOpenAddUser('add')">
           <el-icon>
             <ele-FolderAdd/>
           </el-icon>
-          新增用户
+          {{ $t('message.table.newUser') }}
         </el-button>
       </div>
       <el-table :data="state.tableData.data" v-loading.lock="state.tableData.loading" style="width: 100%">
-        <el-table-column type="index" label="序号" width="60"/>
-        <el-table-column prop="username" label="账户名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="nickname" label="用户昵称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="role_ids" center label="关联角色" show-overflow-tooltip>
+        <el-table-column type="index" :label="$t('message.table.numberSign')" width="60"/>
+        <el-table-column :label="$t('message.table.accountName')" show-overflow-tooltip>
           <template #default="scope">
-            <span v-for="(ite, index) in (scope.row.role_ids?.split(',') || [])" :key="index"
+            <div> {{ scope.row.userName }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="nickname" :label="$t('message.table.nickName')" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="role_ids" center :label="$t('message.table.associatedRole')" show-overflow-tooltip>
+          <template #default="scope">
+            <span v-for="(ite, index) in (scope.row?.role_ids?.split(',') || [])" :key="index"
                   style="background:#f9d83a;margin:0 5px;padding:3px 5px;border-radius: 4px;">
               {{ state.roleList[ite]?.roleName }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="用户状态" show-overflow-tooltip>
+        <el-table-column :label="$t('message.table.userStatus')" show-overflow-tooltip>
           <template #default="scope">
+            <!--            {{ scope.row.status }}-->
             <el-tag type="success" v-if="scope.row.status">启用</el-tag>
             <el-tag type="info" v-else>禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="describe" label="用户描述" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="create_time" label="创建时间" show-overflow-tooltip>
+        <el-table-column prop="describe" :label="$t('message.table.userDescription')" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="create_time" :label="$t('message.table.createdAt')" show-overflow-tooltip>
           <template #default="scope">
             <div>{{ dayjs(scope.row.create_time).format('YYYY-MM-DD') }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="100">
+        <el-table-column :label="$t('message.table.operate')" width="100">
           <template #default="scope">
-            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary"
+            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="warning"
                        @click="onOpenEditUser('edit', scope.row)"
-            >修改
+            >{{ $t('message.table.edit') }}
             </el-button
             >
-            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary"
-                       @click="onRowDel(scope.row)">删除
+            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="danger"
+                       @click="onRowDel(scope.row)">{{ $t('message.table.delete') }}
             </el-button>
           </template>
         </el-table-column>
@@ -57,7 +62,7 @@
           @size-change="onHandleSizeChange"
           @current-change="onHandleCurrentChange"
           class="mt15"
-          :pager-count="5"
+          :pager-count="10"
           :page-sizes="[10, 20, 30]"
           v-model:current-page="state.tableData.param.pageNum"
           background
@@ -71,12 +76,14 @@
   </div>
 </template>
 
-<script setup lang="ts" name="/systemUser">
+<script setup lang="ts" name="systemUser">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { adminList } from '/@/api/admin';
+import { adminList, deleteAdmin } from '/@/api/admin';
 import { getAllRole } from '/@/api/role';
 import dayjs from 'dayjs';
+import { useI18n } from "vue-i18n";
+import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
 
 // 引入组件
 const UserDialog = defineAsyncComponent(() => import('/@/pages/system/user/dialog.vue'));
@@ -95,7 +102,7 @@ const state = reactive({
   },
   roleList: {},
 });
-
+const { t } = useI18n();
 // 初始化表格数据
 const getTableData = async () => {
   state.tableData.loading = true;
@@ -114,14 +121,19 @@ const onOpenEditUser = (type: string, row: RowUserType) => {
 };
 // 删除用户
 const onRowDel = (row: RowUserType) => {
-  ElMessageBox.confirm(`此操作将永久删除账户名称：“${row?.username}”，是否继续?`, '提示', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(`此操作将永久删除账户名称：“${row?.userName}”，是否继续?`, '提示', {
+    confirmButtonText: t('message.yes'),
+    cancelButtonText: t('message.no'),
     type: 'warning',
   })
-      .then(() => {
+      .then( async () => {
+        const response = await deleteAdmin(row);
+        if (response.code === EnumApiErrorCode.success) {
+          ElMessage.success(t('message.success'));
+        } else {
+          ElMessage.success(t('message.fail'));
+        }
         getTableData();
-        ElMessage.success('删除成功');
       })
       .catch(() => {
       });

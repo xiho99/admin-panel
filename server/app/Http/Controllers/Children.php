@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-class Children extends BaseResponseController
+class Children extends BaseController
 {
     public $array = array();
     public function __construct($arrays = [])

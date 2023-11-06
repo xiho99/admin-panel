@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\BaseResponseController;
+use App\Http\Controllers\BaseController;
 use App\Models\Admin;
 use App\Models\AdminUser;
 use App\Models\OperationLog;
@@ -11,7 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-class AdminController extends BaseResponseController
+class AdminController extends BaseController
 {
     public function __construct()
     {

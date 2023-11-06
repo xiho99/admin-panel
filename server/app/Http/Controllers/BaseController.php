@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class BaseResponseController extends Controller
+class BaseController extends FileHelperController
 {
     public function getMsecTime()
     {
@@ -51,3 +51,4 @@ class BaseResponseController extends Controller
         return auth()->user()->id;
     }
 }
+

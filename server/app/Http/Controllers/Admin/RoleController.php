@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\BaseResponseController;
+use App\Http\Controllers\BaseController;
 use App\Models\Role;
 use Illuminate\Http\Request;
 // 角色控制器
-class RoleController extends BaseResponseController
+class RoleController extends BaseController
 {
     // 存储角色信息
     public function saveRole(Request $request){

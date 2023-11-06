@@ -2,39 +2,34 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\BaseResponseController;
+use App\Http\Controllers\BaseController;
 use App\Models\Statistic;
 use App\Models\AdminUser;
 use App\Models\OperationLog;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
 
-class AdminController extends BaseResponseController
+class AdminController extends BaseController
 {
-    public function login(Request $request)
+    public function login(Request $request): Response
     {
-        // 验证用户提供的用户名和密码
-        $validator = Validator::make($request->all(), [
-            'username' => 'required',
-            'password' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return $this->error('用户名和密码为必填项');
+        $data = $request->all();
+        $fail = AdminUser::getNotPassValidator($data);
+        if ($fail) {
+            return $this->error('Username and password are required');
         }
-        $credentials = $request->only('username', 'password');
-        if (! $token = auth('admin')->attempt($credentials)) {
-            return $this->error( '账号密码错误');
+        $credentials = $request->only('userName', 'password');
+        if (!$token = auth('admin')->attempt($credentials)) {
+            return $this->error( 'Account password is wrong');
         }
         $user = auth('admin')->user();
-
-        if ($user->status !== 1) {
+        if ($user->status !== 0) {
             auth('admin')->logout();
-            return $this->error('用户已被禁用');
+            return $this->error('User has been disabled');
         }
-
-        // 添加日志到数据库
-        OperationLog::saveInfo([
+        // Add log to database
+        $from = [
             'controller' => 'AdminController',
             'method' => 'login',
             'parameters' => '[]',
@@ -42,14 +37,15 @@ class AdminController extends BaseResponseController
             'end_time' => date('Y-m-d H:i:s',time()),
             'admin_id' => $user['id'],
             'nickname' => $user['nickname'],
-        ]);
+        ];
+        OperationLog::saveInfo($from);
+
         return $this->success(['access_token' => 'Bearer '.$token,'userName'=>$user['nickname']]);
     }
-    public function logout ()
+    public function logout (): Response
     {
         auth('admin')->logout();
-
-        return response()->json('success');
+        return $this->success(null);
     }
     // 存储角色信息
     function adminList(Request $request){
@@ -69,26 +65,25 @@ class AdminController extends BaseResponseController
         return $this->success($data);
     }
     // 存储管理员信息
-    function saveAdmin(Request $request){
+    public function saveAdmin(Request $request) {
         $data = $request->all();
-        // 验证信息
         $fail = AdminUser::getNotPassValidator($data);
         if($fail){
-            return $this->error('用户名和密码为必填项');
+            return $this->error('Username and password are required!');
         }
         if(!$data['nickname'] ){
-            return $this->error('为昵称必填项');
+            return $this->error('Required for nickname');
         }
         if(!isset($data['id']) || !AdminUser::getInfo([['id' , '=' , $data['id'] ] ])){
+            $info = AdminUser::getInfo([['userName' , '=' , $data['userName'] ] ]);
 
-            $info = AdminUser::getInfo([['username' , '=' , $data['username'] ] ]);
             if($info){
-                return $this->error('无法添加相同名称的角色');
+                return $this->error('Cannot add role with same name');
             }
         }
         $from = [
             'id' => $data['id'] ?? null,
-            'username' => $data['username'] ?? '',
+            'userName' => $data['userName'] ?? '',
             'password' =>  bcrypt($data['password']) ?? '',
             'role_ids' =>  $data['role_ids'] ?? '',
             'overdue_time' =>  $data['overdue_time'] ?? null,
@@ -155,7 +150,7 @@ class AdminController extends BaseResponseController
     // 存储角色信息
     function deleteAdmin(Request $request){
         $id = $request->input('id' , null);
-        if($id == 1) return $this->error('禁止删除超级管理员');
+        if($id == 1) return $this->error('Disable deletion of super administrator');
         AdminUser::deleteInfo($id);
         return $this->success($id);
     }
