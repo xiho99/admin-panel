@@ -16,7 +16,7 @@
           {{ $t('message.table.newUser') }}
         </el-button>
       </div>
-      <el-table :data="state.tableData.data" v-loading.lock="state.tableData.loading" style="width: 100%">
+      <el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
         <el-table-column type="index" :label="$t('message.table.numberSign')" width="60"/>
         <el-table-column :label="$t('message.table.accountName')" show-overflow-tooltip>
           <template #default="scope">
@@ -111,6 +111,7 @@ const getTableData = async () => {
   state.tableData.total = row.data?.count || 0;
   state.tableData.loading = false;
 };
+getTableData();
 // 打开新增用户弹窗
 const onOpenAddUser = (type: string) => {
   userDialogRef.value.openDialog(type);
@@ -152,7 +153,7 @@ const onHandleCurrentChange = (val: number) => {
 onMounted(async () => {
   let row = await getAllRole();
   state.roleList = row.data || {};
-  getTableData();
+
 });
 </script>
 
