@@ -50,6 +50,14 @@ export default function useGroupCategory() {
             }
         })
     };
+    const handleSizeChange = (val: number) => {
+        // eslint-disable-next-line no-console
+        console.log(`${val} items per page`)
+    }
+    const handleCurrentChange = (val: number) => {
+        formData.currentPage = val;
+        getGroupCategory();
+    }
     onMounted(() => {
         getGroupCategory();
     })
@@ -61,5 +69,7 @@ export default function useGroupCategory() {
         formData,
         getGroupCategory,
         deleteRow,
+        handleCurrentChange,
+        handleSizeChange,
     }
 }

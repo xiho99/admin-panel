@@ -61,6 +61,7 @@ export default function useConfiguration() {
         messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
     };
     const handleSizeChange = (val: number) => {
+        // eslint-disable-next-line no-console
         console.log(`${val} items per page`)
     }
     const handleCurrentChange = (val: number) => {

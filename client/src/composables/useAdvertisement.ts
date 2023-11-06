@@ -53,6 +53,14 @@ export default function useAdvertisement() {
         formData.id = id
         messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
     };
+    const handleSizeChange = (val: number) => {
+        // eslint-disable-next-line no-console
+        console.log(`${val} items per page`)
+    }
+    const handleCurrentChange = (val: number) => {
+        formData.currentPage = val;
+        getAds();
+    }
     onMounted(() => {
         getAds();
     })
@@ -64,5 +72,7 @@ export default function useAdvertisement() {
         formData,
         getAds,
         deleteRow,
+        handleSizeChange,
+        handleCurrentChange,
     }
 }

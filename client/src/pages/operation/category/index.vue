@@ -42,6 +42,18 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class=" mt-5 flex justify-between text-2xl items-center">
+        <el-pagination
+            v-model:current-page="formData.currentPage"
+            v-model:page-size="formData.perPage"
+            :page-sizes="[10, 25, 50, 75, 100]"
+            :small="true"
+            :background="true"
+            layout="sizes, prev, pager, next"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :total="formData.total"/>
+      </div>
       <categoryDialog ref="openDialogRef" @refresh="getCategory()"/>
     </div>
   </div>
@@ -59,5 +71,7 @@ const {
   getCategory,
   formData,
   deleteRow,
+  handleSizeChange,
+  handleCurrentChange,
 } = userCategory();
 </script>

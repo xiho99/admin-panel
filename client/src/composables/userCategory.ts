@@ -48,6 +48,14 @@ export default function userCategory() {
 			}
 		})
 	};
+	const handleSizeChange = (val: number) => {
+		// eslint-disable-next-line no-console
+		console.log(`${val} items per page`)
+	}
+	const handleCurrentChange = (val: number) => {
+		formData.currentPage = val;
+		getCategory();
+	}
 	onMounted(() => {
 		getCategory();
 	})
@@ -59,5 +67,7 @@ export default function userCategory() {
 		formData,
 		getCategory,
 		deleteRow,
+		handleSizeChange,
+		handleCurrentChange,
 	}
 }
