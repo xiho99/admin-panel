@@ -421,14 +421,13 @@ class BaseModel extends Model
         return $objQuery->value($field, $default, $force);
     }
 
-    public static function getListData (array $condition = [], array|string $field = ['*'], int $page, int $pageSize, $order = 'id desc', array $join = [])
+    public static function getListData ($condition = [], $field = ['*'], int $page, int $pageSize, $order = 'id desc', array $join = [])
     {
         $model = self::initBase();
-        // First try to get data from Redis cache
-        $result = Redis::get('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? [])]).$page.$pageSize);
+        // 首先尝试从 Redis 缓存获取数据
+        $result = Redis::get('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []),$field]).$page.$pageSize);
         // print_r('Table-'.$model->table.'Redis:');die;
         if ($result) {
-            dd($result->with('group'));
             // If there is data in the cache, return it directly
             return json_decode($result ,true);
         }

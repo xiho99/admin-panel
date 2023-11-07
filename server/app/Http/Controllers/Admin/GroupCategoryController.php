@@ -13,15 +13,18 @@ class GroupCategoryController extends BaseController
 {
     public function get(Request $request): Response
     {
+        $where = [];
         $page = $request->input('currentPage' , 1);
         $pageSize = $request->input('pageSize' , 10);
         $order = 'CAST(sort AS UNSIGNED) ASC';
-        $catGroupWithSub = Category::getListData([],['*'], $page, $pageSize, $order);
+        $catGroupWithSub = Category::getListData($where, ['*'], $page, $pageSize, $order);
         $result = [];
         foreach ($catGroupWithSub['data'] as $k => $v) {
             $group = GroupCategory::orderByRaw('CAST(sort AS UNSIGNED) ASC')
-                ->where('cat_id', $v->id)
-                ->where('is_delete', 0)
+                ->where([
+                    'is_delete' => 0,
+                    'cat_id' => $v['id']
+                ])
                 ->get();
             $result[$k] = $v;
             $result[$k]['group'] = $group;
