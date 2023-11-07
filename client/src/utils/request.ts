@@ -45,6 +45,7 @@ service.interceptors.response.use(
 					ElMessage.error(res.message);
 			}
 			// return Promise.reject(service.interceptors.response)
+			ElMessage.error(res.message);
 			return response.data;
 		} else {
 			return res;
