@@ -13,11 +13,13 @@ export default function useGroupCategory() {
     const { t } = useI18n();
     const formData = reactive({
         data: <IGroupCategory[]>[],
-        currentPage: 1,
-        perPage: 10,
         search: '',
-        total: 0,
-        id: 0
+        id: 0,
+        paginate: {
+            currentPage: 1,
+            pageSize: 10,
+            total: 0,
+        }
     });
     const onOpenAddDialog = (type: string) => {
         openDialogRef.value.openDialog(type);
@@ -27,12 +29,10 @@ export default function useGroupCategory() {
     };
     const getGroupCategory = async () => {
         isLoading.value = true;
-        const response = await api.getGroupCategory();
+        const response = await api.getGroupCategory(formData.paginate);
         if (response.code === EnumApiErrorCode.success) {
             formData.data = response.data.data.map((item: IGroupCategory) => new GroupCategory(item));
-            formData.currentPage = response.data.current_page;
-            formData.perPage = response.data.per_page;
-            formData.total = response.data.total;
+            formData.paginate.total = response.data.count;
         } else {
             // eslint-disable-next-line no-console
             console.log(response);
@@ -51,11 +51,11 @@ export default function useGroupCategory() {
         })
     };
     const handleSizeChange = (val: number) => {
-        // eslint-disable-next-line no-console
-        console.log(`${val} items per page`)
+        formData.paginate.pageSize = val;
+        getGroupCategory();
     }
     const handleCurrentChange = (val: number) => {
-        formData.currentPage = val;
+        formData.paginate.currentPage = val;
         getGroupCategory();
     }
     onMounted(() => {

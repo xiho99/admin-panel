@@ -11,10 +11,10 @@ use Illuminate\Http\Response;
 
 class GroupCategoryController extends BaseController
 {
-    public function get(): Response
+    public function get(Request $request): Response
     {
-        $page = request()->input('page' , 1);
-        $pageSize = request()->input('pageSize' , 10);
+        $page = $request->input('currentPage' , 1);
+        $pageSize = $request->input('pageSize' , 10);
         $order = 'CAST(sort AS UNSIGNED) ASC';
         $catGroupWithSub = Category::getListData([],['*'], $page, $pageSize, $order);
         $result = [];

@@ -9,7 +9,7 @@
           {{ $t('message.table.new') }}
         </el-button>
       </div>
-      <el-table :data="formData.data" v-loading="isLoading">
+      <el-table :data="formData.data" v-loading.lock="isLoading">
         <el-table-column type="expand">
           <template #default="props">
               <el-table :data="props.row.group">
@@ -58,15 +58,15 @@
       </el-table>
       <div class=" mt-5 flex justify-between text-2xl items-center">
         <el-pagination
-            v-model:current-page="formData.currentPage"
-            v-model:page-size="formData.perPage"
+            v-model:current-page="formData.paginate.currentPage"
+            v-model:page-size="formData.paginate.pageSize"
             :page-sizes="[10, 25, 50, 75, 100]"
             :small="true"
-            :background="true"
+            background
             layout="sizes, prev, pager, next"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :total="formData.total"/>
+            :total="formData.paginate.total"/>
       </div>
       <groupCatDialog ref="openDialogRef" :categories="formData.data" @refresh="getGroupCategory()"/>
     </div>
