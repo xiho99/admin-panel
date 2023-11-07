@@ -144,7 +144,9 @@ const submitProcess = async () => {
       is_visible: formData.is_visible,
     };
     const response = request.id !== 0 ? await api.updateAds(request) : await api.addAds(request);
-    if (response.code === EnumApiErrorCode.success) {
+    if (response.code !== EnumApiErrorCode.success) {
+      messageNotification(t(response.message), EnumMessageType.Error);
+    } else {
       messageNotification(t('message.success'), EnumMessageType.Success);
       resetFields();
       formDialog.isShowDialog = false;

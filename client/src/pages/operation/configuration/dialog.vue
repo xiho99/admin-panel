@@ -139,15 +139,18 @@ const submitProcess = async () => {
       sort: configuration.sort,
     };
     const response = request.id !== 0 ? await api.updateConfiguration(request) : await api.addConfiguration(request);
-    if (response.code === EnumApiErrorCode.success) {
+    if (response.code !== EnumApiErrorCode.success) {
+      messageNotification(t(response.message), EnumMessageType.Error);
+    } else {
       messageNotification(t('message.success'), EnumMessageType.Success);
       resetFields();
+      configuration.dialog.isShowDialog = false;
+      emit('refresh');
     }
   } catch (e) {
     //TODO handle the exception
   }
   isProcessing.value = false;
-  emit('refresh');
 };
 const configRules = formHelper.getRules(rules);
 const onSubmit = formHelper.getSubmitFunction(submitProcess);
