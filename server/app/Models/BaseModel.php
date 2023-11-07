@@ -168,7 +168,7 @@ class BaseModel extends Model
         return $result;
     }
 
-    public static function pageList(array $condition = [], array|string $field = ['*'], int $page = 0, $pageSize = 0, string $order = 'id desc', array $join = [], $group = null, $limit = null){
+    public static function pageList(array $condition = [], array|string $field = ['*'], int $page = 0, $pageSize = 0, $order = 'id desc', array $join = [], $group = null, $limit = null){
         $model = self::initBase();
         // 首先尝试从 Redis 缓存获取数据
         $result = Redis::get('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []),$field]).$page.$pageSize);
@@ -421,4 +421,50 @@ class BaseModel extends Model
         return $objQuery->value($field, $default, $force);
     }
 
+    public static function getListData (array $condition = [], array|string $field = ['*'], int $page, int $pageSize, $order = 'id desc', array $join = [])
+    {
+        $model = self::initBase();
+        // First try to get data from Redis cache
+        $result = Redis::get('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? [])]).$page.$pageSize);
+        // print_r('Table-'.$model->table.'Redis:');die;
+        if ($result) {
+            dd($result->with('group'));
+            // If there is data in the cache, return it directly
+            return json_decode($result ,true);
+        }
+        // Create a query builder
+        $objQuery = self::query(); // 创建一个查询构建器
+
+        // Processing conditions
+        $condition && $objQuery = $model->handleConditions($objQuery,$condition);
+
+        if(in_array('is_delete',$model->fillable)){
+            $objQuery->where('is_delete', '=', 0);
+        }
+        // Set sort
+        $order && $objQuery->orderByRaw($order);
+
+        // Get the total number of records
+        $count = $objQuery->count();
+
+        // If the number of records displayed on each page is 0, query all
+        if ($pageSize == 0) {
+            // $resultData = $objQuery->select($field)->get();
+            $pageSize = 20;
+            $pageCount = 1;
+        }
+
+        // Paging query
+        $resultData = $objQuery->forPage($page, $pageSize)->select($field)->get();
+        $pageCount = ceil($count / $pageSize);
+
+        $result = [
+            'count' => $count,
+            'page_count' => $pageCount,
+            'data' => $resultData,
+        ];
+        // Store the obtained data in the Redis cache
+        Redis::set('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []) ,$field]).$page.$pageSize, json_encode($result));
+        return $result;
+    }
 }

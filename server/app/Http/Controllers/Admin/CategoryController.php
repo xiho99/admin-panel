@@ -7,15 +7,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redis;
 
 class CategoryController extends BaseController
 {
     public function get(): Response
     {
-        $configurations = Category::orderBy('sort', 'asc')
-            ->where('is_delete', 0)
-            ->paginate(10);
-        return $this->success($configurations);
+        $where = [];
+        $page = request()->input('page' , 1);
+        $pageSize = request()->input('pageSize' , 10);
+        $order = 'CAST(sort AS UNSIGNED) ASC';
+        $category = Category::getListData($where, ['*'],$page, $pageSize, $order);
+        return $this->success($category);
     }
 
     public function saveCategory(Request $request): Response

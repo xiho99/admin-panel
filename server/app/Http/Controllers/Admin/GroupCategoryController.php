@@ -13,8 +13,20 @@ class GroupCategoryController extends BaseController
 {
     public function get(): Response
     {
-        $catGroupWithSub = Category::with('group')
-            ->where('is_delete', 0)->paginate(10);
+        $page = request()->input('page' , 1);
+        $pageSize = request()->input('pageSize' , 10);
+        $order = 'CAST(sort AS UNSIGNED) ASC';
+        $catGroupWithSub = Category::getListData([],['*'], $page, $pageSize, $order);
+        $result = [];
+        foreach ($catGroupWithSub['data'] as $k => $v) {
+            $group = GroupCategory::orderByRaw('CAST(sort AS UNSIGNED) ASC')
+                ->where('cat_id', $v->id)
+                ->where('is_delete', 0)
+                ->get();
+            $result[$k] = $v;
+            $result[$k]['group'] = $group;
+            $catGroupWithSub['data'] = $result;
+        }
         return $this->success($catGroupWithSub);
     }
     public function saveGroupCategory(Request $request): Response

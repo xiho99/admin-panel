@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\API\AuthController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -89,7 +90,7 @@ Route::controller(\App\Http\Controllers\Admin\GroupCategoryController::class)->g
 });
 // todo ** API for front-site **
 Route::controller(\App\Http\Controllers\API\FrontEndController::class)->group(function () {
-    Route::get('getConfigurations ', 'getConfigurations');
+    Route::get('getConfigurationList ', 'getConfigurations');
     Route::get('getMenuList', 'getMenuList');
     Route::get('getGroupList', 'getGroupList');
     Route::get('getAdsList', 'getAds');

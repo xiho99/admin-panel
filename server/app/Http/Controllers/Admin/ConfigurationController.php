@@ -13,9 +13,11 @@ class ConfigurationController extends BaseController
 
     public function get(): Response
     {
-        $configurations = Configuration::orderBy('sort', 'asc')
-            ->where('is_delete', 0)
-            ->paginate(10);
+        $where = [];
+        $page = request()->input('page' , 1);
+        $pageSize = request()->input('pageSize' , 10);
+        $order = 'CAST(sort AS UNSIGNED) ASC';
+        $configurations = Configuration::getListData($where, ['*'],$page, $pageSize, $order);
         return $this->success($configurations);
     }
     public function saveConfiguration(Request $request)

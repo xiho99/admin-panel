@@ -11,9 +11,11 @@ use Illuminate\Http\Response;
 class AdsController extends BaseController
 {
     public function get(): Response {
-        $configurations = Ads::orderBy('sort', 'asc')
-            ->where('is_delete', 0)
-            ->paginate(10);
+        $where = [];
+        $page = request()->input('page' , 1);
+        $pageSize = request()->input('pageSize' , 10);
+        $order = 'CAST(sort AS UNSIGNED) ASC';
+        $configurations = Ads::getListData($where, ['*'], $page, $pageSize, $order);
         return $this->success($configurations);
     }
     public function saveAds(Request $request): Response {
