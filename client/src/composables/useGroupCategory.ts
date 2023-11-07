@@ -30,12 +30,14 @@ export default function useGroupCategory() {
     const getGroupCategory = async () => {
         isLoading.value = true;
         const response = await api.getGroupCategory(formData.paginate);
-        if (response.code === EnumApiErrorCode.success) {
-            formData.data = response.data.data.map((item: IGroupCategory) => new GroupCategory(item));
-            formData.paginate.total = response.data.count;
-        } else {
+        if (response.code !== EnumApiErrorCode.success) {
+            messageNotification(response.message, EnumMessageType.Error)
             // eslint-disable-next-line no-console
             console.log(response);
+        } else {
+            formData.data = response.data.data.map((item: IGroupCategory) => new GroupCategory(item));
+            formData.paginate.total = response.data.count;
+
         }
         isLoading.value = false;
     };

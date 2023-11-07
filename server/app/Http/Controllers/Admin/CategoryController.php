@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Redis;
 
 class CategoryController extends BaseController
 {
-    public function get(): Response
+    public function get(Request $request): Response
     {
         $where = [];
-        $page = request()->input('page' , 1);
-        $pageSize = request()->input('pageSize' , 10);
+        $page = $request->input('currentPage' , 1);
+        $pageSize = $request->input('pageSize' , 10);
         $order = 'CAST(sort AS UNSIGNED) ASC';
         $category = Category::getListData($where, ['*'],$page, $pageSize, $order);
         return $this->success($category);

@@ -56,14 +56,14 @@
         <el-table-column prop="sort" :label="$t('message.sort')" width="80"/>
         <el-table-column prop="created_at" :label="$t('message.created_at')"/>
       </el-table>
-      <div class=" mt-5 flex justify-between text-2xl items-center">
+      <div class="mt-5">
         <el-pagination
             v-model:current-page="formData.paginate.currentPage"
             v-model:page-size="formData.paginate.pageSize"
             :page-sizes="[10, 25, 50, 75, 100]"
             :small="true"
             background
-            layout="sizes, prev, pager, next"
+            layout="total, sizes, prev, pager, next, jumper"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :total="formData.paginate.total"/>

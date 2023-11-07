@@ -1,15 +1,10 @@
-import request from '/@/utils/request';
 import service from "/@/utils/request";
 
 // 评论管理
 export default function  useApi() {
 	return {
 		getConfiguration: (params?: object) => {
-			return request({
-				url: 'getConfiguration',
-				method: 'get',
-				params,
-			});
+			return service.post('getConfiguration', params);
 		},
 		addConfiguration: (params?: object) => {
 			return service.post('saveConfiguration', params);
@@ -21,11 +16,7 @@ export default function  useApi() {
 			return await service.post('deleteConfiguration', param)
 		},
 		getAds: (params?: object) => {
-			return request({
-				url: 'getAds',
-				method: 'get',
-				params,
-			});
+			return service.post('getAds', params)
 		},
 		addAds: (params?: object) => {
 			return service.post('saveAds', params);
@@ -37,11 +28,7 @@ export default function  useApi() {
 			return service.post('deleteAds', params);
 		},
 		getMenuItem: (params?: object) => {
-			return request({
-				url: 'getMenuItem',
-				method: 'get',
-				params,
-			});
+			return service.post('getMenuItem', params)
 		},
 		addMenuItem: (params?: object) => {
 			return service.post('saveMenuItem', params);
@@ -53,11 +40,7 @@ export default function  useApi() {
 			return service.post('deleteMenuItem', params);
 		},
 		getCategory: (params?: object) => {
-			return request({
-				url: 'getCategory',
-				method: 'get',
-				params,
-			});
+			return service.post('getCategory', params);
 		},
 		addCategory: (params?: object) => {
 			return service.post('saveCategory', params);
@@ -69,11 +52,7 @@ export default function  useApi() {
 			return service.post('deleteCategory', params);
 		},
 		getGroupCategory: (params?: object) => {
-			return request({
-				url: 'getGroupCategory',
-				method: 'get',
-				params,
-			});
+			return service.post('getGroupCategory', params)
 		},
 		addGroupCategory: (params?: object) => {
 			return service.post('saveGroupCategory', params);

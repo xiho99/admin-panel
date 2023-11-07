@@ -13,10 +13,12 @@ export default function userCategory() {
 	const { t } = useI18n();
 	const formData = reactive({
 		data: <ICategory[]>[],
-		currentPage: 1,
-		perPage: 10,
 		search: '',
-		total: 0,
+		paginate: {
+			currentPage: 1,
+			pageSize: 10,
+			total: 0,
+		},
 	});
 	const onOpenAddDialog = (type: string) => {
 		openDialogRef.value.openDialog(type);
@@ -26,14 +28,12 @@ export default function userCategory() {
 	};
 	const getCategory = async () => {
 		isLoading.value = true;
-		const response = await api.getCategory();
-		if (response.code === EnumApiErrorCode.success) {
-			formData.data = response.data.data;
-			formData.currentPage = response.data.current_page;
-			formData.perPage = response.data.per_page;
-			formData.total = response.data.total;
-		} else {
+		const response = await api.getCategory(formData.paginate);
+		if (response.code !== EnumApiErrorCode.success) {
 			messageNotification(response.message, EnumMessageType.Error);
+		} else {
+			formData.data = response.data.data;
+			formData.paginate.total = response.data.count;
 		}
 		isLoading.value = false;
 	};
@@ -49,11 +49,11 @@ export default function userCategory() {
 		})
 	};
 	const handleSizeChange = (val: number) => {
-		// eslint-disable-next-line no-console
-		console.log(`${val} items per page`)
+		formData.paginate.pageSize = val;
+		getCategory();
 	}
 	const handleCurrentChange = (val: number) => {
-		formData.currentPage = val;
+		formData.paginate.currentPage = val;
 		getCategory();
 	}
 	onMounted(() => {

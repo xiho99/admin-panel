@@ -9,7 +9,7 @@
           {{ $t('message.table.new') }}
         </el-button>
       </div>
-      <el-table :data="filterTableData" v-loading="isLoading">
+      <el-table :data="filterTableData" v-loading.lock="isLoading">
         <el-table-column type="index" :label="$t('No')" width="80"/>
         <el-table-column prop="appName" :label="$t('message.appName')"/>
         <el-table-column prop="key" :label="$t('message.key')"/>
@@ -24,7 +24,7 @@
         <el-table-column prop="sort" :label="$t('message.sort')"/>
         <el-table-column label="status">
           <template #header>
-            <el-input v-model="data.search" size="default" :placeholder="$t('message.name')"/>
+            <el-input v-model="formData.search" size="default" :placeholder="$t('message.name')"/>
           </template>
           <template #default="scope">
             <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
@@ -38,15 +38,15 @@
       </el-table>
       <div class=" mt-5 flex justify-between text-2xl items-center">
         <el-pagination
-            v-model:current-page="data.currentPage"
-            v-model:page-size="data.perPage"
+            v-model:current-page="formData.paginate.currentPage"
+            v-model:page-size="formData.paginate.pageSize"
             :page-sizes="[10, 25, 50, 75, 100]"
             :small="true"
             :background="true"
             layout="sizes, prev, pager, next"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :total="data.total"/>
+            :total="formData.paginate.total"/>
       </div>
       <configurationDialog ref="openDialogRef" @refresh="getConfiguration()"/>
     </div>
@@ -60,7 +60,7 @@ const configurationDialog = defineAsyncComponent(() => import('/@/pages/operatio
 
 const {
   isLoading,
-  data,
+  formData,
   onOpenAddDialog,
   onOpenEditDialog,
   openDialogRef,

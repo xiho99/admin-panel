@@ -6,16 +6,19 @@ import { IConfiguration } from "/@/models/IConfiguration";
 import messageBoxHelper from "/@/libraries/elementUiHelpers/messageBoxHelper";
 import { useI18n } from "vue-i18n";
 import EnumMessageType from "/@/models/enums/enumMessageType";
+import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
 export default function useConfiguration() {
     const { isLoading} = useVariable();
 
     const api = useApi();
-    const data = reactive({
-        configurations: <IConfiguration[]>[],
-        currentPage: 1,
-        perPage: 10,
+    const formData = reactive({
+        data: <IConfiguration[]>[],
         search: '',
-        total: 0,
+        paginate: {
+            currentPage: 1,
+            pageSize: 10,
+            total: 0,
+        }
     });
     const openDialogRef = ref();
     const onOpenAddDialog = (type: string) => {
@@ -27,23 +30,20 @@ export default function useConfiguration() {
     const { t } = useI18n();
     const getConfiguration = async () => {
         isLoading.value = true;
-        const response = await api.getConfiguration();
-        if (response.code === EnumApiErrorCode.success) {
-            data.configurations = response.data.data;
-            data.currentPage = response.data.current_page;
-            data.perPage = response.data.per_page;
-            data.total = response.data.total;
+        const response = await api.getConfiguration(formData.paginate);
+        if (response.code !== EnumApiErrorCode.success) {
+            messageNotification(response.message, EnumMessageType.Error)
         } else {
-            // eslint-disable-next-line no-console
-            console.log(response);
+            formData.data = response.data.data;
+            formData.paginate.total = response.data.count;
         }
         isLoading.value = false;
     };
     const filterTableData = computed(() =>
-        data.configurations.filter(
+        formData.data.filter(
             (item) =>
-                !data.search ||
-                item.appName.toLowerCase().includes(data.search.toLowerCase())
+                !formData.search ||
+                item.appName.toLowerCase().includes(formData.search.toLowerCase())
         )
     );
     const deleteId = ref(0);
@@ -61,11 +61,11 @@ export default function useConfiguration() {
         messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
     };
     const handleSizeChange = (val: number) => {
-        // eslint-disable-next-line no-console
-        console.log(`${val} items per page`)
+        formData.paginate.pageSize = val;
+        getConfiguration();
     }
     const handleCurrentChange = (val: number) => {
-        data.currentPage = val;
+        formData.paginate.currentPage = val;
         getConfiguration();
     }
     onMounted(() => {
@@ -76,7 +76,7 @@ export default function useConfiguration() {
         onOpenAddDialog,
         onOpenEditDialog,
         openDialogRef,
-        data,
+        formData,
         getConfiguration,
         filterTableData,
         deleteRow,

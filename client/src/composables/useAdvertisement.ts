@@ -13,11 +13,13 @@ export default function useAdvertisement() {
     const { t } = useI18n();
     const formData = reactive({
         data: <IAds[]>[],
-        currentPage: 1,
-        perPage: 10,
         search: '',
-        total: 0,
-        id: 0
+        id: 0,
+        paginate: {
+            currentPage: 1,
+            pageSize: 10,
+            total: 0,
+        },
     });
     const onOpenAddDialog = (type: string) => {
         openDialogRef.value.openDialog(type);
@@ -27,15 +29,14 @@ export default function useAdvertisement() {
     };
     const getAds = async () => {
         isLoading.value = true;
-        const response = await api.getAds();
-        if (response.code === EnumApiErrorCode.success) {
-            formData.data = response.data.data;
-            formData.currentPage = response.data.current_page;
-            formData.perPage = response.data.per_page;
-            formData.total = response.data.total;
-        } else {
+        const response = await api.getAds(formData.paginate);
+        if (response.code !== EnumApiErrorCode.success) {
+            messageNotification(response.message, EnumMessageType.Error)
             // eslint-disable-next-line no-console
             console.log(response);
+        } else {
+            formData.data = response.data.data;
+            formData.paginate.total = response.data.count;
         }
         isLoading.value = false;
     };
@@ -54,11 +55,11 @@ export default function useAdvertisement() {
         messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
     };
     const handleSizeChange = (val: number) => {
-        // eslint-disable-next-line no-console
-        console.log(`${val} items per page`)
+        formData.paginate.pageSize = val;
+        getAds();
     }
     const handleCurrentChange = (val: number) => {
-        formData.currentPage = val;
+        formData.paginate.currentPage = val;
         getAds();
     }
     onMounted(() => {

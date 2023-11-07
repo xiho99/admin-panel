@@ -10,10 +10,10 @@ use Illuminate\Http\Response;
 
 class MenuItemController extends BaseController
 {
-    public function get(): Response {
+    public function get(Request $request): Response {
         $where = [];
-        $page = request()->input('page' , 1);
-        $pageSize = request()->input('pageSize' , 10);
+        $page = $request->input('currentPage' , 1);
+        $pageSize = $request->input('pageSize' , 10);
         $order = 'CAST(sort AS UNSIGNED) ASC';
         $configurations = MenuItem::getListData($where, ['*'], $page, $pageSize, $order);
         return $this->success($configurations);

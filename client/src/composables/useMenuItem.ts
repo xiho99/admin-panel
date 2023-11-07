@@ -7,17 +7,20 @@ import messageBoxHelper from "/@/libraries/elementUiHelpers/messageBoxHelper";
 import { useI18n } from "vue-i18n";
 import EnumMessageType from "/@/models/enums/enumMessageType";
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
+
 export default function useMenuItem() {
 	const { isLoading, openDialogRef, } = useVariable();
 	const api = useApi();
 	const { t } = useI18n();
 	const formData = reactive({
 		data: <IAds[]>[],
-		currentPage: 1,
-		perPage: 10,
 		search: '',
-		total: 0,
-		id: 0
+		id: 0,
+		paginate: {
+			currentPage: 1,
+			pageSize: 10,
+			total: 0,
+		},
 	});
 	const onOpenAddDialog = (type: string) => {
 		openDialogRef.value.openDialog(type);
@@ -27,15 +30,14 @@ export default function useMenuItem() {
 	};
 	const getMenuItem = async () => {
 		isLoading.value = true;
-		const response = await api.getMenuItem();
-		if (response.code === EnumApiErrorCode.success) {
-			formData.data = response.data.data;
-			formData.currentPage = response.data.current_page;
-			formData.perPage = response.data.per_page;
-			formData.total = response.data.total;
-		} else {
+		const response = await api.getMenuItem(formData.paginate);
+		if (response.code !== EnumApiErrorCode.success) {
 			// eslint-disable-next-line no-console
 			console.log(response);
+			messageNotification(response.message, EnumMessageType.Error)
+		} else {
+			formData.data = response.data.data;
+			formData.paginate.total = response.data.count;
 		}
 		isLoading.value = false;
 	};
@@ -54,11 +56,11 @@ export default function useMenuItem() {
 		messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
 	};
 	const handleSizeChange = (val: number) => {
-		// eslint-disable-next-line no-console
-		console.log(`${val} items per page`)
+		formData.paginate.pageSize = val;
+		getMenuItem();
 	}
 	const handleCurrentChange = (val: number) => {
-		formData.currentPage = val;
+		formData.paginate.currentPage = val;
 		getMenuItem();
 	}
 	onMounted(() => {
