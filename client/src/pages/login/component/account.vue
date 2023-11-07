@@ -70,6 +70,7 @@ import { NextLoading } from '/@/utils/loading';
 import { login } from '/@/api/login';
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
 import EnumMessageType from "/@/models/enums/enumMessageType";
+import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
 
 // 定义变量内容
 const { t } = useI18n();
@@ -103,10 +104,16 @@ const onSignIn = async () => {
     try{
       state.loading.signIn = true;
       const row = await login(state.ruleForm);
-      Session.set('token', row.data?.access_token);
-      Cookies.set('userName', row.data.userName);
-      const isNoPower = await initBackEndControlRoutes();
-      signInSuccess(isNoPower);
+      if (row.code !== EnumApiErrorCode.success) {
+        messageNotification(row.message, EnumMessageType.Error);
+      } else {
+        Session.set('token', row.data?.access_token);
+        Cookies.set('userName', row.data.userName);
+        const isNoPower = await initBackEndControlRoutes();
+        signInSuccess(isNoPower);
+
+      }
+      state.loading.signIn = false;
     }catch(e){
       return state.loading.signIn = false;
     }

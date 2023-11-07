@@ -53,7 +53,7 @@ const formData = reactive({
   id: 0,
   category_id: null,
   name: '',
-  link: '',
+  key: '',
   sort: 0,
   is_visible: true,
 });
@@ -68,7 +68,7 @@ const emit = defineEmits(['refresh']);
 const resetFields = () => {
   formData.id = 0;
   formData.name = '';
-  formData.link = '';
+  formData.key = '';
   formData.sort = 0;
   formData.is_visible = true;
 }
@@ -98,7 +98,7 @@ const submitProcess = async () => {
     const request = {
       id: formData.id,
       name: formData.name,
-      link: formData.link,
+      key: formData.key,
       is_visible: formData.is_visible,
       sort: formData.sort,
     };

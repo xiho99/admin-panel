@@ -44,7 +44,8 @@ service.interceptors.response.use(
 			}else if(res.code === -10001){
 					ElMessage.error(res.message);
 			}
-			return Promise.reject(service.interceptors.response);
+			// return Promise.reject(service.interceptors.response)
+			return response.data;
 		} else {
 			return res;
 		}

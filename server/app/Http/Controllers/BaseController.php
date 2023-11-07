@@ -26,11 +26,11 @@ class BaseController extends FileHelperController
         return Response($response, $status);
     }
 
-    public function error($message = 'error', $code = 1, $data = []): Response
+    public function error($message = 'error', $code = 1, $data = null): Response
     {
         $response = [
-            'message' => $message,
             'code' => $code,
+            'message' => $message,
             'data' => $data,
             'server_time' => $this->getMsecTime(),
         ];

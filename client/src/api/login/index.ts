@@ -1,12 +1,8 @@
 import request from '/@/utils/request';
-
+import service from "/@/utils/request";
 
 export function login(params?: object) {
-	return request({
-		url: 'auth/login',
-		method: 'post',
-		data: params,
-	});
+	return service.post('auth/login', params)
 }
 
 export function logout(params?: object) {
