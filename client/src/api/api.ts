@@ -6,83 +6,83 @@ export default function  useApi() {
 	return {
 		getConfiguration: (params?: object) => {
 			return request({
-				url: '/getConfiguration',
+				url: 'getConfiguration',
 				method: 'get',
 				params,
 			});
 		},
 		addConfiguration: (params?: object) => {
-			return service.post('/saveConfiguration', params);
+			return service.post('saveConfiguration', params);
 		},
 		updateConfiguration: (params?: object) => {
-			return service.post('/updateConfiguration', params);
+			return service.post('updateConfiguration', params);
 		},
 		deleteConfiguration: async (param?: object) => {
-			return await service.post('/deleteConfiguration', param)
+			return await service.post('deleteConfiguration', param)
 		},
 		getAds: (params?: object) => {
 			return request({
-				url: '/getAds',
+				url: 'getAds',
 				method: 'get',
 				params,
 			});
 		},
 		addAds: (params?: object) => {
-			return service.post('/saveAds', params);
+			return service.post('saveAds', params);
 		},
 		updateAds: (params?: object) => {
-			return service.post('/updateAds', params);
+			return service.post('updateAds', params);
 		},
 		deleteAds: (params?: object) => {
-			return service.post('/deleteAds', params);
+			return service.post('deleteAds', params);
 		},
 		getMenuItem: (params?: object) => {
 			return request({
-				url: '/getMenuItem',
+				url: 'getMenuItem',
 				method: 'get',
 				params,
 			});
 		},
 		addMenuItem: (params?: object) => {
-			return service.post('/saveMenuItem', params);
+			return service.post('saveMenuItem', params);
 		},
 		updateMenuItem: (params?: object) => {
-			return service.post('/updateMenuItem', params);
+			return service.post('updateMenuItem', params);
 		},
 		deleteMenuItem: (params?: object) => {
-			return service.post('/deleteMenuItem', params);
+			return service.post('deleteMenuItem', params);
 		},
 		getCategory: (params?: object) => {
 			return request({
-				url: '/getCategory',
+				url: 'getCategory',
 				method: 'get',
 				params,
 			});
 		},
 		addCategory: (params?: object) => {
-			return service.post('/saveCategory', params);
+			return service.post('saveCategory', params);
 		},
 		updateCategory: (params?: object) => {
-			return service.post('/updateCategory', params);
+			return service.post('updateCategory', params);
 		},
 		deleteCategory: (params?: object) => {
-			return service.post('/deleteCategory', params);
+			return service.post('deleteCategory', params);
 		},
 		getGroupCategory: (params?: object) => {
 			return request({
-				url: '/getGroupCategory',
+				url: 'getGroupCategory',
 				method: 'get',
 				params,
 			});
 		},
 		addGroupCategory: (params?: object) => {
-			return service.post('/saveGroupCategory', params);
+			return service.post('saveGroupCategory', params);
 		},
 		updateGroupCategory: (params?: object) => {
-			return service.post('/updateGroupCategory', params);
+			return service.post('updateGroupCategory', params);
 		},
 		deleteGroupCategory: (params?: object) => {
-			return service.post('/deleteGroupCategory', params);
+			return service.post('deleteGroupCategory', params);
 		},
 	};
 }

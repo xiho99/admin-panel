@@ -39,7 +39,7 @@ export default function userCategory() {
 	};
 	const deleteRow = (row: Object) => {
 		messageBoxHelper.confirmDelete(EnumMessageType.Warning, t('message.areYouSure', t('message.yes'))).then( async () => {
-			const response = await api.deleteMenuItem(row)
+			const response = await api.deleteCategory(row)
 			if (response.code === EnumApiErrorCode.success) {
 				messageNotification(t('message.success'), EnumMessageType.Success);
 				getCategory();

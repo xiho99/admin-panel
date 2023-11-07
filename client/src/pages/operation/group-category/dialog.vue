@@ -128,7 +128,6 @@ const openDialog = async (type: string, row: IGroup) => {
     // 模拟数据，实际请走接口
     fileList.value.push({ name: row.name, url: row.image });
     Object.assign(formData, row)
-    console.log(formData);
     formData.image = ''
     formDialog.title = t('message.table.edit');
     formDialog.submit = t('message.table.submit');
