@@ -13,11 +13,16 @@ class ConfigurationController extends BaseController
 
     public function get(Request $request): Response
     {
-        $where = [];
-        $page = $request->input('page' , 1);
+        //todo: Redis
+        //$where = [];
+        //$page = $request->input('currentPage' , 1);
         $pageSize = $request->input('pageSize' , 10);
         $order = 'CAST(sort AS UNSIGNED) ASC';
-        $configurations = Configuration::getListData($where, ['*'],$page, $pageSize, $order);
+        //$configurations = Configuration::pageList($where, '*', $page, $pageSize, $order);
+
+        $configurations = Configuration::orderByRaw($order)
+            ->where('is_delete', 0)
+            ->paginate($pageSize);
         return $this->success($configurations);
     }
     public function saveConfiguration(Request $request)

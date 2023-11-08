@@ -15,7 +15,7 @@ export default function userCategory() {
 		data: <ICategory[]>[],
 		search: '',
 		paginate: {
-			currentPage: 1,
+			page: 1,
 			pageSize: 10,
 			total: 0,
 		},
@@ -33,7 +33,7 @@ export default function userCategory() {
 			messageNotification(response.message, EnumMessageType.Error);
 		} else {
 			formData.data = response.data.data;
-			formData.paginate.total = response.data.count;
+			formData.paginate.total = response.data.total;
 		}
 		isLoading.value = false;
 	};
@@ -48,12 +48,12 @@ export default function userCategory() {
 			}
 		})
 	};
-	const handleSizeChange = (val: number) => {
-		formData.paginate.pageSize = val;
+	const handleCurrentChange = (val: number) => {
+		formData.paginate.page = val;
 		getCategory();
 	}
-	const handleCurrentChange = (val: number) => {
-		formData.paginate.currentPage = val;
+	const handleSizeChange = (val: number) => {
+		formData.paginate.pageSize = val;
 		getCategory();
 	}
 	onMounted(() => {

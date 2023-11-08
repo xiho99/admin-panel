@@ -222,7 +222,7 @@ class BaseModel extends Model
         $result = [
             'count' => $count,
             'page_count' => $pageCount,
-            'list' => $resultData,
+            'data' => $resultData,
         ];
         // 将获取到的数据存储到 Redis 缓存
         Redis::set('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []) ,$field]).$page.$pageSize, json_encode($result));
@@ -421,10 +421,10 @@ class BaseModel extends Model
         return $objQuery->value($field, $default, $force);
     }
 
-    public static function getListData ($condition = [], $field = ['*'], int $page, int $pageSize, $order = 'id desc', array $join = [])
+    public static function getListData($condition = [], $field = ['*'],$page = 0,$pageSize = 0, $order = 'id desc',  $join = [], $group = null, $limit = null)
     {
         $model = self::initBase();
-        // 首先尝试从 Redis 缓存获取数据
+        // First try to get data from Redis cache
         $result = Redis::get('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []),$field]).$page.$pageSize);
         // print_r('Table-'.$model->table.'Redis:');die;
         if ($result) {

@@ -16,7 +16,7 @@ export default function useGroupCategory() {
         search: '',
         id: 0,
         paginate: {
-            currentPage: 1,
+            page: 1,
             pageSize: 10,
             total: 0,
         }
@@ -36,8 +36,7 @@ export default function useGroupCategory() {
             console.log(response);
         } else {
             formData.data = response.data.data.map((item: IGroupCategory) => new GroupCategory(item));
-            formData.paginate.total = response.data.count;
-
+            formData.paginate.total = response.data.total;
         }
         isLoading.value = false;
     };
@@ -52,12 +51,12 @@ export default function useGroupCategory() {
             }
         })
     };
-    const handleSizeChange = (val: number) => {
-        formData.paginate.pageSize = val;
+    const handleCurrentChange = (val: number) => {
+        formData.paginate.page = val;
         getGroupCategory();
     }
-    const handleCurrentChange = (val: number) => {
-        formData.paginate.currentPage = val;
+    const handleSizeChange = (val: number) => {
+        formData.paginate.pageSize = val;
         getGroupCategory();
     }
     onMounted(() => {

@@ -13,23 +13,15 @@ class GroupCategoryController extends BaseController
 {
     public function get(Request $request): Response
     {
-        $where = [];
-        $page = $request->input('currentPage' , 1);
+        //todo: Redis
+        //$where = [];
+        //$page = $request->input('currentPage' , 1);
         $pageSize = $request->input('pageSize' , 10);
         $order = 'CAST(sort AS UNSIGNED) ASC';
-        $catGroupWithSub = Category::getListData($where, ['*'], $page, $pageSize, $order);
-        $result = [];
-        foreach ($catGroupWithSub['data'] as $k => $v) {
-            $group = GroupCategory::orderByRaw('CAST(sort AS UNSIGNED) ASC')
-                ->where([
-                    'is_delete' => 0,
-                    'cat_id' => $v['id']
-                ])
-                ->get();
-            $result[$k] = $v;
-            $result[$k]['group'] = $group;
-            $catGroupWithSub['data'] = $result;
-        }
+        //$catGroupWithSub = Category::pageList($where, '*', $page, $pageSize, $order);
+
+        $catGroupWithSub = Category::orderByRaw($order)->with('group')
+            ->where('is_delete', 0)->paginate($pageSize);
         return $this->success($catGroupWithSub);
     }
     public function saveGroupCategory(Request $request): Response

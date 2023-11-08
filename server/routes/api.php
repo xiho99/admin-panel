@@ -49,7 +49,7 @@ Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(fun
 });
 Route::controller(\App\Http\Controllers\Admin\ConfigurationController::class)->group(function () {
     Route::group(['middleware' => 'jwt'], function ($router) {
-        Route::post('getConfiguration', 'get');
+        Route::get('getConfiguration', 'get');
         Route::post('saveConfiguration', 'saveConfiguration');
         Route::post('updateConfiguration', 'updateConfiguration');
         Route::post('deleteConfiguration', 'deleteConfiguration');
@@ -57,7 +57,7 @@ Route::controller(\App\Http\Controllers\Admin\ConfigurationController::class)->g
 });
 Route::controller(\App\Http\Controllers\Admin\AdsController::class)->group(function () {
     Route::group(['middleware' => 'jwt'], function ($router) {
-        Route::post('getAds', 'get');
+        Route::get('getAdsBanner', 'get');
         Route::post('saveAds', 'saveAds');
         Route::post('updateAds', 'updateAds');
         Route::post('deleteAds', 'deleteAds');
@@ -65,7 +65,7 @@ Route::controller(\App\Http\Controllers\Admin\AdsController::class)->group(funct
 });
 Route::controller(\App\Http\Controllers\Admin\MenuItemController::class)->group(function () {
     Route::group(['middleware' => 'jwt'], function ($router) {
-        Route::post('getMenuItem', 'get');
+        Route::get('getMenuItem', 'get');
         Route::post('saveMenuItem', 'saveMenuItem');
         Route::post('updateMenuItem', 'updateMenuItem');
         Route::post('deleteMenuItem', 'deleteMenuItem');
@@ -73,7 +73,7 @@ Route::controller(\App\Http\Controllers\Admin\MenuItemController::class)->group(
 });
 Route::controller(\App\Http\Controllers\Admin\CategoryController::class)->group(function () {
     Route::group(['middleware' => 'jwt'], function () {
-        Route::post('getCategory', 'get');
+        Route::get('getCategory', 'get');
         Route::post('saveCategory', 'saveCategory');
         Route::post('updateCategory', 'updateCategory');
         Route::post('deleteCategory', 'deleteCategory');
@@ -82,7 +82,7 @@ Route::controller(\App\Http\Controllers\Admin\CategoryController::class)->group(
 
 Route::controller(\App\Http\Controllers\Admin\GroupCategoryController::class)->group(function () {
     Route::group(['middleware' => 'jwt'], function () {
-        Route::post('getGroupCategory ', 'get');
+        Route::get('getGroupCategory ', 'get');
         Route::post('saveGroupCategory', 'saveGroupCategory');
         Route::post('updateGroupCategory', 'updateGroupCategory');
         Route::post('deleteGroupCategory', 'deleteGroupCategory');

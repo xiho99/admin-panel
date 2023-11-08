@@ -13,11 +13,16 @@ class CategoryController extends BaseController
 {
     public function get(Request $request): Response
     {
-        $where = [];
-        $page = $request->input('currentPage' , 1);
+        //todo: Redis
+        //$where = [];
+        //$page = $request->input('currentPage' , 1);
         $pageSize = $request->input('pageSize' , 10);
         $order = 'CAST(sort AS UNSIGNED) ASC';
-        $category = Category::getListData($where, ['*'],$page, $pageSize, $order);
+        //$category = Category::pageList($where, '*', $page, $pageSize, $order);
+
+        $category = Category::orderByRaw($order)
+            ->where('is_delete', 0)
+            ->paginate($pageSize);
         return $this->success($category);
     }
 

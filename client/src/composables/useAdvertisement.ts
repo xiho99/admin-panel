@@ -16,7 +16,7 @@ export default function useAdvertisement() {
         search: '',
         id: 0,
         paginate: {
-            currentPage: 1,
+            page: 1,
             pageSize: 10,
             total: 0,
         },
@@ -36,7 +36,7 @@ export default function useAdvertisement() {
             console.log(response);
         } else {
             formData.data = response.data.data;
-            formData.paginate.total = response.data.count;
+            formData.paginate.total = response.data.total;
         }
         isLoading.value = false;
     };
@@ -54,12 +54,12 @@ export default function useAdvertisement() {
         formData.id = id
         messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
     };
-    const handleSizeChange = (val: number) => {
-        formData.paginate.pageSize = val;
+    const handleCurrentChange = (val: number) => {
+        formData.paginate.page = val;
         getAds();
     }
-    const handleCurrentChange = (val: number) => {
-        formData.paginate.currentPage = val;
+    const handleSizeChange = (val: number) => {
+        formData.paginate.pageSize = val;
         getAds();
     }
     onMounted(() => {

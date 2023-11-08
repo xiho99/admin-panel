@@ -47,7 +47,7 @@
       </el-table>
       <div class="mt-5">
         <el-pagination
-            v-model:current-page="formData.paginate.currentPage"
+            v-model:current-page="formData.paginate.page"
             v-model:page-size="formData.paginate.pageSize"
             :page-sizes="[10, 25, 50, 75, 100]"
             :small="true"

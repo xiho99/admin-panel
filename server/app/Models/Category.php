@@ -26,6 +26,8 @@ class Category extends BaseModel
         return self::$initBase;
     }
     public function group(): HasMany {
-        return $this->hasMany(GroupCategory::class, 'cat_id', 'id')->where('is_delete', 0);
+        return $this->hasMany(GroupCategory::class, 'cat_id', 'id')
+            ->orderByRaw('CAST(sort AS UNSIGNED) ASC')
+            ->where('is_delete', 0);
     }
 }

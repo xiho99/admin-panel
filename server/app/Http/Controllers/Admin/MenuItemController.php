@@ -10,13 +10,19 @@ use Illuminate\Http\Response;
 
 class MenuItemController extends BaseController
 {
-    public function get(Request $request): Response {
-        $where = [];
-        $page = $request->input('currentPage' , 1);
+    public function get(Request $request): Response
+    {
+        //todo: Redis
+        //$where = [];
+//        $page = $request->input('currentPage' , 1);
         $pageSize = $request->input('pageSize' , 10);
         $order = 'CAST(sort AS UNSIGNED) ASC';
-        $configurations = MenuItem::getListData($where, ['*'], $page, $pageSize, $order);
-        return $this->success($configurations);
+        //$menuItems = MenuItem::pageList($where, '*', $page, $pageSize, $order);
+
+        $menuItems = MenuItem::orderByRaw($order)
+            ->where('is_delete', 0)
+            ->paginate($pageSize);
+        return $this->success($menuItems);
     }
     public function saveMenuItem(Request $request): Response {
         $data = $request->all();

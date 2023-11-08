@@ -15,7 +15,7 @@ export default function useConfiguration() {
         data: <IConfiguration[]>[],
         search: '',
         paginate: {
-            currentPage: 1,
+            page: 1,
             pageSize: 10,
             total: 0,
         }
@@ -35,7 +35,7 @@ export default function useConfiguration() {
             messageNotification(response.message, EnumMessageType.Error)
         } else {
             formData.data = response.data.data;
-            formData.paginate.total = response.data.count;
+            formData.paginate.total = response.data.total;
         }
         isLoading.value = false;
     };
@@ -60,12 +60,12 @@ export default function useConfiguration() {
         deleteId.value = item.id
         messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
     };
-    const handleSizeChange = (val: number) => {
-        formData.paginate.pageSize = val;
+    const handleCurrentChange = (val: number) => {
+        formData.paginate.page = val;
         getConfiguration();
     }
-    const handleCurrentChange = (val: number) => {
-        formData.paginate.currentPage = val;
+    const handleSizeChange = (val: number) => {
+        formData.paginate.pageSize = val;
         getConfiguration();
     }
     onMounted(() => {
