@@ -21,21 +21,30 @@ class FrontEndController extends BaseController
     public function getMenuList(): Response
     {
         $configurations = MenuItem::orderBy('sort', 'asc')
-            ->where('is_delete', 0)
+            ->where([
+                'is_delete' => 0,
+                'is_visible' => true,
+            ])
             ->get();
         return $this->success($configurations);
     }
     public function getAds(): Response
     {
         $configurations = Ads::orderBy('sort', 'asc')
-            ->where('is_delete', 0)
+            ->where([
+                'is_delete' => 0,
+                'is_visible' => true,
+            ])
             ->get();
         return $this->success($configurations);
     }
     public function getGroupList(): Response
     {
         $catGroupWithSub = Category::with('group')
-            ->where('is_delete', 0)->get();
+            ->where([
+                'is_delete' => 0,
+                'is_visible' => true,
+            ])->get();
         return $this->success($catGroupWithSub);
     }
 }
