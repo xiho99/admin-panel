@@ -31,7 +31,6 @@ export default function useGroupCategory() {
         isLoading.value = true;
         const response = await api.getGroupCategory(formData.paginate);
         if (response.code !== EnumApiErrorCode.success) {
-            messageNotification(response.error, EnumMessageType.Error)
             // eslint-disable-next-line no-console
             console.log(response);
         } else {
