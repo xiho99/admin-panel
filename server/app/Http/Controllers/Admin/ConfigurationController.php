@@ -14,15 +14,15 @@ class ConfigurationController extends BaseController
     public function get(Request $request): Response
     {
         //todo: Redis
-        //$where = [];
-        //$page = $request->input('currentPage' , 1);
+        $where = [];
+        $page = $request->input('currentPage' , 1);
         $pageSize = $request->input('pageSize' , 10);
         $order = 'CAST(sort AS UNSIGNED) ASC';
-        //$configurations = Configuration::pageList($where, '*', $page, $pageSize, $order);
+        $configurations = Configuration::getListData($where, ['*'], $page, $pageSize, $order);
 
-        $configurations = Configuration::orderByRaw($order)
-            ->where('is_delete', 0)
-            ->paginate($pageSize);
+//        $configurations = Configuration::orderByRaw($order)
+//            ->where('is_delete', 0)
+//            ->paginate($pageSize);
         return $this->success($configurations);
     }
     public function saveConfiguration(Request $request)
@@ -57,7 +57,6 @@ class ConfigurationController extends BaseController
     }
     public function updateConfiguration(Request $request) {
         $data = $request->all();
-        // 验证信息
         $fail = Configuration::getNotPassValidator($data);
         if($fail){
             return $this->error('Missing required fields');
@@ -74,7 +73,7 @@ class ConfigurationController extends BaseController
         $config->key = $data['key'];
         $config->type = $data['type'];
         $config->sort = $data['sort'];
-        $config->update();
+        Configuration::updateCacheData($config);
         return $this->success($config, 0, 201);
     }
 

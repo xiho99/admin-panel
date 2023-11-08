@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends BaseModel
 {
     use HasFactory;
+    protected $table = 'categories';
     protected $fillable = [
         'name',
         'key',

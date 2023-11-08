@@ -4,7 +4,11 @@ import service from "/@/utils/request";
 export default function  useApi() {
 	return {
 		getConfiguration: (params?: object) => {
-			return service.post('getConfiguration', params);
+			return service({
+				url: 'getConfiguration',
+				method: 'get',
+				params,
+			});
 		},
 		addConfiguration: (params?: object) => {
 			return service.post('saveConfiguration', params);
@@ -16,7 +20,11 @@ export default function  useApi() {
 			return await service.post('deleteConfiguration', param)
 		},
 		getAds: (params?: object) => {
-			return service.post('getAds', params)
+			return service({
+				url: 'getAdsBanner',
+				method: 'get',
+				params,
+			});
 		},
 		addAds: (params?: object) => {
 			return service.post('saveAds', params);
@@ -28,7 +36,11 @@ export default function  useApi() {
 			return service.post('deleteAds', params);
 		},
 		getMenuItem: (params?: object) => {
-			return service.post('getMenuItem', params)
+			return service({
+				url: 'getMenuItem',
+				method: 'get',
+				params,
+			});
 		},
 		addMenuItem: (params?: object) => {
 			return service.post('saveMenuItem', params);
@@ -40,7 +52,11 @@ export default function  useApi() {
 			return service.post('deleteMenuItem', params);
 		},
 		getCategory: (params?: object) => {
-			return service.post('getCategory', params);
+			return service({
+				url: 'getCategory',
+				method: 'get',
+				params,
+			});
 		},
 		addCategory: (params?: object) => {
 			return service.post('saveCategory', params);
@@ -52,7 +68,11 @@ export default function  useApi() {
 			return service.post('deleteCategory', params);
 		},
 		getGroupCategory: (params?: object) => {
-			return service.post('getGroupCategory', params)
+			return service({
+				url: 'getGroupCategory',
+				method: 'get',
+				params,
+			});
 		},
 		addGroupCategory: (params?: object) => {
 			return service.post('saveGroupCategory', params);

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class GroupCategory extends BaseModel
 {
     use HasFactory;
+    protected $table = 'group_categories';
     protected $fillable = [
         'cat_id',
         'name',

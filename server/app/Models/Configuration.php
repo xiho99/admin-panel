@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Configuration extends BaseModel
 {
     use HasFactory;
+    protected $table = 'configurations';
     protected $fillable = [
         'appName',
         'key' ,

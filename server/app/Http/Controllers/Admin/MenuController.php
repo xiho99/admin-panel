@@ -37,6 +37,7 @@ class MenuController extends BaseController
             'redirect' =>  $data['redirect'] ?? '',
             'menuSuperior' => '',
             'menuSuperiorPath' => '',
+            'operation' =>  $data['operation'],
         ];
         if(!empty($data['menuSuperiorPath']) && $data['menuSuperiorPath']){
             $from['menuSuperior'] = $data['menuSuperiorPath'][count($data['menuSuperiorPath']) - 1];

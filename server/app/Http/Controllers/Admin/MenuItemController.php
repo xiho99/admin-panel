@@ -13,15 +13,15 @@ class MenuItemController extends BaseController
     public function get(Request $request): Response
     {
         //todo: Redis
-        //$where = [];
-//        $page = $request->input('currentPage' , 1);
-        $pageSize = $request->input('pageSize' , 10);
+        $where = [];
+        $page = $request->input('page' , 1);
+        $pageSize = $request->input('pageSize' , 20);
         $order = 'CAST(sort AS UNSIGNED) ASC';
-        //$menuItems = MenuItem::pageList($where, '*', $page, $pageSize, $order);
+        $menuItems = MenuItem::getListData($where, ['*'], $page, $pageSize, $order);
 
-        $menuItems = MenuItem::orderByRaw($order)
-            ->where('is_delete', 0)
-            ->paginate($pageSize);
+//        $menuItems = MenuItem::orderByRaw($order)
+//            ->where('is_delete', 0)
+//            ->paginate($pageSize);
         return $this->success($menuItems);
     }
     public function saveMenuItem(Request $request): Response {
@@ -70,7 +70,7 @@ class MenuItemController extends BaseController
         $menuItem->color = $data['color'];
         $menuItem->is_visible = $data['is_visible'];
         $menuItem->sort = $data['sort'];
-        $menuItem->update();
+        MenuItem::updateCacheData($menuItem);
         return $this->success($menuItem, 0, 201);
     }
 

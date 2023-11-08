@@ -14,15 +14,15 @@ class CategoryController extends BaseController
     public function get(Request $request): Response
     {
         //todo: Redis
-        //$where = [];
-        //$page = $request->input('currentPage' , 1);
-        $pageSize = $request->input('pageSize' , 10);
+        $where = [];
+        $page = $request->input('page' , 1);
+        $pageSize = $request->input('pageSize' , 20);
         $order = 'CAST(sort AS UNSIGNED) ASC';
-        //$category = Category::pageList($where, '*', $page, $pageSize, $order);
+        $category = Category::getListData($where, ['*'], $page, $pageSize, $order);
 
-        $category = Category::orderByRaw($order)
-            ->where('is_delete', 0)
-            ->paginate($pageSize);
+//        $category = Category::orderByRaw($order)
+//            ->where('is_delete', 0)
+//            ->paginate($pageSize);
         return $this->success($category);
     }
 
@@ -62,7 +62,7 @@ class CategoryController extends BaseController
         $ads->key = $data['key'];
         $ads->is_visible = $data['is_visible'];
         $ads->sort = $data['sort'];
-        $ads->update();
+        Category::updateCacheData($ads);
         return $this->success($ads, 0, 201);
     }
 

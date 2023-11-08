@@ -13,15 +13,14 @@ class AdsController extends BaseController
     public function get(Request $request): Response
     {
         //todo: Redis
-        //$where = [];
-        //$page = $request->input('currentPage' , 1);
-        $pageSize = $request->input('pageSize' , 10);
+        $where = [];
+        $page = $request->input('page' , 1);
+        $pageSize = $request->input('pageSize' , 20);
         $order = 'CAST(sort AS UNSIGNED) ASC';
-        //$ads = Ads::pageList($where, '*', $page, $pageSize, $order);
-
-        $ads = Ads::orderByRaw($order)
-            ->where('is_delete', 0)
-            ->paginate($pageSize);
+        $ads = Ads::getListData($where, ['*'], $page, $pageSize, $order);
+//        $ads = Ads::orderByRaw($order)
+//            ->where('is_delete', 0)
+//            ->paginate($pageSize);
         return $this->success($ads);
     }
     public function saveAds(Request $request): Response {
@@ -53,7 +52,6 @@ class AdsController extends BaseController
     }
     public function updateAds(Request $request): Response {
         $data = $request->all();
-        // 验证信息
         $fail = Ads::getNotPassValidator($data);
         if($fail){
             return $this->error('Missing required fields');
@@ -67,14 +65,13 @@ class AdsController extends BaseController
         $ads->link = $data['link'];
         $ads->is_visible = $data['is_visible'];
         $ads->sort = $data['sort'];
-        $ads->update();
+        Ads::updateCacheData($ads);
         return $this->success($ads, 0, 201);
     }
     public function deleteAds(Request $request)
     {
-        $ads = Ads::findOrFail($request['id']);
-        $ads->is_delete = 1;
-        $ads->update();
-        return $this->success(null,  0);
+        $id = $request->input('id' , null);
+        Ads::deleteInfo($id);
+        return $this->success($id);
     }
 }

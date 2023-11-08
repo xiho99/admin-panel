@@ -458,12 +458,21 @@ class BaseModel extends Model
         $pageCount = ceil($count / $pageSize);
 
         $result = [
-            'count' => $count,
+            'total' => $count,
             'page_count' => $pageCount,
             'data' => $resultData,
         ];
         // Store the obtained data in the Redis cache
         Redis::set('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []) ,$field]).$page.$pageSize, json_encode($result));
         return $result;
+    }
+
+    public static function updateCacheData($record)
+    {
+        $model = self::initBase();
+        // 删除此表格redis数据
+        $id =  $record->save();
+        delRedisPrefix('Table-'.$model->table.'Redis:');
+        return $id;
     }
 }

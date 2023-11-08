@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('menuSort')->comment('sort');
             $table->string('redirect')->nullable()->comment('Redirect');
             $table->string('path')->comment('routing path');
+            $table->string('operation')->comment('operation');
             $table->text('meta')->comment('Other parameters');
             $table->integer('is_parent')->default(0);
             $table->timestamps();
