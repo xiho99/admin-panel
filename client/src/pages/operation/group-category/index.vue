@@ -18,8 +18,8 @@
                     <el-image class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('message.name')" prop="name" />
-                <el-table-column :label="$t('message.router.link')">
+                <el-table-column :label="$t('message.name')" prop="name" min-width="120"/>
+                <el-table-column :label="$t('message.router.link')" min-width="140">
                   <template #default="prop">
                     <el-link :underline="false" type="primary" :href="prop.row.link" target="_blank">
                       {{ prop.row.link }}
@@ -27,8 +27,8 @@
                   </template>
                 </el-table-column>
                 <el-table-column :label="$t('message.sort')" prop="sort" />
-                <el-table-column :label="$t('message.created_at')" prop="created_at" />
-                <el-table-column>
+                <el-table-column :label="$t('message.created_at')" prop="created_at" min-width="120"/>
+                <el-table-column min-width="120">
                   <template #default="prop">
                     <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', prop.row)">
                       {{ $t('message.table.edit') }}
@@ -41,9 +41,9 @@
               </el-table>
           </template>
         </el-table-column>
-        <el-table-column prop="name" :label="$t('message.groupName')"/>
-        <el-table-column prop="key" :label="$t('message.key')"/>
-        <el-table-column  :label="$t('message.is_visible')">
+        <el-table-column prop="name" :label="$t('message.groupName')" min-width="120"/>
+        <el-table-column prop="key" :label="$t('message.key')" min-width="120"/>
+        <el-table-column  :label="$t('message.is_visible')" min-width="120">
           <template #default="prop">
             <div v-if="prop.row.is_visible">
               <el-tag class="ml-2" type="success">{{ $t('message.enabled') }}</el-tag>
@@ -54,7 +54,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="sort" :label="$t('message.sort')" width="80"/>
-        <el-table-column prop="created_at" :label="$t('message.created_at')"/>
+        <el-table-column prop="created_at" :label="$t('message.created_at')" min-width="120"/>
       </el-table>
       <div class="mt-5">
         <el-pagination

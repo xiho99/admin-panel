@@ -15,13 +15,13 @@
             <el-image  v-show="prop.row.type === 'icon'" class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
           </template>
         </el-table-column>
-        <el-table-column prop="name" :label="$t('message.name')"/>
-        <el-table-column prop="link" :label="$t('message.router.link')">
+        <el-table-column prop="name" :label="$t('message.name')" min-width="120"/>
+        <el-table-column prop="link" :label="$t('message.router.link')" min-width="140">
           <template #default="prop">
             <el-link type="primary" :underline="false"> {{ prop.row.link }}</el-link>
           </template>
         </el-table-column>
-        <el-table-column prop="color" :label="$t('message.color')">
+        <el-table-column prop="color" :label="$t('message.color')" min-width="120">
           <template #default="prop">
             <span :style="{ color: prop.row.color }">
               {{ prop.row.color }}
@@ -30,7 +30,7 @@
         </el-table-column>
         <el-table-column prop="type" :label="$t('message.type')"/>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
-        <el-table-column  :label="$t('message.is_visible')">
+        <el-table-column  :label="$t('message.is_visible')" min-width="120">
           <template #default="prop">
             <div v-if="prop.row.is_visible">
               <el-tag class="ml-2" type="success">{{ $t('message.enabled') }}</el-tag>
@@ -41,12 +41,12 @@
 
           </template>
         </el-table-column>
-        <el-table-column :label="$t('message.created_at')">
+        <el-table-column :label="$t('message.created_at')" min-width="120">
            <template #default="prop">
              {{ prop.row.created_at.split('T')[0] }}
            </template>
         </el-table-column>
-        <el-table-column>
+        <el-table-column min-width="120">
           <template #header>
             <el-input v-model="formData.search" size="default" :placeholder="$t('message.name')"/>
           </template>

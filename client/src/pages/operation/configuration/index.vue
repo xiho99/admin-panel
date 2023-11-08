@@ -11,9 +11,9 @@
       </div>
       <el-table :data="filterTableData" v-loading.lock="isLoading">
         <el-table-column type="index" :label="$t('No')" width="80"/>
-        <el-table-column prop="appName" :label="$t('message.appName')"/>
-        <el-table-column prop="key" :label="$t('message.key')"/>
-        <el-table-column :label="$t('message.type')">
+        <el-table-column prop="appName" :label="$t('message.appName')" min-width="120"/>
+        <el-table-column prop="key" :label="$t('message.key')" min-width="120"/>
+        <el-table-column :label="$t('message.type')" min-width="120">
           <template #default="prop">
             <div v-if="prop.row.type === 'image'">
               <el-image class="w-28 h-14 rounded" :src="prop.row.value" alt="loading.."/>
@@ -22,7 +22,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
-        <el-table-column label="status">
+        <el-table-column label="status" min-width="120">
           <template #header>
             <el-input v-model="formData.search" size="default" :placeholder="$t('message.name')"/>
           </template>

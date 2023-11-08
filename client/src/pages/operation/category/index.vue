@@ -11,11 +11,11 @@
       </div>
       <el-table :data="formData.data" v-loading.lock="isLoading">
         <el-table-column prop="name" :label="$t('message.name')"/>
-        <el-table-column prop="key" :label="$t('message.key')"/>
+        <el-table-column prop="key" :label="$t('message.key')" min-width="160"/>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
-        <el-table-column  :label="$t('message.is_visible')">
+        <el-table-column  :label="$t('message.is_visible')" min-width="120">
           <template #default="prop">
-            <div v-if="prop.row.is_visible">
+            <div v-if="prop.row.is_visible" >
               <el-tag class="ml-2" type="success">{{ $t('message.enabled') }}</el-tag>
             </div>
             <div v-else>
@@ -23,12 +23,12 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('message.created_at')">
+        <el-table-column :label="$t('message.created_at')" min-width="120">
            <template #default="prop">
              {{ prop.row.created_at.split('T')[0] }}
            </template>
         </el-table-column>
-        <el-table-column>
+        <el-table-column min-width="120">
           <template #header>
             <el-input v-model="formData.search" size="default" :placeholder="$t('message.name')"/>
           </template>

@@ -34,7 +34,7 @@ export default function useMenuItem() {
 		if (response.code !== EnumApiErrorCode.success) {
 			// eslint-disable-next-line no-console
 			console.log(response);
-			messageNotification(response.message, EnumMessageType.Error)
+			messageNotification(response.error, EnumMessageType.Error)
 		} else {
 			formData.data = response.data.data;
 			formData.paginate.total = response.data.total;
