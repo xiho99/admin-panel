@@ -1,8 +1,8 @@
 <template>
 	<div class="system-menu-container layout-pd">
-		<el-card shadow="hover">
+    <el-card shadow="hover" class="layout-padding-auto">
 			<div class="system-menu-search mb15">
-				<el-input size="default" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"> </el-input>
+				<el-input size="default" v-model="state.tableData.search" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"> </el-input>
 				<el-button size="default" type="primary" class="ml10">
 					<el-icon>
 						<ele-Search />
@@ -17,7 +17,7 @@
 				</el-button>
 			</div>
 			<el-table
-				:data="state.tableData.data"
+				:data="dataFilterPaginationSearch"
 				v-loading.lock="state.tableData.loading"
 				style="width: 100%"
 				row-key="path"
@@ -59,13 +59,20 @@
 					</template>
 				</el-table-column>
 			</el-table>
+      <el-pagination class="mt-5"
+          v-model:current-page="state.tableData.paginate.page"
+          v-model:page-size="state.tableData.paginate.pageSize"
+          :page-sizes="[10, 25, 50, 75, 100]"
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="state.tableData.data.length"/>
 		</el-card>
 		<MenuDialog ref="menuDialogRef" @refresh="getTableData()" />
 	</div>
 </template>
 
 <script setup lang="ts" name="systemMenu">
-import { defineAsyncComponent, ref, onMounted, reactive } from 'vue';
+import { defineAsyncComponent, ref, onMounted, reactive, computed } from 'vue';
 import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { storeToRefs } from 'pinia';
@@ -83,7 +90,13 @@ const state = reactive({
 	tableData: {
 		data: [] as RouteRecordRaw[],
 		loading: true,
-	},
+    search: '',
+    paginate: {
+      page: 1,
+      pageSize: 10,
+      total: 0,
+    },
+  },
 });
 const getTableData = async () => {
 	state.tableData.loading = true;
@@ -91,6 +104,11 @@ const getTableData = async () => {
 	state.tableData.data = routesList.value;
 	state.tableData.loading = false;
 };
+const dataFilterPaginationSearch = computed(() => {
+  return state.tableData.data.slice(state.tableData.paginate.pageSize * state.tableData.paginate.page - state.tableData.paginate, state.tableData.paginate.pageSize * state.tableData.paginate.page)
+      .filter((data) =>!state.tableData.search || data.meta?.title.toLowerCase().includes(state.tableData.search.toLowerCase()));
+});
+
 // 打开新增菜单弹窗
 const onOpenAddMenu = (type: string) => {
 	menuDialogRef.value.openDialog(type);

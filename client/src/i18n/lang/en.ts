@@ -271,4 +271,8 @@ export default {
 	youHaveBeenLogOut: "You have been logged out, please log in again!",
 	category: 'Category',
 	groupName: 'Group name',
+	roleName: 'Role name',
+	roleSign: 'Role a Sign',
+	status: 'Status',
+	describe: 'Describe',
 };

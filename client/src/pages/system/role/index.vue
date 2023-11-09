@@ -17,19 +17,19 @@
 				</el-button>
 			</div>
 			<el-table :data="state.tableData.data" v-loading.lock="state.tableData.loading" style="width: 100%">
-				<el-table-column type="index" label="序号" min-width="60" />
-				<el-table-column prop="roleName" label="角色名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="roleSign" label="角色标识" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="sort" label="排序" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="status" label="角色状态" show-overflow-tooltip>
+        <el-table-column type="index" :label="$t('message.table.numberSign')" width="60"/>
+				<el-table-column prop="roleName" :label="$t('message.roleName')" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="roleSign" :label="$t('message.roleSign')" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="sort" :label="$t('message.sort')" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="status" :label="$t('message.status')" show-overflow-tooltip>
 					<template #default="scope">
 						<el-tag type="success" v-if="scope.row.status">启用</el-tag>
 						<el-tag type="info" v-else>禁用</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="describe" label="角色描述" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="100">
+				<el-table-column prop="describe" :label="$t('message.describe')" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="createTime" :label="$t('message.table.createdAt')" show-overflow-tooltip></el-table-column>
+				<el-table-column :label="$t('message.operate')" width="100">
 					<template #default="scope">
 						<el-button :disabled="scope.row.roleName === '超级管理员'" size="small" text type="warning" @click="onOpenEditRole('edit', scope.row)"
 							>{{ $t('message.table.edit') }}</el-button

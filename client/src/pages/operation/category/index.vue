@@ -10,6 +10,7 @@
         </el-button>
       </div>
       <el-table :data="formData.data" v-loading.lock="isLoading">
+        <el-table-column type="index" :label="$t('message.table.numberSign')" width="60"/>
         <el-table-column prop="name" :label="$t('message.name')"/>
         <el-table-column prop="key" :label="$t('message.key')" min-width="160"/>
         <el-table-column prop="sort" :label="$t('message.sort')"/>

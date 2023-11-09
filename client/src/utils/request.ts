@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Session } from '/@/utils/storage';
 import qs from 'qs';
-
+import { Local } from '/@/utils/storage';
 // 配置新建一个 axios 实例
 const service: AxiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
@@ -14,6 +14,7 @@ const service: AxiosInstance = axios.create({
 		},
 	},
 });
+
 // 添加请求拦截器
 service.interceptors.request.use(
 	(config) => {
@@ -28,7 +29,6 @@ service.interceptors.request.use(
 		return Promise.reject(error);
 	}
 );
-
 // 添加响应拦截器
 service.interceptors.response.use(
 	(response) => {
@@ -38,7 +38,13 @@ service.interceptors.response.use(
 			// `token` 过期或者账号已在别处登录
 			if (res.code === -10004 || res.code === -20004) {
 				Session.clear(); // 清除浏览器全部临时缓存
-				ElMessageBox.alert('You have been logged out, please log in again', 'hint', {})
+				let message = '';
+				if (Local.get('themeConfig').globalI18n === 'en') {
+					message = `'You have been logged out, please log in again', 'hint', {}`;
+				} else {
+					message = `'你已被登出，请重新登录', '提示', {}`;
+				}
+				ElMessageBox.alert(message)
 					.then(() => {window.location.href = '/';})
 					.catch(() => {});
 			}else if(res.code === -10001){

@@ -10,7 +10,7 @@
         </el-button>
       </div>
       <el-table :data="filterTableData" v-loading.lock="isLoading">
-        <el-table-column type="index" :label="$t('No')" width="80"/>
+        <el-table-column type="index" :label="$t('message.table.numberSign')" width="60"/>
         <el-table-column prop="appName" :label="$t('message.appName')" min-width="120"/>
         <el-table-column prop="key" :label="$t('message.key')" min-width="120"/>
         <el-table-column :label="$t('message.type')" min-width="120">

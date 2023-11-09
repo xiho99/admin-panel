@@ -270,4 +270,8 @@ export default {
 	youHaveBeenLogOut: "您已退出，请重新登录！",
 	category: '类别',
 	groupName: '团队名字',
+	roleName: '角色名称',
+	roleSign: '角色标识',
+	status: '角色状态',
+	describe: '角色描述',
 };

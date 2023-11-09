@@ -10,6 +10,7 @@
         </el-button>
       </div>
       <el-table :data="formData.data" v-loading.lock="isLoading">
+        <el-table-column type="index" :label="$t('message.table.numberSign')" width="60"/>
         <el-table-column :label="$t('message.image')">
           <template #default="prop">
             <el-image  v-show="prop.row.type === 'icon'" class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
