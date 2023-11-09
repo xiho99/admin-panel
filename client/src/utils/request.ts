@@ -38,13 +38,16 @@ service.interceptors.response.use(
 			// `token` 过期或者账号已在别处登录
 			if (res.code === -10004 || res.code === -20004) {
 				Session.clear(); // 清除浏览器全部临时缓存
-				let message = '';
+				let msgTitle = '';
+				let msgText = '';
 				if (Local.get('themeConfig').globalI18n === 'en') {
-					message = `'You have been logged out, please log in again', 'hint', {}`;
+					msgTitle = 'Hint';
+					msgText = 'You have been logged out, please log in again';
 				} else {
-					message = `'你已被登出，请重新登录', '提示', {}`;
+					msgTitle = '提示';
+					msgText = '你已被登出，请重新登录';
 				}
-				ElMessageBox.alert(message)
+				ElMessageBox.alert(msgText, msgTitle, {})
 					.then(() => {window.location.href = '/';})
 					.catch(() => {});
 			}else if(res.code === -10001){
