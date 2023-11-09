@@ -142,6 +142,17 @@ export const staticRoutes : Array<RouteRecordRaw> = [
 		component: () => import('/@/pages/login/index.vue'),
 		meta: {
 			title: '登录',
+			front: true,
+		},
+	},
+	{
+		path: '/',
+		name: 'homePage',
+		component: () => import('/@/pages/home/index.vue'),
+		meta: {
+			title: 'home-page',
+			front: true,
+			layout: 'AppLayout'
 		},
 	},
 	/**
