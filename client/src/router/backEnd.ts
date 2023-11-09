@@ -1,14 +1,14 @@
 import { RouteRecordRaw } from 'vue-router';
-import pinia from '/@/stores/index';
+import pinia from '/@/stores';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useRequestOldRoutes } from '/@/stores/requestOldRoutes';
 import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
 import { dynamicRoutes, notFoundAndNoPower } from '/@/router/route';
-import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/index';
+import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router';
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-import { useMenuApi } from '/@/api/menu/index';
+import { useMenuApi } from '/@/api/menu';
 import sysRoute from './sys'
 
 // 引入 api 请求接口
