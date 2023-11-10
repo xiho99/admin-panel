@@ -432,7 +432,7 @@ class BaseModel extends Model
             return json_decode($result ,true);
         }
         // Create a query builder
-        $objQuery = self::query(); // 创建一个查询构建器
+        $objQuery = self::query(); // Create a query builder
 
         // Processing conditions
         $condition && $objQuery = $model->handleConditions($objQuery,$condition);
@@ -442,6 +442,21 @@ class BaseModel extends Model
         }
         // Set sort
         $order && $objQuery->orderByRaw($order);
+
+        // If there is a JOIN condition
+        if (!empty($join)) {
+            $objQuery = $model->parseJoin($objQuery, $join);
+        }
+
+        // If there is a GROUP BY condition
+        if (!empty($group)) {
+            $objQuery->groupBy($group);
+        }
+
+        // If there is a limited quantity
+        if (!empty($limit)) {
+            $objQuery->limit($limit);
+        }
 
         // Get the total number of records
         $count = $objQuery->count();
@@ -457,6 +472,7 @@ class BaseModel extends Model
         $resultData = $objQuery->forPage($page, $pageSize)->select($field)->get();
         $pageCount = ceil($count / $pageSize);
 
+        // Return result array
         $result = [
             'total' => $count,
             'page_count' => $pageCount,
@@ -470,7 +486,7 @@ class BaseModel extends Model
     public static function updateCacheData($record)
     {
         $model = self::initBase();
-        // 删除此表格redis数据
+        // Delete the redis data of this table
         $id =  $record->save();
         delRedisPrefix('Table-'.$model->table.'Redis:');
         return $id;

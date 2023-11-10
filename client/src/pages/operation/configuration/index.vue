@@ -22,6 +22,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
+        <el-table-column :label="$t('message.created_at')" min-width="120">
+          <template #default="prop">
+            {{ prop.row.created_at.split('T')[0] }}
+          </template>
+        </el-table-column>
         <el-table-column label="status" min-width="120">
           <template #header>
             <el-input v-model="formData.search" size="default" :placeholder="$t('message.name')"/>
