@@ -13,7 +13,7 @@
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>
-          {{ $t('message.table.newUser') }}
+          {{ $t('message.table.newRole') }}
 				</el-button>
 			</div>
 			<el-table :data="state.tableData.data" v-loading.lock="state.tableData.loading" style="width: 100%">

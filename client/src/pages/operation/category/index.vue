@@ -1,6 +1,6 @@
 <template>
   <div class=" layout-pd">
-    <div class="shadow bg-white rounded p-5">
+    <el-card shadow="hover">
       <div class="system-user-search p-3 flex justify-end">
         <el-button type="success" @click="onOpenAddDialog('add')">
           <el-icon>
@@ -57,7 +57,7 @@
         />
       </div>
       <categoryDialog ref="openDialogRef" @refresh="getCategory()"/>
-    </div>
+    </el-card>
   </div>
 </template>
 <script lang="ts" setup>

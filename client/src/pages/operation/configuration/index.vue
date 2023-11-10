@@ -1,6 +1,6 @@
 <template>
   <div class="home-container layout-pd">
-    <div class="shadow bg-white rounded p-5">
+    <el-card shadow="hover" >
       <div class="system-user-search pr-3 flex justify-end">
         <el-button type="success" @click="onOpenAddDialog('add')">
           <el-icon>
@@ -49,7 +49,7 @@
             :total="formData.paginate.total"/>
       </div>
       <configurationDialog ref="openDialogRef" @refresh="getConfiguration()"/>
-    </div>
+    </el-card>
   </div>
 </template>
 <script lang="ts" setup>

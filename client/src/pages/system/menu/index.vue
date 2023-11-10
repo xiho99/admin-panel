@@ -13,7 +13,7 @@
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>
-          {{ $t('message.table.newUser') }}
+          {{ $t('message.table.newMenu') }}
 				</el-button>
 			</div>
 			<el-table
