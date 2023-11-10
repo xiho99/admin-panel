@@ -57,7 +57,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
 import { IConfiguration } from "/@/models/IConfiguration";
 import { useI18n } from "vue-i18n";
 import formHelper, { IRule } from "/@/libraries/elementUiHelpers/formHelper";
@@ -93,6 +93,7 @@ const configuration = reactive({
 });
 const emit = defineEmits(['refresh']);
 const resetFields = () => {
+  configuration.id = 0;
   configuration.appName = '';
   configuration.key = '';
   configuration.type = '';

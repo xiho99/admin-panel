@@ -37,12 +37,12 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
-import formHelper, { IRule } from "/src/libraries/elementUiHelpers/formHelper";
-import useVariable from "/src/composables/useVariables";
-import useApi from "/src/api/api";
-import EnumMessageType from "/src/models/enums/enumMessageType";
-import { messageNotification } from "/src/libraries/elementUiHelpers/notificationHelper";
-import EnumApiErrorCode from "/src/models/enums/enumApiErrorCode";
+import formHelper, { IRule } from "/@/libraries/elementUiHelpers/formHelper";
+import useVariable from "/@/composables/useVariables";
+import useApi from "/@/api/api";
+import EnumMessageType from "/@/models/enums/enumMessageType";
+import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
+import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
 import { IMenu } from "/@/models/IMenu";
 import { Hide, View } from '@element-plus/icons-vue'
 
