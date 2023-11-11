@@ -24,6 +24,9 @@ class AdminUser extends BaseModel
     protected $hidden = [
         'password'
     ];
+    protected $casts = [
+        'status' => 'boolean',
+    ];
     protected static $initBase;
     public static function initBase(): static
     {

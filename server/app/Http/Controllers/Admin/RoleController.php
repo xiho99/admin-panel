@@ -39,12 +39,10 @@ class RoleController extends BaseController
         $page = $request->input('page' , 1);
         $pageSize = $request->input('pageSize' , 20);
         $where = [];
-
         if($name){
             $where[] = ['roleName' , 'like',"%{$name}%"];
         }
-
-        $data = Role::pageList($where,'*',$page,$pageSize);
+        $data = Role::getListData($where,'*',$page,$pageSize);
 
         return $this->success($data);
     }
@@ -52,7 +50,7 @@ class RoleController extends BaseController
     public function getAllRole(){
 
         $data = Role::select('id','roleName')->get()->pluck(null, 'id');
-        $data[0] = ['id' => 0 , 'roleName' => '超级管理员'];
+        $data[0] = ['id' => 0 , 'roleName' => 'superAdmin'];
         return $this->success($data);
     }
     // 存储角色信息

@@ -28,15 +28,15 @@
           <template #default="scope">
             <span v-for="(ite, index) in (scope.row?.role_ids?.split(',') || [])" :key="index"
                   style="background:#f9d83a;margin:0 5px;padding:3px 5px;border-radius: 4px;">
-              {{ state.roleList[ite]?.roleName }}
+              {{ $t(`message.${state.roleList[ite]?.roleName}`) }}
             </span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('message.table.userStatus')" show-overflow-tooltip>
           <template #default="scope">
 <!--            {{ scope.row.status }}-->
-            <el-tag type="success" v-if="scope.row.status">启用</el-tag>
-            <el-tag type="info" v-else>禁用</el-tag>
+            <el-tag type="success" v-if="!scope.row.status">{{ $t('message.enabled') }}</el-tag>
+            <el-tag type="info" v-else>{{ $t('message.disabled') }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="describe" :label="$t('message.table.userDescription')" show-overflow-tooltip></el-table-column>
@@ -62,7 +62,6 @@
           @size-change="onHandleSizeChange"
           @current-change="onHandleCurrentChange"
           class="mt15"
-          :pager-count="10"
           :page-sizes="[10, 20, 30]"
           v-model:current-page="state.tableData.param.pageNum"
           background
@@ -80,7 +79,7 @@
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { adminList, deleteAdmin } from '/@/api/admin';
-import { getAllRole } from '/@/api/role';
+import { getAllRole, roleList } from '/@/api/role';
 import dayjs from 'dayjs';
 import { useI18n } from "vue-i18n";
 import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
@@ -107,8 +106,8 @@ const { t } = useI18n();
 const getTableData = async () => {
   state.tableData.loading = true;
   let row = await adminList(state.tableData.param);
-  state.tableData.data = row.data?.list;
-  state.tableData.total = row.data?.count || 0;
+  state.tableData.data = row.data?.data;
+  state.tableData.total = row.data?.total || 0;
   state.tableData.loading = false;
 };
 getTableData();
@@ -149,11 +148,18 @@ const onHandleCurrentChange = (val: number) => {
   state.tableData.param.pageNum = val;
   getTableData();
 };
+const getRole = async () => {
+  const response  = await getAllRole();
+  if (response.code !== EnumApiErrorCode.success) {
+    // eslint-disable-next-line no-console
+    console.log(response);
+  } else {
+    state.roleList = response.data || {};
+  }
+};
 // 页面加载时
-onMounted(async () => {
-  let row = await getAllRole();
-  state.roleList = row.data || {};
-
+onMounted(() => {
+  getRole();
 });
 </script>
 

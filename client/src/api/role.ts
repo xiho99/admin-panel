@@ -28,7 +28,7 @@ export async function deleteRole(params = null) {
 		data: params,
 	});
 }
-export async function getAllRole(params = null) {
+export async function getAllRole(params?: object) {
 	return await request({
 		url: 'getAllRole',
 		method: 'post',

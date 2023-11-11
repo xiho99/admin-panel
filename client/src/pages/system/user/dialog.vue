@@ -1,6 +1,6 @@
 <template>
 	<div class="system-user-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" >
+		<el-dialog @close="resetFields" destroy-on-close :title="state.dialog.title" v-model="state.dialog.isShowDialog" >
 			<el-form ref="userDialogFormRef" :model="state.ruleForm" size="default" label-width="140px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -17,7 +17,7 @@
 						<el-form-item :label="$t('message.associatedRoles')">
 							<el-select v-model="state.ruleForm.role_ids" multiple :placeholder="$t('message.pleaseChoose')" clearable
 								class="w100">
-								<el-option v-for="(ite, index) in state.roleList" :key="index" :label="ite.roleName" :value="ite.id+''"/>
+								<el-option v-for="(ite, index) in state.roleList" :key="index" :label="$t(`message.${ite.roleName}`)" :value="ite.id+''"/>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -89,11 +89,20 @@
 		},
 		roleList: {},
 	});
+  const resetFields = () => {
+    state.ruleForm.userName = '';
+    state.ruleForm.userNickname = '';
+    state.ruleForm.role_ids = [];
+    state.ruleForm.password = '';
+    state.ruleForm.overdueTime = '';
+    state.ruleForm.status = true;
+    state.ruleForm.describe = '';
+  };
 
 	// 打开弹窗
-	const openDialog = async (type : string, row : RowUserType) => {
-		let rows = await getAllRole();
-		state.roleList = rows.data || {};
+	const openDialog = async (type : string, row?: RowUserType) => {
+		const rows = await getAllRole();
+		Object.assign(state.roleList, rows.data || {});
 		if (type === 'edit') {
 			state.ruleForm = JSON.parse(JSON.stringify(row));
 			state.ruleForm.role_ids = state.ruleForm.role_ids?.split(',');
@@ -123,10 +132,11 @@
 		closeDialog();
 		emit('refresh');
 		try{
-		let form = JSON.parse(JSON.stringify(state.ruleForm));
-		form.role_ids = form.role_ids?.join(',');
-		await saveAdmin(form);
-		ElMessage.success('操作成功');
+      let form = JSON.parse(JSON.stringify(state.ruleForm));
+      form.role_ids = form.role_ids?.join(',');
+      await saveAdmin(form);
+      ElMessage.success('操作成功');
+      resetFields();
 		}catch(e){
 			//TODO handle the exception
 		}

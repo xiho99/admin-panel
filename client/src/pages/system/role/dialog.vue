@@ -1,6 +1,6 @@
 <template>
 	<div class="system-role-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" >
+		<el-dialog @close="resetFields" :title="state.dialog.title" v-model="state.dialog.isShowDialog" >
 			<el-form ref="roleDialogFormRef" :model="state.ruleForm" size="default" label-width="140px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -54,7 +54,7 @@
 import { reactive, ref,nextTick } from 'vue';
 import { saveRole } from '/@/api/role';
 import { useRoutesList } from '/@/stores/routesList';
-import { i18n } from '/@/i18n/index';
+import { i18n } from '/@/i18n';
 import { storeToRefs } from 'pinia';
 import { ElMessage } from 'element-plus';
 
@@ -65,7 +65,7 @@ const emit = defineEmits(['refresh']);
 const roleDialogFormRef = ref();
 const state = reactive({
 	ruleForm: {
-		roleName: '', // 角色名称
+    roleName: '', // 角色名称
 		roleSign: '', // 角色标识
 		sort: 0, // 排序
 		status: 1, // 角色状态
@@ -85,6 +85,16 @@ const state = reactive({
 		loading:false
 	},
 });
+const resetFields = () => {
+  state.ruleForm = {
+    roleName: '',
+    roleSign: '',
+    sort: 0,
+    status: 1,
+    describe: '',
+    menu_ids:'',
+  };
+}
 const treeRef = ref();
 const getCheckedKeys = () => {
   return treeRef.value!.getCheckedKeys(false);
@@ -94,13 +104,14 @@ const { routesList } = storeToRefs(stores);
 // 打开弹窗
 const openDialog = (type: string, row: any) => {
 	if (type === 'edit') {
-		state.ruleForm = row;
+    Object.assign(state.ruleForm, row);
+		// state.ruleForm = row;
 		state.dialog.title = i18n.global.t('message.editRole');
 		nextTick(() => {
 			treeRef.value!.setCheckedKeys(state.ruleForm.menu_ids.split(','), false);
 		});
 		state.dialog.submitTxt = i18n.global.t('message.submit');
-		
+
 	} else {
 		state.dialog.title = i18n.global.t('message.addNewRole');
 		state.dialog.submitTxt = i18n.global.t('message.submit');
@@ -129,6 +140,7 @@ const onSubmit = async () => {
 	try{
 		await saveRole(state.ruleForm);
 		ElMessage.success('操作成功');
+    resetFields();
 	}catch(e){
 		//TODO handle the exception
 	}

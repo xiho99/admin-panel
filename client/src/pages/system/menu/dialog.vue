@@ -1,6 +1,6 @@
 <template>
 	<div class="system-menu-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog">
+		<el-dialog @close="initRuleFrom" destroy-on-close :title="state.dialog.title" v-model="state.dialog.isShowDialog">
 			<el-form ref="menuDialogFormRef" :model="state.ruleForm" size="default" label-width="120px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
@@ -213,7 +213,7 @@ const initRuleFrom  = () =>{
 				isIframe: false, // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
 			}
 	}
-}
+};
 // 打开弹窗
 const openDialog = (type: string, row?: any) => {
 	if (type === 'edit') {
@@ -226,7 +226,6 @@ const openDialog = (type: string, row?: any) => {
 	} else {
 		state.dialog.title = t('message.addMenu');
 		state.dialog.submitTxt = t('message.submit');
-		initRuleFrom(); // 	清空表单
 	}
 	state.dialog.type = type;
 	state.dialog.isShowDialog = true;
@@ -251,6 +250,7 @@ const onSubmit = async () => {
 		data.meta = JSON.stringify(data.meta);
 		await menuApi.saveMenu(data);
 		ElMessage.success('操作成功');
+    initRuleFrom();
 	}catch(e){
 		//TODO handle the exception
 	}

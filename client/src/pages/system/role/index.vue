@@ -82,7 +82,7 @@ const state = reactive({
 const getTableData = async () => {
 	state.tableData.loading = true;
 	let row = await roleList(state.tableData.param);
-	state.tableData.data = row.data?.list;
+	state.tableData.data = row.data?.data;
 	state.tableData.total = row.data?.count || 0;
 	state.tableData.loading = false;
 };
