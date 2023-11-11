@@ -26,7 +26,7 @@ class AdminController extends BaseController
             return $this->error( 'Account password is wrong');
         }
         $user = auth('admin')->user();
-        if ($user->status !== 0) {
+        if ($user->status == 0) {
             auth('admin')->logout();
             return $this->error('User has been disabled');
         }
