@@ -42,7 +42,7 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default"  :loading="state.dialog.loading">取 消</el-button>
+					<el-button @click="onCancel" size="default"  :loading="state.dialog.loading">{{ $t('message.cancel') }}</el-button>
 					<el-button type="primary" @click="onSubmit" size="default" :loading="state.dialog.loading">{{ state.dialog.submitTxt }}</el-button>
 				</span>
 			</template>
@@ -57,10 +57,11 @@ import { useRoutesList } from '/@/stores/routesList';
 import { i18n } from '/@/i18n';
 import { storeToRefs } from 'pinia';
 import { ElMessage } from 'element-plus';
+import { useI18n } from "vue-i18n";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
-
+const { t } = useI18n();
 // 定义变量内容
 const roleDialogFormRef = ref();
 const state = reactive({
@@ -139,7 +140,7 @@ const onSubmit = async () => {
 	state.ruleForm.menu_ids = getCheckedKeys()?.join(',');
 	try{
 		await saveRole(state.ruleForm);
-		ElMessage.success('操作成功');
+		ElMessage.success(t('message.success'));
     resetFields();
 	}catch(e){
 		//TODO handle the exception

@@ -9,7 +9,7 @@
           </el-icon>
           {{ $t('message.table.search') }}
         </el-button>
-        <el-button size="default" type="success" class="ml10" @click="onOpenAddUser('add')">
+        <el-button size="default" type="success" class="ml10" @click="onOpenAddUser('add')" :loading="state.tableData.loading">
           <el-icon>
             <ele-FolderAdd/>
           </el-icon>
@@ -35,7 +35,7 @@
         <el-table-column :label="$t('message.table.userStatus')" show-overflow-tooltip>
           <template #default="scope">
 <!--            {{ scope.row.status }}-->
-            <el-tag type="success" v-if="!scope.row.status">{{ $t('message.enabled') }}</el-tag>
+            <el-tag type="success" v-if="scope.row.status">{{ $t('message.enabled') }}</el-tag>
             <el-tag type="info" v-else>{{ $t('message.disabled') }}</el-tag>
           </template>
         </el-table-column>
@@ -48,7 +48,7 @@
         <el-table-column :label="$t('message.table.operate')" width="100">
           <template #default="scope">
             <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="warning"
-                       @click="onOpenEditUser('edit', scope.row)"
+                       @click="onOpenEditUser('edit', scope.row)" :loading="state.tableData.loading"
             >{{ $t('message.table.edit') }}
             </el-button
             >
@@ -79,7 +79,7 @@
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { adminList, deleteAdmin } from '/@/api/admin';
-import { getAllRole, roleList } from '/@/api/role';
+import { getAllRole } from '/@/api/role';
 import dayjs from 'dayjs';
 import { useI18n } from "vue-i18n";
 import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
@@ -113,11 +113,15 @@ const getTableData = async () => {
 getTableData();
 // 打开新增用户弹窗
 const onOpenAddUser = (type: string) => {
+  state.tableData.loading = true;
   userDialogRef.value.openDialog(type);
+  state.tableData.loading = false;
 };
 // 打开修改用户弹窗
 const onOpenEditUser = (type: string, row: RowUserType) => {
+  state.tableData.loading = true
   userDialogRef.value.openDialog(type, row);
+  state.tableData.loading = false;
 };
 // 删除用户
 const onRowDel = (row: RowUserType) => {

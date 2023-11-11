@@ -42,7 +42,6 @@
 				@size-change="onHandleSizeChange"
 				@current-change="onHandleCurrentChange"
 				class="mt15"
-				:pager-count="5"
 				:page-sizes="[10, 20, 30]"
 				v-model:current-page="state.tableData.param.page"
 				background

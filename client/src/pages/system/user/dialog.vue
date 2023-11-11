@@ -64,6 +64,7 @@
 	import { getAllRole } from '/@/api/role';
 	import { ElMessage } from 'element-plus';
   import { useI18n } from "vue-i18n";
+  import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
 
 	// 定义子组件向父组件传值/事件
 	const emit = defineEmits(['refresh']);
@@ -130,16 +131,20 @@
 	const onSubmit = async () => {
 		state.dialog.loading = true;
 		closeDialog();
-		emit('refresh');
 		try{
       let form = JSON.parse(JSON.stringify(state.ruleForm));
       form.role_ids = form.role_ids?.join(',');
-      await saveAdmin(form);
-      ElMessage.success('操作成功');
+      const response = await saveAdmin(form);
+      if (response.code !== EnumApiErrorCode.success) {
+        ElMessage.error(response.message);
+      } else {
+        ElMessage.success(t('message.success'));
+      }
       resetFields();
 		}catch(e){
 			//TODO handle the exception
 		}
+    emit('refresh');
 		state.dialog.loading = false;
 		// if (state.dialog.type === 'add') { }
 	};
