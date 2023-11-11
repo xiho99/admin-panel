@@ -101,9 +101,16 @@
   };
 
 	// 打开弹窗
+  const getRoles = async () => {
+      const response = await getAllRole();
+      if (response.code !== EnumApiErrorCode.success) {
+        ElMessage.error(response.message);
+      } else {
+        Object.assign(state.roleList, response.data || {});
+      }
+  };
+  getRoles();
 	const openDialog = async (type : string, row?: RowUserType) => {
-		const rows = await getAllRole();
-		Object.assign(state.roleList, rows.data || {});
 		if (type === 'edit') {
 			state.ruleForm = JSON.parse(JSON.stringify(row));
 			state.ruleForm.role_ids = state.ruleForm.role_ids?.split(',');

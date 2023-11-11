@@ -104,18 +104,14 @@ const state = reactive({
 const { t } = useI18n();
 // 初始化表格数据
 const getTableData = async () => {
-  state.tableData.loading = true;
   let row = await adminList(state.tableData.param);
   state.tableData.data = row.data?.data;
   state.tableData.total = row.data?.total || 0;
-  state.tableData.loading = false;
 };
 getTableData();
 // 打开新增用户弹窗
 const onOpenAddUser = (type: string) => {
-  state.tableData.loading = true;
   userDialogRef.value.openDialog(type);
-  state.tableData.loading = false;
 };
 // 打开修改用户弹窗
 const onOpenEditUser = (type: string, row: RowUserType) => {
