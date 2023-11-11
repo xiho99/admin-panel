@@ -312,4 +312,6 @@ export default {
 	pleaseEnterRouteRedirect: "请输入路由重定向",
 	nameValueInRoute: "路由中的 name 值",
 	pleaseSelectTheUpperLevelMenu: "请选择上一级菜单",
+	addMenu: "添加菜单",
+	modifyMenu: "修改菜单",
 };

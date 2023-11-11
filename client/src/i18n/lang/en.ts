@@ -313,4 +313,6 @@ export default {
 	pleaseEnterRouteRedirect: "Please enter route redirect",
 	nameValueInRoute: "Name value in route",
 	pleaseSelectTheUpperLevelMenu: "Please select the upper level menu",
+	addMenu: "Add menu",
+	modifyMenu: "Modify menu",
 };

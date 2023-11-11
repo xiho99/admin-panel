@@ -221,10 +221,10 @@ const openDialog = (type: string, row?: any) => {
 		row.menuType = 'menu';
 		// row.menuSort = Math.floor(Math.random() * 100);
 		state.ruleForm = JSON.parse(JSON.stringify(row));
-		state.dialog.title = '修改菜单';
+		state.dialog.title = t('message.modifyMenu');
 		state.dialog.submitTxt = t('message.submit');
 	} else {
-		state.dialog.title = '新增菜单';
+		state.dialog.title = t('message.addMenu');
 		state.dialog.submitTxt = t('message.submit');
 		initRuleFrom(); // 	清空表单
 	}
