@@ -23,18 +23,18 @@
 				<el-table-column prop="sort" :label="$t('message.sort')" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="status" :label="$t('message.status')" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag type="success" v-if="scope.row.status">启用</el-tag>
-						<el-tag type="info" v-else>禁用</el-tag>
+						<el-tag type="success" v-if="scope.row.status">{{ $t('message.enabled') }}</el-tag>
+						<el-tag type="info" v-else>{{ $t('message.disabled') }}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="describe" :label="$t('message.describe')" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="createTime" :label="$t('message.table.createdAt')" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('message.operate')" width="100">
 					<template #default="scope">
-						<el-button :disabled="scope.row.roleName === '超级管理员'" size="small" text type="warning" @click="onOpenEditRole('edit', scope.row)"
+						<el-button :disabled="scope.row.roleName === 'superAdmin'" size="small" text type="warning" @click="onOpenEditRole('edit', scope.row)"
 							>{{ $t('message.table.edit') }}</el-button
 						>
-						<el-button :disabled="scope.row.roleName === '超级管理员'" size="small" text type="danger" @click="onRowDel(scope.row)">{{ $t('message.table.delete') }}</el-button>
+						<el-button :disabled="scope.row.roleName === 'superAdmin'" size="small" text type="danger" @click="onRowDel(scope.row)">{{ $t('message.table.delete') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
