@@ -8,7 +8,7 @@
 							<el-cascader
 								:options="state.menuData"
 								:props="{ checkStrictly: true, value: 'path', label: 'title' }"
-								placeholder="请选择上级菜单"
+								:placeholder="$t('message.pleaseSelectTheUpperLevelMenu')"
 								clearable
 								class="w100"
 								v-model="state.ruleForm.menuSuperiorPath"
@@ -30,35 +30,35 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item :label="$t('message.menuName')">
-							<el-input v-model="state.ruleForm.meta.title" placeholder="格式：message.router.xxx" clearable></el-input>
+							<el-input v-model="state.ruleForm.meta.title" placeholder="Format：message.router.xxx" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<template v-if="state.ruleForm.menuType === 'menu'">
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item :label="$t('message.routeName')">
-								<el-input v-model="state.ruleForm.name" placeholder="路由中的 name 值" clearable></el-input>
+								<el-input v-model="state.ruleForm.name" :placeholder="$t('message.nameValueInRoute')" clearable></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item :label="$t('message.routePath')">
-								<el-input v-model="state.ruleForm.path" placeholder="路由中的 path 值" clearable></el-input>
+								<el-input v-model="state.ruleForm.path" placeholder="path value in route" clearable></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item :label="$t('message.redirect')">
-								<el-input v-model="state.ruleForm.redirect" placeholder="请输入路由重定向" clearable></el-input>
+								<el-input v-model="state.ruleForm.redirect" :placeholder="$t('message.pleaseEnterRouteRedirect')" clearable></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item :label="$t('message.menuIcon')">
-								<IconSelector placeholder="请输入菜单图标" v-model="state.ruleForm.meta.icon" />
+								<IconSelector :placeholder="$t('message.pleaseEnterMenuIcon')" v-model="state.ruleForm.meta.icon" />
 							</el-form-item>
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item :label="$t('message.linkAddress')">
 								<el-input
 									v-model="state.ruleForm.meta.isLink"
-									placeholder="外链/内嵌时链接地址（http:xxx.com）"
+									:placeholder="$t('message.linkAddressEmbedded')"
 									clearable
 									:disabled="!state.ruleForm.isLink"
 								>
@@ -80,7 +80,7 @@
 					</el-col>
 					<template v-if="state.ruleForm.menuType === 'menu'">
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="是否隐藏">
+							<el-form-item :label="$t('message.menuType')">
 								<el-radio-group v-model="state.ruleForm.meta.isHide">
 									<el-radio :label="true">{{ $t('message.hide') }}</el-radio>
 									<el-radio :label="false">{{ $t('message.notHide') }}</el-radio>

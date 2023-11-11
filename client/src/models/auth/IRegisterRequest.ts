@@ -18,7 +18,7 @@ interface IRegisterResponse {
     Message: string,
 }
 
-export {
+export type {
   IRegisterRequest,
   IRegisterResponse,
 };
