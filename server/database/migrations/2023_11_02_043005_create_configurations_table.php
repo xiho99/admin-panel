@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('value');
             $table->integer('sort');
+            $table->boolean('is_visible')->default(0);
             $table->boolean('is_delete')->default(0);
             $table->timestamps();
         });

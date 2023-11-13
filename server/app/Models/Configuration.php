@@ -16,6 +16,10 @@ class Configuration extends BaseModel
         'value',
         'sort',
         'is_delete',
+        'is_visible',
+    ];
+    protected $casts = [
+        'is_visible' => 'boolean',
     ];
     protected $rules = [
         'appName' => 'required',

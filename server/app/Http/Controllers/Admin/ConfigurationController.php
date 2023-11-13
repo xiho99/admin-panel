@@ -44,6 +44,7 @@ class ConfigurationController extends BaseController
             'key' => $data['key'],
             'type' => $data['type'] ?? 1,
             'sort' => (int)$data['sort'] ?? 1,
+            'is_visible' => $data['is_visible'],
         ];
         if ($data['type'] == 'image') {
             $address = $this->fileUpload($data['value'], 'uploads/');
@@ -66,6 +67,9 @@ class ConfigurationController extends BaseController
             $address = $this->fileUpload($data['value'], 'uploads/');
             $config->value = $address;
         }
+        if ($data['type'] === 'colorPicker' && isset($data['value'])) {
+            $config->value = $data['value'];
+        }
         if ($data['type'] === 'text' && isset($data['value'])) {
             $config->value = $data['value'];
         }
@@ -73,6 +77,7 @@ class ConfigurationController extends BaseController
         $config->key = $data['key'];
         $config->type = $data['type'];
         $config->sort = $data['sort'];
+        $config->is_visible = $data['is_visible'];
         Configuration::updateCacheData($config);
         return $this->success($config, 0, 201);
     }

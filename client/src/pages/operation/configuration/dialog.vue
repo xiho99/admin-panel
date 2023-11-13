@@ -16,6 +16,7 @@
         <el-form-item prop="type" :label="$t('message.type')">
           <el-select v-model="configuration.type" class="w-full" placeholder="Select">
             <el-option value="text" :label="$t('message.text')"/>
+            <el-option value="colorPicker" :label="$t('message.colorPicker')"/>
             <el-option value="image" :label="$t('message.image')"/>
           </el-select>
         </el-form-item>
@@ -41,8 +42,20 @@
               </el-icon>
             </el-upload>
           </div>
-          <div v-if="configuration.type === 'text'" class="w-full">
+          <div v-if="configuration.type === 'colorPicker'">
+            <el-color-picker v-model="configuration.value" />
+          </div>
+          <div  v-if="configuration.type === 'text'" class="w-full">
             <el-input type="text" v-model="configuration.value"/>
+          </div>
+        </el-form-item>
+        <el-form-item :label="$t('message.is_visible')">
+          <div class="flex gap-5">
+            <el-switch
+                v-model="configuration.is_visible"
+                :active-action-icon="View"
+                :inactive-action-icon="Hide"
+            />
           </div>
         </el-form-item>
       </el-form>
@@ -59,6 +72,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { IConfiguration } from "/@/models/IConfiguration";
+import { Hide, View } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
 import formHelper, { IRule } from "/@/libraries/elementUiHelpers/formHelper";
 import useVariable from "/@/composables/useVariables";
@@ -83,6 +97,7 @@ const configuration = reactive({
   type: '',
   value: '',
   sort: 0,
+  is_visible: true,
   dialog: {
     title: '',
     submit: '',
@@ -98,6 +113,7 @@ const resetFields = () => {
   configuration.key = '';
   configuration.type = '';
   configuration.value = '';
+  configuration.is_visible = true;
   configuration.sort = 0;
   configuration.dialog.isShowDialog = false;
   file.value = '';
@@ -138,6 +154,7 @@ const submitProcess = async () => {
       type: configuration.type,
       value: configuration.type === 'image' ? file.value : configuration.value,
       sort: configuration.sort,
+      is_visible: configuration.is_visible,
     };
     const response = request.id !== 0 ? await api.updateConfiguration(request) : await api.addConfiguration(request);
     if (response.code !== EnumApiErrorCode.success) {

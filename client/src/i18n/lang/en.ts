@@ -315,4 +315,5 @@ export default {
 	pleaseSelectTheUpperLevelMenu: "Please select the upper level menu",
 	addMenu: "Add menu",
 	modifyMenu: "Modify menu",
+	colorPicker: "Color picker",
 };

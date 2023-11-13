@@ -314,4 +314,5 @@ export default {
 	pleaseSelectTheUpperLevelMenu: "请选择上一级菜单",
 	addMenu: "添加菜单",
 	modifyMenu: "修改菜单",
+	colorPicker: "选色器",
 };
