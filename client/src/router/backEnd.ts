@@ -78,7 +78,6 @@ export function generateMenuTree(menuData: any) {
 	});// 然后，遍历菜单项，将子菜单插入到其父级的 children 中
 	menuData.forEach((menu: any) => {
 		if (menu.menuSuperior && menuMap[menu.menuSuperior]) {
-			
 			menuMap[menu.menuSuperior].children.push(menu);
 		} else {
 			menuTree.push(menu); // 如果没有父级，将其作为根级菜单
