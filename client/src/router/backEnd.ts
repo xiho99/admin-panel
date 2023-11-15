@@ -73,11 +73,12 @@ export function generateMenuTree(menuData: any) {
 	const menuTree: any = []; // 最终生成的菜单树
 	// 首先，将所有菜单项添加到菜单映射中
 	menuData.forEach((menu: any) => {
-		menuMap[menu.name] = menu;
+		menuMap[menu.id] = menu;
 		menu.children = []; // 初始化子菜单
 	});// 然后，遍历菜单项，将子菜单插入到其父级的 children 中
 	menuData.forEach((menu: any) => {
 		if (menu.menuSuperior && menuMap[menu.menuSuperior]) {
+			
 			menuMap[menu.menuSuperior].children.push(menu);
 		} else {
 			menuTree.push(menu); // 如果没有父级，将其作为根级菜单

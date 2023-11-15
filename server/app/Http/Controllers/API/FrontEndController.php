@@ -14,7 +14,10 @@ class FrontEndController extends BaseController
     public function getConfigurations(): Response
     {
         $configurations = Configuration::orderBy('sort', 'asc')
-            ->where('is_delete', 0)
+            ->where([
+                'is_delete' => 0,
+                'is_visible' => 1,
+            ])
             ->get();
         return $this->success($configurations);
     }

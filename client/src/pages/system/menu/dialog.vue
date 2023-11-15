@@ -133,7 +133,7 @@
 </template>
 
 <script setup lang="ts" name="systemMenuDialog">
-import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
+import { defineAsyncComponent, reactive, onMounted, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoutesList } from '/@/stores/routesList';
 import { i18n } from '/@/i18n';
@@ -156,6 +156,7 @@ const { routesList } = storeToRefs(stores);
 const state = reactive({
 	// 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
 	ruleForm: {
+    menuSuperior: null,
 		menuSuperiorPath: [], // 上级菜单
 		menuType: 'menu', // 菜单类型
 		name: '', // 路由名称
@@ -195,6 +196,7 @@ const getMenuData = (routes: RouteItems) => {
 };
 const initRuleFrom  = () =>{
 	state.ruleForm = {
+      menuSuperior: null,
 			menuSuperiorPath: [], // 上级菜单
       btnPower: "",
 			menuType: 'menu', // 菜单类型
@@ -244,7 +246,7 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = async () => {
-	state.dialog.loading = true;
+	// state.dialog.loading = true;
 	try{
 		let data = JSON.parse(JSON.stringify(state.ruleForm));
 		data.meta = JSON.stringify(data.meta);
@@ -260,11 +262,16 @@ const onSubmit = async () => {
 	// if (state.dialog.type === 'add') { }
 	// setBackEndControlRefreshRoutes() // 刷新菜单，未进行后端接口测试
 };
+watch(() => state.ruleForm.menuSuperiorPath, (value) => {
+  const findItem = state.menuData.find((item) => item.path === value[0]);
+  if (findItem) {
+    state.ruleForm.menuSuperior= findItem.id;
+  }
+});
 // 页面加载时
 onMounted(() => {
 	state.menuData = getMenuData(routesList.value);
 });
-
 // 暴露变量
 defineExpose({
 	openDialog,
