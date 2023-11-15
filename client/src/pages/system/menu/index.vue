@@ -1,5 +1,5 @@
 <template>
-	<div class="system-menu-container layout-pd">
+	<div class="layout-container layout-padding">
     <el-card shadow="hover" class="layout-padding-auto">
 			<div class="system-menu-search mb15">
 				<el-input size="default" v-model="state.tableData.search" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"> </el-input>
@@ -59,9 +59,10 @@
 					</template>
 				</el-table-column>
 			</el-table>
-      <el-pagination class="mt-5"
+      <el-pagination class="mt15"
           v-model:current-page="state.tableData.paginate.page"
           v-model:page-size="state.tableData.paginate.pageSize"
+          :small="true"
           :page-sizes="[10, 25, 50, 75, 100]"
           background
           layout="total, sizes, prev, pager, next, jumper"

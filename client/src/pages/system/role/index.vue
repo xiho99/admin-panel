@@ -38,10 +38,10 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination
+			<el-pagination class="mt15"
 				@size-change="onHandleSizeChange"
 				@current-change="onHandleCurrentChange"
-				class="mt15"
+        :small="true"
 				:page-sizes="[10, 20, 30]"
 				v-model:current-page="state.tableData.param.page"
 				background

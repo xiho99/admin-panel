@@ -1,6 +1,6 @@
 <template>
-  <div class=" layout-pd">
-    <el-card shadow="hover">
+  <div class="layout-container layout-padding">
+    <el-card shadow="hover" class="layout-padding-auto">
       <div class="system-user-search p-3 flex justify-end">
         <el-button type="success" @click="onOpenAddDialog('add')">
           <el-icon>
@@ -57,18 +57,16 @@
         <el-table-column prop="sort" :label="$t('message.sort')" width="80"/>
         <el-table-column prop="created_at" :label="$t('message.created_at')" min-width="120"/>
       </el-table>
-      <div class="mt-5">
-        <el-pagination
-            v-model:current-page="formData.paginate.page"
-            v-model:page-size="formData.paginate.pageSize"
-            :page-sizes="[10, 25, 50, 75, 100]"
-            :small="true"
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :total="formData.paginate.total"/>
-      </div>
+      <el-pagination class="mt15"
+          v-model:current-page="formData.paginate.page"
+          v-model:page-size="formData.paginate.pageSize"
+          :page-sizes="[10, 25, 50, 75, 100]"
+          :small="true"
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :total="formData.paginate.total"/>
       <groupCatDialog ref="openDialogRef" :categories="formData.data" @refresh="getGroupCategory()"/>
     </el-card>
   </div>

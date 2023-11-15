@@ -1,7 +1,7 @@
 <template>
-  <div class=" layout-pd">
-    <el-card shadow="hover">
-      <div class="system-user-search p-3 flex justify-end">
+  <div class="layout-container layout-padding">
+    <el-card shadow="hover" class="layout-padding-auto">
+      <div class=" system-user-search p-3 flex justify-end">
         <el-button type="success" @click="onOpenAddDialog('add')">
           <el-icon>
             <ele-FolderAdd/>
@@ -9,7 +9,7 @@
           {{ $t('message.table.new') }}
         </el-button>
       </div>
-      <el-table :data="formData.data" v-loading.lock="isLoading">
+      <el-table :data="formData.data" v-loading.lock="isLoading" >
         <el-table-column type="index" :label="$t('message.table.numberSign')" width="60"/>
         <el-table-column prop="name" :label="$t('message.name')"/>
         <el-table-column prop="key" :label="$t('message.key')" min-width="160"/>
@@ -43,19 +43,17 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="mt-5">
-        <el-pagination
-            v-model:current-page="formData.paginate.page"
-            v-model:page-size="formData.paginate.pageSize"
-            :page-sizes="[10, 25, 50, 75, 100]"
-            :small="true"
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :total="formData.paginate.total"
-        />
-      </div>
+      <el-pagination class="mt15"
+          v-model:current-page="formData.paginate.page"
+          v-model:page-size="formData.paginate.pageSize"
+          :page-sizes="[10, 25, 50, 75, 100]"
+          :small="true"
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :total="formData.paginate.total"
+      />
       <categoryDialog ref="openDialogRef" @refresh="getCategory()"/>
     </el-card>
   </div>
