@@ -113,11 +113,11 @@ const getTableData = async () => {
 getTableData();
 // 打开新增用户弹窗
 const onOpenAddUser = (type: string) => {
-  userDialogRef.value.openDialog(type);
+  userDialogRef.value.openDialog(type, null, state.roleList);
 };
 // 打开修改用户弹窗
 const onOpenEditUser = (type: string, row: RowUserType) => {
-  userDialogRef.value.openDialog(type, row);
+  userDialogRef.value.openDialog(type, row, state.roleList);
 };
 // 删除用户
 const onRowDel = (row: RowUserType) => {

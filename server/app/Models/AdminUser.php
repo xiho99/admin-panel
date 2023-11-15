@@ -9,6 +9,7 @@ class AdminUser extends BaseModel
     protected $table = 'admins';
 
     protected $fillable = [
+        'p_id',
         'userName',
         'password' ,
         'role_ids',

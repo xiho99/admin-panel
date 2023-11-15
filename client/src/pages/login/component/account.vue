@@ -108,7 +108,8 @@ const onSignIn = async () => {
         messageNotification(row.message, EnumMessageType.Error);
       } else {
         Session.set('token', row.data?.access_token);
-        Cookies.set('userName', row.data.userName);
+        Cookies.set('userName', row.data?.userName);
+        Cookies.set('userId', row.data?.userId);
         const isNoPower = await initBackEndControlRoutes();
         signInSuccess(isNoPower);
 

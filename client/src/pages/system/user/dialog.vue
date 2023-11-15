@@ -65,6 +65,7 @@
 	import { ElMessage } from 'element-plus';
   import { useI18n } from "vue-i18n";
   import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
+  import { Session } from "/@/utils/storage";
 
 	// 定义子组件向父组件传值/事件
 	const emit = defineEmits(['refresh']);
@@ -100,17 +101,9 @@
     state.ruleForm.describe = '';
   };
 
-	// 打开弹窗
-  const getRoles = async () => {
-      const response = await getAllRole();
-      if (response.code !== EnumApiErrorCode.success) {
-        ElMessage.error(response.message);
-      } else {
-        Object.assign(state.roleList, response.data || {});
-      }
-  };
-  getRoles();
-	const openDialog = async (type : string, row?: RowUserType) => {
+	const openDialog = async (type : string, row?: RowUserType, roleList?: any) => {
+    // todo: assign role list
+    Object.assign(state.roleList, roleList || {});
 		if (type === 'edit') {
 			state.ruleForm = JSON.parse(JSON.stringify(row));
 			state.ruleForm.role_ids = state.ruleForm.role_ids?.split(',');
@@ -119,6 +112,7 @@
 		} else {
 			state.dialog.title = t('message.newUser');
 			state.dialog.submitTxt = t('message.submit');
+      state.ruleForm['p_id'] = Session.get('userId')
 			// 清空表单，此项需加表单验证才能使用
 			// nextTick(() => {
 			// 	userDialogFormRef.value.resetFields();

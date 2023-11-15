@@ -73,7 +73,7 @@ class BaseModel extends Model
                         });
                         break;
                     default:
-                        $objQuery->where($column, $operator, $value);
+                        $objQuery->where($column, $operator, $value, $w);
                         break;
                     // 添加更多操作符的处理
                 }
@@ -127,7 +127,7 @@ class BaseModel extends Model
             $result = Redis::get('Table-'.$model->table.'Redis:'.json_encode([$condition,$join,$field]));
             if ($result) {
                 // 如果缓存中有数据，直接返回它
-                return json_decode($result ,true);
+//                return json_decode($result ,true);
             }
         }
         $objQuery = self::query(); // 创建一个查询构建器

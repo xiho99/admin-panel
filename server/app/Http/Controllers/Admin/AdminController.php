@@ -9,6 +9,7 @@ use App\Models\OperationLog;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends BaseController
@@ -42,7 +43,7 @@ class AdminController extends BaseController
         ];
         OperationLog::saveInfo($from);
 
-        return $this->success(['access_token' => 'Bearer '.$token,'userName'=>$user['nickname']]);
+        return $this->success(['access_token' => 'Bearer '.$token,'userName'=>$user['nickname'], 'userId'=>$user['id']]);
     }
     public function logout (): Response
     {
@@ -50,12 +51,20 @@ class AdminController extends BaseController
         return $this->success(null);
     }
     // 存储角色信息
-    function adminList(Request $request){
+    public function adminList(Request $request) {
+
         $name = $request->input('name' , null);
         $page = $request->input('page' , 1);
         $pageSize = $request->input('pageSize' , 20);
-        if($this->user->role_ids != 0){
-            return $this->success(['list'=>[$this->user]]);
+        if($this->user['role_ids'] != 0){
+            $orWhere = [['id' , '=' , (string)$this->user['id']] ,['p_id' ,'=', (string)$this->user['id']]];
+            $where = [['','or' , $orWhere]];
+//            $where[] = ['','or' , [['userName' , 'like' ,'%com%']]];
+//            DB::enableQueryLog();
+//            $queryLog = DB::getQueryLog();
+            $data = AdminUser::getListData($where,['*'], $page, $pageSize,'created_at desc');
+
+            return $this->success($data);
         }
         $where = [];
         if($name){
@@ -83,16 +92,22 @@ class AdminController extends BaseController
                 return $this->error('Cannot add role with same name');
             }
         }
+        $pid = null;
+        if ($data['p_id'] != $this->user['id']) {
+            $pid = $data['p_id'];
+        }
         $from = [
             'id' => $data['id'] ?? null,
-            'userName' => $data['userName'] ?? '',
+            'p_id' => $pid,
+            'userName' => $data['userName'],
+            'nickname' =>  $data['nickname'] ?? '',
             'password' =>  bcrypt($data['password']) ?? '',
             'role_ids' =>  $data['role_ids'] ?? '',
             'overdue_time' =>  $data['overdue_time'] ?? null,
             'describe' =>  $data['describe'] ?? '',
             'status' =>  $data['status'] ?? 0,
-            'nickname' =>  $data['nickname'] ?? '',
         ];
+
         $id = AdminUser::saveInfo($from);
         return $this->success($id);
     }
