@@ -106,6 +106,7 @@ const { t } = useI18n();
 const getTableData = async () => {
   state.tableData.loading = true;
   let row = await adminList(state.tableData.param);
+  state.tableData.data = row.data?.data;
   state.tableData.total = row.data?.total || 0;
   state.tableData.loading = false;
 };
