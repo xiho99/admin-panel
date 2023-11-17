@@ -315,4 +315,5 @@ export default {
 	addMenu: "添加菜单",
 	modifyMenu: "修改菜单",
 	colorPicker: "选色器",
+	linkExample: "示例：http://hls69.co 或 https://hls69.co",
 };

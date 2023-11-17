@@ -21,12 +21,7 @@ class GroupCategoryController extends BaseController
         $catGroupWithSub = Category::getListData($where, ['*'], $page, $pageSize, $order);
         $result = [];
         foreach ($catGroupWithSub['data'] as $k => $v) {
-            $group = GroupCategory::orderByRaw($order)
-                ->where([
-                    'is_delete' => 0,
-                    'cat_id' => $v['id']
-                ])
-                ->get();
+            $group = GroupCategory::getList(['cat_id' =>  $v['id']], ['*'], $order);
             $result[$k] = $v;
             $result[$k]['group'] = $group;
             $catGroupWithSub['data'] = $result;

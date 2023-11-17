@@ -21,7 +21,7 @@
           <el-input type="text" v-model="formData.name"/>
         </el-form-item>
         <el-form-item prop="link" :label="$t('message.router.link')">
-          <el-input type="text" v-model="formData.link"/>
+          <el-input type="text" v-model="formData.link" :placeholder="$t('message.linkExample')"/>
         </el-form-item>
         <el-form-item prop="sort" :label="$t('message.sort')">
            <div class="flex gap-5">

@@ -316,4 +316,5 @@ export default {
 	addMenu: "Add menu",
 	modifyMenu: "Modify menu",
 	colorPicker: "Color picker",
+	linkExample: "Example: http://hls69.co or https://hls69.co",
 };
