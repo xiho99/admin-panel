@@ -276,21 +276,21 @@ class BaseModel extends Model
     public static function getInfo($condition = [], $field = '*', $join = null, $data = null)
     {
         $model = self::initBase();
-        // 创建一个查询构建器
+        // Create a query builder
         $objQuery = self::query();
 
         if(in_array('is_delete',$model->fillable)){
                 $objQuery->where('is_delete', '=', 0);
         }
-        // 处理条件
+        // Processing conditions
         $objQuery = $model->handleConditions($objQuery,$condition);
-        // 如果没有 JOIN 条件
+        // If there is no JOIN condition
         if (empty($join)) {
-            // 没有 JOIN 条件，直接查询
+            // There is no JOIN condition, direct query
             $result = $objQuery->select($field)->first();
         } else {
             $objQuery = $model->parseJoin($objQuery, $join);
-            // 获取单条数据
+            // Get a single piece of data
             $result = $objQuery->first();
         }
 

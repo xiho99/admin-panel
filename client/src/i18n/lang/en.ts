@@ -14,7 +14,7 @@ export default {
 		limitsFrontEndBtn: 'FrontEndBtn',
 		limitsBackEnd: 'BackEnd',
 		limitsBackEndEndPage: 'BackEndEndPage',
-		menu: 'menu',
+		menu: 'Menu',
 		menu1: 'menu1',
 		menu11: 'menu11',
 		menu12: 'menu12',
@@ -317,4 +317,5 @@ export default {
 	modifyMenu: "Modify menu",
 	colorPicker: "Color picker",
 	linkExample: "Example: http://hls69.co or https://hls69.co",
+	menuButton: "Menu button",
 };

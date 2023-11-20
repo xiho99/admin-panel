@@ -13,7 +13,7 @@ class MenuController extends BaseController
     public function saveMenu(Request $request) {
 
         $data = $request->all();
-        // 验证信息
+        // verify message
         $fail = Menu::getNotPassValidator($data);
         if($fail){
             return $this->error('Missing required fields');
@@ -37,7 +37,7 @@ class MenuController extends BaseController
             'redirect' =>  $data['redirect'] ?? '',
             'menuSuperior' => $data['menuSuperior'],
             'menuSuperiorPath' => '',
-            'operation' =>  $data['operation'],
+            'operation' =>  $data['operation'] ?? null,
         ];
         if(!empty($data['menuSuperiorPath'])){
             $from['menuSuperiorPath'] = implode(',', $data['menuSuperiorPath']);

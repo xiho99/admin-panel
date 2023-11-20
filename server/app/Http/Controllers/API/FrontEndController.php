@@ -6,7 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Models\Ads;
 use App\Models\Category;
 use App\Models\Configuration;
-use App\Models\MenuItem;
+use App\Models\MenuIcon;
 use Illuminate\Http\Response;
 
 class FrontEndController extends BaseController
@@ -23,7 +23,7 @@ class FrontEndController extends BaseController
     }
     public function getMenuList(): Response
     {
-        $configurations = MenuItem::orderBy('sort', 'asc')
+        $configurations = MenuIcon::orderBy('sort', 'asc')
             ->where([
                 'is_delete' => 0,
                 'is_visible' => true,

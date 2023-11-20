@@ -5,23 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MenuItem extends BaseModel
+class MenuButton extends BaseModel
 {
     use HasFactory;
-    protected $table = 'menu_items';
+    protected $table = 'menu_buttons';
     protected $fillable = [
         'name',
-        'image',
         'link',
         'sort',
         'color',
-        'type',
         'is_visible',
         'is_delete',
     ];
     protected $rules = [
         'name' => 'required',
-        'type' => 'required',
         'sort' => 'required',
         'link' => 'required',
     ];

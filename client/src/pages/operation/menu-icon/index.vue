@@ -13,7 +13,7 @@
         <el-table-column type="index" :label="$t('message.table.numberSign')" width="60"/>
         <el-table-column :label="$t('message.image')">
           <template #default="prop">
-            <el-image  v-show="prop.row.type === 'icon'" class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
+            <el-image class="h-14 rounded" :src="prop.row.image" alt="loading.."/>
           </template>
         </el-table-column>
         <el-table-column prop="name" :label="$t('message.name')" min-width="120"/>
@@ -22,14 +22,6 @@
             <el-link type="primary" :underline="false"> {{ prop.row.link }}</el-link>
           </template>
         </el-table-column>
-        <el-table-column prop="color" :label="$t('message.color')" min-width="120">
-          <template #default="prop">
-            <span :style="{ color: prop.row.color }">
-              {{ prop.row.color }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="type" :label="$t('message.type')"/>
         <el-table-column prop="sort" :label="$t('message.sort')"/>
         <el-table-column  :label="$t('message.is_visible')" min-width="120">
           <template #default="prop">
@@ -55,7 +47,7 @@
             <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
               {{ $t('message.table.edit') }}
             </el-button>
-            <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row.id)">
+            <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row)">
               {{ $t('message.table.delete') }}
             </el-button>
           </template>
@@ -71,24 +63,24 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :total="formData.paginate.total"/>
-      <menuDialog ref="openDialogRef" @refresh="getMenuItem()"/>
+      <menuDialog ref="openDialogRef" @refresh="getMenuIcon()"/>
     </el-card>
   </div>
 </template>
 <script lang="ts" setup>
 import { defineAsyncComponent } from "vue";
-import useMenuItem from "/@/composables/useMenuItem";
+import useMenuIcon from "/src/composables/useMenuIcon";
 
-const menuDialog = defineAsyncComponent(() => import('/@/pages/operation/menu/dialog.vue'));
+const menuDialog = defineAsyncComponent(() => import('/@/pages/operation/menu-icon/dialog.vue'));
 const {
   isLoading,
   onOpenAddDialog,
   onOpenEditDialog,
   openDialogRef,
-  getMenuItem,
+  getMenuIcon,
   formData,
   deleteRow,
   handleSizeChange,
   handleCurrentChange,
-} = useMenuItem();
+} = useMenuIcon();
 </script>

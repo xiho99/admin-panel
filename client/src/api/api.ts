@@ -35,21 +35,18 @@ export default function  useApi() {
 		deleteAds: (params?: object) => {
 			return service.post('deleteAds', params);
 		},
-		getMenuItem: (params?: object) => {
+		getMenuIcon: (params?: object) => {
 			return service({
-				url: 'getMenuItem',
+				url: 'getMenuIcon',
 				method: 'get',
 				params,
 			});
 		},
-		addMenuItem: (params?: object) => {
-			return service.post('saveMenuItem', params);
+		addMenuIcon: (params?: object) => {
+			return service.post('saveMenuIcon', params);
 		},
-		updateMenuItem: (params?: object) => {
-			return service.post('updateMenuItem', params);
-		},
-		deleteMenuItem: (params?: object) => {
-			return service.post('deleteMenuItem', params);
+		deleteMenuIcon: (params?: object) => {
+			return service.post('deleteMenuIcon', params);
 		},
 		getCategory: (params?: object) => {
 			return service({
@@ -57,6 +54,19 @@ export default function  useApi() {
 				method: 'get',
 				params,
 			});
+		},
+		getMenuButton: (params?: object) => {
+			return service({
+				url: 'getMenuButton',
+				method: 'get',
+				params,
+			});
+		},
+		addMenuButton: (params?: object) => {
+			return service.post('saveMenuButton', params);
+		},
+		deleteMenuButton: (params?: object) => {
+			return service.post('deleteMenuButton', params);
 		},
 		addCategory: (params?: object) => {
 			return service.post('saveCategory', params);

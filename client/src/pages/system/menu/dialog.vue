@@ -251,7 +251,7 @@ const onSubmit = async () => {
 		let data = JSON.parse(JSON.stringify(state.ruleForm));
 		data.meta = JSON.stringify(data.meta);
 		await menuApi.saveMenu(data);
-		ElMessage.success('操作成功');
+		ElMessage.success(t('message.success'));
     initRuleFrom();
 	}catch(e){
 		//TODO handle the exception

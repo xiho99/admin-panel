@@ -63,12 +63,18 @@ Route::controller(\App\Http\Controllers\Admin\AdsController::class)->group(funct
         Route::post('deleteAds', 'deleteAds');
     });
 });
-Route::controller(\App\Http\Controllers\Admin\MenuItemController::class)->group(function () {
+Route::controller(\App\Http\Controllers\Admin\MenuIconController::class)->group(function () {
     Route::group(['middleware' => 'jwt'], function ($router) {
-        Route::get('getMenuItem', 'get');
-        Route::post('saveMenuItem', 'saveMenuItem');
-        Route::post('updateMenuItem', 'updateMenuItem');
-        Route::post('deleteMenuItem', 'deleteMenuItem');
+        Route::get('getMenuIcon', 'get');
+        Route::post('saveMenuIcon', 'saveMenuIcon');
+        Route::post('deleteMenuIcon', 'deleteMenuIcon');
+    });
+});
+Route::controller(\App\Http\Controllers\Admin\MenuButtonController::class)->group(function () {
+    Route::group(['middleware' => 'jwt'], function ($router) {
+        Route::get('getMenuButton', 'get');
+        Route::post('saveMenuButton', 'saveMenuButton');
+        Route::post('deleteMenuButton', 'deleteMenuButton');
     });
 });
 Route::controller(\App\Http\Controllers\Admin\CategoryController::class)->group(function () {
