@@ -31,42 +31,22 @@ class AdsController extends BaseController
             return $this->error('Missing required fields');
         }
         if(isset($data['id']) && $data['id'] || !Ads::getInfo([['id' , '=' , $data['id'] ] ])){
+            $self = Ads::getInfo(['id' => $data['id']]);
             $info = Ads::getInfo([['title' , '=' , $data['title'] ] ]);
-            if($info){
+            if($info && $info['id'] != $self['id']) {
                 return $this->error('Cannot add name with same name');
             }
         }
         $from = [
+            'id' => $data['id'] ?? null,
             'title' => $data['title'],
             'link' => $data['link'],
             'is_visible' => $data['is_visible'],
-            'image' => $data['image'] ?? 1,
             'sort' => (int)$data['sort'] ?? 1,
+            'image' => $data['image'],
         ];
-        if ($data['image']) {
-            $address = $this->fileUpload($data['image'], 'uploads/');
-            $from['image'] = $address;
-        }
         $id = Ads::saveInfo($from);
         return $this->success($id);
-    }
-    public function updateAds(Request $request): Response {
-        $data = $request->all();
-        $fail = Ads::getNotPassValidator($data);
-        if($fail){
-            return $this->error('Missing required fields');
-        }
-        $ads = Ads::findOrFail($data['id']);
-        if ($data['image']) {
-            $address = $this->fileUpload($data['image'], 'uploads/');
-            $ads->image = $address;
-        }
-        $ads->title = $data['title'];
-        $ads->link = $data['link'];
-        $ads->is_visible = $data['is_visible'];
-        $ads->sort = $data['sort'];
-        Ads::updateCacheData($ads);
-        return $this->success($ads, 0, 201);
     }
     public function deleteAds(Request $request)
     {

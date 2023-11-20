@@ -34,18 +34,14 @@ class MenuIconController extends BaseController
                 return $this->error('Name already exist!');
             }
         }
-
         $from = [
             'id' => $data['id'] ?? null,
             'name' => $data['name'],
             'link' => $data['link'],
             'is_visible' => $data['is_visible'],
             'sort' => (int)$data['sort'] ?? 1,
+            'image' => $data['image'],
         ];
-        if ($data['image']) {
-            $address = $this->fileUpload($data['image'], 'uploads/');
-            $from['image'] = $address;
-        }
         $id = MenuIcon::saveInfo($from);
         return $this->success($id);
     }

@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::controller(\App\Http\Controllers\UploadController::class)->group(function () {
+    Route::post('uploadFile', 'upload');
+});
 Route::prefix('auth')->controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'saveAdmin');
@@ -23,7 +26,6 @@ Route::prefix('auth')->controller(\App\Http\Controllers\Admin\AdminController::c
     Route::post('refresh', 'refresh');
 
 });
-
 Route::controller(MenuController::class)->group(function () {
     Route::group(['middleware' => 'jwt'], function ($router) {
         Route::get('getMenu', 'adminMenu');
@@ -97,6 +99,8 @@ Route::controller(\App\Http\Controllers\Admin\GroupCategoryController::class)->g
 // todo ** API for front-site **
 Route::controller(\App\Http\Controllers\API\FrontEndController::class)->group(function () {
     Route::get('getConfigurationList ', 'getConfigurations');
+    Route::get('getMenuIconList', 'menuIconList');
+    Route::get('getMenuButtonList', 'menuButtonList');
     Route::get('getMenuList', 'getMenuList');
     Route::get('getGroupList', 'getGroupList');
     Route::get('getAdsList', 'getAds');

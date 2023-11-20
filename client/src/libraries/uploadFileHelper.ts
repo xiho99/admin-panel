@@ -63,13 +63,21 @@ const renderFile = async () => {
         /* Make sure file exists */
         if (!file.value) return;
         /* create a reader */
-        const readData = (f: File) =>  new Promise((resolve) => {
+        const readData = (f: File, extension = 'png') =>  new Promise((resolve) => {
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result);
             reader.readAsDataURL(f);
+        }).then((dataURL: any) => {
+            return dataURL.replace(/^data:image\/(png|jpg|jpeg|gif);base64,/, `data:image/${extension};base64,`);
         });
+        // const readData = (f: File) =>  new Promise((resolve) => {
+        //     const reader = new FileReader();
+        //     reader.onloadend = () => resolve(reader.result);
+        //     reader.readAsDataURL(f);
+        //
+        // });
         /* Read data */
-        const data = await readData(compressedFile);
+        const data = await readData(compressedFile, file.value.type.split('/')[1]);
         file.value = data;
 
     } catch (error) {

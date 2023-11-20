@@ -35,7 +35,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 					rewrite: (path: string) => path.replace(/^\/api/, ''), // 移除/api前缀
 				},
 				'/uploads': {
-					target: `${isProduction}/uploads`,
+					target: `${isProduction}/storage/uploads`,
 					changeOrigin: true,
 					rewrite: (path: string) => path.replace(/^\/uploads/, ''), // 移除/api前缀
 				},
