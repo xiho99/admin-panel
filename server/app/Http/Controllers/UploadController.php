@@ -56,7 +56,7 @@ class UploadController extends Controller
             $t = date('Y-m-d', strtotime('today'));
 
             // 构建存储路径
-            $path = 'uploads';
+            $path = 'uploads/';
 
             // 存储文件
             $file->store($path, 'public');
@@ -69,7 +69,7 @@ class UploadController extends Controller
             'message' => 'success',
             'data' => [
                 'path' => $path,
-                'url' => $path . '/' . $fileName,
+                'url' => $path . $fileName,
                 'filename' => $fileName, // 添加文件名称到返回数组
             ],
             'server_time' => $this->getMsecTime(),

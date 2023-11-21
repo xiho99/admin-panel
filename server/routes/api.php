@@ -66,14 +66,14 @@ Route::controller(\App\Http\Controllers\Admin\AdsController::class)->group(funct
     });
 });
 Route::controller(\App\Http\Controllers\Admin\MenuIconController::class)->group(function () {
-    Route::group(['middleware' => 'jwt'], function ($router) {
+    Route::group(['middleware' => 'jwt'], function () {
         Route::get('getMenuIcon', 'get');
         Route::post('saveMenuIcon', 'saveMenuIcon');
         Route::post('deleteMenuIcon', 'deleteMenuIcon');
     });
 });
 Route::controller(\App\Http\Controllers\Admin\MenuButtonController::class)->group(function () {
-    Route::group(['middleware' => 'jwt'], function ($router) {
+    Route::group(['middleware' => 'jwt'], function () {
         Route::get('getMenuButton', 'get');
         Route::post('saveMenuButton', 'saveMenuButton');
         Route::post('deleteMenuButton', 'deleteMenuButton');
@@ -101,9 +101,8 @@ Route::controller(\App\Http\Controllers\API\FrontEndController::class)->group(fu
     Route::get('getConfigurationList ', 'getConfigurations');
     Route::get('getMenuIconList', 'menuIconList');
     Route::get('getMenuButtonList', 'menuButtonList');
-    Route::get('getMenuList', 'getMenuList');
     Route::get('getGroupList', 'getGroupList');
-    Route::get('getAdsList', 'getAds');
+    Route::get('getAdsList', 'getAds')->middleware(['LogIpAddress']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

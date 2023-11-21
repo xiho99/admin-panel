@@ -57,7 +57,7 @@ class AdminController extends BaseController
         $page = $request->input('page' , 1);
         $pageSize = $request->input('pageSize' , 20);
         if($this->user['role_ids'] != 0){
-            $orWhere = [['id' , '=' , (string)$this->user['id']] ,['p_id' ,'=', (string)$this->user['id']]];
+            $orWhere = [['id' , '=' , (string)$this->user['id']], ['p_id' ,'=', (string)$this->user['id']]];
             $where = [['','or' , $orWhere]];
 //            $where[] = ['','or' , [['userName' , 'like' ,'%com%']]];
 //            DB::enableQueryLog();

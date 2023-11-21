@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Models\MenuIcon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

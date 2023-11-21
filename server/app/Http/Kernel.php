@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'jwt' => \App\Http\Middleware\JwtMiddleware::class,
         'LogOperation' => \App\Http\Middleware\LogOperation::class,
+        'LogIpAddress' => \App\Http\Middleware\LogIpAddress::class,
     ];
 }

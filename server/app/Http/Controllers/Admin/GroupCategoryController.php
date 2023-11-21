@@ -36,12 +36,12 @@ class GroupCategoryController extends BaseController
         if($fail){
             return $this->error('Missing required fields');
         }
-        if(isset($data['id']) && $data['id'] || !GroupCategory::getInfo([['id' , '=' , $data['id'] ] ])){
-            $info = GroupCategory::getInfo([['name' , '=' , $data['name'] ] ]);
-            if($info){
-                return $this->error('Cannot add name with same name');
-            }
-        }
+//        if(isset($data['id']) && $data['id'] || !GroupCategory::getInfo([['id' , '=' , $data['id'] ] ])){
+//            $info = GroupCategory::getInfo([['name' , '=' , $data['name'] ] ]);
+//            if($info){
+//                return $this->error('Cannot add name with same name');
+//            }
+//        }
         $from = [
             'cat_id' => $data['cat_id'],
             'name' => $data['name'],
