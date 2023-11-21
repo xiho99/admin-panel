@@ -44,6 +44,7 @@ Route::controller(\App\Http\Controllers\Admin\RoleController::class)->group(func
 });
 Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
     Route::group(['middleware' => 'jwt'], function ($router) {
+        Route::get('getHomeStatistics', 'getHomeStatistics');
         Route::post('getAdmin', 'adminList');
         Route::post('saveAdmin', 'saveAdmin')->middleware(['LogOperation']);
         Route::post('deleteAdmin', 'deleteAdmin')->middleware(['LogOperation']);

@@ -15,8 +15,8 @@
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
 						<div class="flex-auto">
 							<span class="font30">{{ v.num1 }}</span>
-							<span class="ml5 font16" :style="{ color: v.color1 }">{{ v.num2 }}%</span>
-							<div class="mt10">{{ v.num3 }}</div>
+<!--							<span class="ml5 font16" :style="{ color: v.color1 }">{{ v.num2 }}%</span>-->
+							<div class="mt10 font16 font-bold">{{ v.num3 }}</div>
 						</div>
 						<div class="home-card-item-icon flex" :style="{ background: `var(${v.color2})` }">
 							<i class="flex-margin font32" :class="v.num4" :style="{ color: `var(${v.color3})` }"></i>
@@ -71,6 +71,8 @@ import * as echarts from 'echarts';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
+import { useI18n } from "vue-i18n";
+import useApi from "/@/api/api";
 
 // 定义变量内容
 const homeLineRef = ref();
@@ -80,6 +82,8 @@ const storesTagsViewRoutes = useTagsViewRoutes();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const { isTagsViewCurrenFull } = storeToRefs(storesTagsViewRoutes);
+const { t } = useI18n();
+const api = useApi();
 const state = reactive({
 	global: {
 		homeChartOne: null,
@@ -89,37 +93,37 @@ const state = reactive({
 	} as any,
 	homeOne: [
 		{
-			num1: '125,12',
+			num1: 0,
 			num2: '-12.32',
-			num3: '订单统计信息',
-			num4: 'fa fa-meetup',
+			num3: t('message.todayViews'),
+			num4: 'iconfont icon-zaosheng',
 			color1: '#FF6462',
 			color2: '--next-color-primary-lighter',
 			color3: '--el-color-primary',
 		},
 		{
-			num1: '653,33',
+			num1: 0,
 			num2: '+42.32',
-			num3: '月度计划信息',
-			num4: 'iconfont icon-ditu',
+			num3: t('message.totalIpVisit'),
+			num4: 'iconfont icon-zaosheng',
 			color1: '#6690F9',
 			color2: '--next-color-success-lighter',
 			color3: '--el-color-success',
 		},
 		{
-			num1: '125,65',
+			num1: 0,
 			num2: '+17.32',
-			num3: '年度计划信息',
+			num3: t('message.totalViesThisYear'),
 			num4: 'iconfont icon-zaosheng',
 			color1: '#6690F9',
 			color2: '--next-color-warning-lighter',
 			color3: '--el-color-warning',
 		},
 		{
-			num1: '520,43',
+			num1: 0,
 			num2: '-10.01',
-			num3: '访问统计信息',
-			num4: 'fa fa-github-alt',
+			num3: t('message.totalIpThisYear'),
+			num4: 'iconfont icon-zaosheng',
 			color1: '#FF6462',
 			color2: '--next-color-danger-lighter',
 			color3: '--el-color-danger',
@@ -196,15 +200,28 @@ const initLineChart = () => {
 	const option = {
 		backgroundColor: state.charts.bgColor,
 		title: {
-			text: '政策补贴额度',
+			text: t('message.yearLineChart'),
 			x: 'left',
 			textStyle: { fontSize: '15', color: state.charts.color },
 		},
-		grid: { top: 70, right: 20, bottom: 30, left: 30 },
+		grid: { top:70, right: 20, bottom: 30, left: 30 },
 		tooltip: { trigger: 'axis' },
-		legend: { data: ['预购队列', '最新成交价'], right: 0 },
+		legend: { data: [t('message.previousYear'), t('message.thisYear')], right: 0 },
 		xAxis: {
-			data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+			data: [
+        t('message.oneMonth'),
+        t('message.twoMonth'),
+        t('message.threeMonth'),
+        t('message.forthMonth'),
+        t('message.fifthMonth'),
+        t('message.sixthMonth'),
+        t('message.seventhMonth'),
+        t('message.eighthMonth'),
+        t('message.nineMonth'),
+        t('message.tenthMonth'),
+        t('message.elevenMonth'),
+        t('message.twelveMonth'),
+      ],
 		},
 		yAxis: [
 			{
@@ -215,7 +232,7 @@ const initLineChart = () => {
 		],
 		series: [
 			{
-				name: '预购队列',
+				name: t('message.previousYear'),
 				type: 'line',
 				symbolSize: 6,
 				symbol: 'circle',
@@ -231,7 +248,7 @@ const initLineChart = () => {
 				},
 			},
 			{
-				name: '最新成交价',
+				name: t('message.thisYear'),
 				type: 'line',
 				symbolSize: 6,
 				symbol: 'circle',
@@ -501,9 +518,22 @@ const initEchartsResizeFun = () => {
 const initEchartsResize = () => {
 	window.addEventListener('resize', initEchartsResizeFun);
 };
+const getHomeIp = async () => {
+  const response = await api.getHomeStatistics();
+  if (response.code !== 0) {
+    // eslint-disable-next-line no-console
+    console.log(response)
+  } else {
+    state.homeOne[0].num1 = response.data?.todayView;
+    state.homeOne[1].num1 = response.data?.todayIp;
+    state.homeOne[2].num1 = response.data?.totalViewCurrentYear;
+    state.homeOne[3].num1 = response.data?.totalIP;
+  }
+};
 // 页面加载时
 onMounted(() => {
 	initEchartsResize();
+  getHomeIp();
 });
 // 由于页面缓存原因，keep-alive
 onActivated(() => {

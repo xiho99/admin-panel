@@ -93,5 +93,12 @@ export default function  useApi() {
 		deleteGroupCategory: (params?: object) => {
 			return service.post('deleteGroupCategory', params);
 		},
+		getHomeStatistics: (params?: object) => {
+			return service({
+				url: 'getHomeStatistics',
+				method: 'get',
+				params,
+			});
+		},
 	};
 }

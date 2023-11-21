@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
+use App\Models\IPStatistic;
 use App\Models\Statistic;
 use App\Models\AdminUser;
 use App\Models\OperationLog;
@@ -114,44 +115,26 @@ class AdminController extends BaseController
     public function getHomeStatistics(){
 
         $today = Carbon::now();
-        $startOfDay = $today->startOfDay()->format('Y-m-d H:i:s');
+//        $startOfDay = $today->startOfDay()->format('Y-m-d H:i:s');
         // 今日最热文章列表
-        $list = Statistic::getArticleTotalList($startOfDay);
-        // 总访问
-        $allTotal = Statistic::getInfoTotal('allTotal');
-        // ip访问
-        $allTotalLimit = Statistic::getInfoTotal('allTotalLimit');
-        // 获取15天内的范围数量
-        $fifDaysAgo = Carbon::now()->subDays(29);
-        $fifteenDaysAgo = Carbon::now()->subDays(15);
-        $endDate = Carbon::now()->endOfDay();
+        $currentDay = date('Y-m-d');
+        $where = [['create_time', '=', $currentDay]];
+        $todayIP = count(IPStatistic::getList($where));
+        $todayView = collect(IPStatistic::getList($where))->sum('ip_access');
+        $totalIpCurrentYear = IPStatistic::whereBetween('create_time', [
+            Carbon::now()->startOfYear(),
+            Carbon::now()->endOfYear(),
+        ])->count('ip');
+        $totalViewCurrentYear = IPStatistic::whereBetween('create_time', [
+            Carbon::now()->startOfYear(),
+            Carbon::now()->endOfYear(),
+        ])->sum('ip_access');
+        return $this->success(['todayIp' => $todayIP, 'todayView' => $todayView, 'totalIP' => $totalIpCurrentYear, 'totalViewCurrentYear' => (int)$totalViewCurrentYear]);
 
-        // 15日对比数据
-        $statistics = [
-            'lastStatis' => [],
-            'nowStatis' => [],
-        ];
-        $statisticsIp = [
-            'lastStatis' => [],
-            'nowStatis' => [],
-        ];
-        while ($fifDaysAgo <= $endDate) {
-            $ft = $fifDaysAgo->format('Y-m-d');
-            $k = $fifDaysAgo <= $fifteenDaysAgo ? 'lastStatis' : 'nowStatis';
-            $statistics[$k][] = [
-                'date' => $ft,
-                'value' => Statistic::getInfoTotal('allTotal' , null,$ft)
-            ];
-            $statisticsIp[$k][] = [
-                'date' => $ft,
-                'value' => Statistic::getInfoTotal('allTotalLimit' , null,$ft)
-            ];
-            $fifDaysAgo->addDay();
-        }
         // 获取今年总数据
-        $yearStart = Carbon::now()->startOfYear()->format('Y-m-d H:i:s');
-        $yearAllTotal = Statistic::getSectionTotal('allTotal' ,$yearStart);
-        $yearAllTotalLimit = Statistic::getSectionTotal('allTotalLimit',$yearStart);
+//        $yearStart = Carbon::now()->startOfYear()->format('Y-m-d H:i:s');
+//        $yearAllTotal = Statistic::getSectionTotal('allTotal' ,$yearStart);
+//        $yearAllTotalLimit = Statistic::getSectionTotal('allTotalLimit',$yearStart);
 
 //        $historyList = Article::getList(null , ['title','id','click_num'],'click_num desc',15);
 //
