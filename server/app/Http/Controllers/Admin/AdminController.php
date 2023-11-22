@@ -25,7 +25,7 @@ class AdminController extends BaseController
         }
         $credentials = $request->only('userName', 'password');
         if (!$token = auth('admin')->attempt($credentials)) {
-            return $this->error( 'Account password is wrong');
+            return $this->error('Account password is wrong');
         }
         $user = auth('admin')->user();
         if ($user->status == 0) {
@@ -37,59 +37,64 @@ class AdminController extends BaseController
             'controller' => 'AdminController',
             'method' => 'login',
             'parameters' => '[]',
-            'start_time' => date('Y-m-d H:i:s',time()),
-            'end_time' => date('Y-m-d H:i:s',time()),
+            'start_time' => date('Y-m-d H:i:s', time()),
+            'end_time' => date('Y-m-d H:i:s', time()),
             'admin_id' => $user['id'],
             'nickname' => $user['nickname'],
         ];
         OperationLog::saveInfo($from);
 
-        return $this->success(['access_token' => 'Bearer '.$token,'userName'=>$user['nickname'], 'userId'=>$user['id']]);
+        return $this->success(['access_token' => 'Bearer ' . $token, 'userName' => $user['nickname'], 'userId' => $user['id']]);
     }
-    public function logout (): Response
+
+    public function logout(): Response
     {
         auth('admin')->logout();
         return $this->success(null);
     }
-    // 存储角色信息
-    public function adminList(Request $request) {
 
-        $name = $request->input('name' , null);
-        $page = $request->input('page' , 1);
-        $pageSize = $request->input('pageSize' , 20);
-        if($this->user['role_ids'] != 0){
-            $orWhere = [['id' , '=' , (string)$this->user['id']], ['p_id' ,'=', (string)$this->user['id']]];
-            $where = [['','or' , $orWhere]];
+    // 存储角色信息
+    public function adminList(Request $request)
+    {
+
+        $name = $request->input('name', null);
+        $page = $request->input('page', 1);
+        $pageSize = $request->input('pageSize', 20);
+        if ($this->user['role_ids'] != 0) {
+            $orWhere = [['id', '=', (string)$this->user['id']], ['p_id', '=', (string)$this->user['id']]];
+            $where = [['', 'or', $orWhere]];
 //            $where[] = ['','or' , [['userName' , 'like' ,'%com%']]];
 //            DB::enableQueryLog();
 //            $queryLog = DB::getQueryLog();
-            $data = AdminUser::getListData($where,['*'], $page, $pageSize,'created_at desc');
+            $data = AdminUser::getListData($where, ['*'], $page, $pageSize, 'created_at desc');
 
             return $this->success($data);
         }
         $where = [];
-        if($name){
-            $where[] = ['name' , 'like',"%{$name}%"];
+        if ($name) {
+            $where[] = ['name', 'like', "%{$name}%"];
         }
 
-        $data = AdminUser::pageList($where,'*',$page,$pageSize);
+        $data = AdminUser::pageList($where, '*', $page, $pageSize);
 
         return $this->success($data);
     }
+
     // 存储管理员信息
-    public function saveAdmin(Request $request) {
+    public function saveAdmin(Request $request)
+    {
         $data = $request->all();
         $fail = AdminUser::getNotPassValidator($data);
-        if($fail){
+        if ($fail) {
             return $this->error('Username and password are required!');
         }
-        if(!$data['nickname'] ){
+        if (!$data['nickname']) {
             return $this->error('Required for nickname');
         }
-        if(!isset($data['id']) || !AdminUser::getInfo([['id' , '=' , $data['id'] ] ])){
-            $info = AdminUser::getInfo([['userName' , '=' , $data['userName'] ] ]);
+        if (!isset($data['id']) || !AdminUser::getInfo([['id', '=', $data['id']]])) {
+            $info = AdminUser::getInfo([['userName', '=', $data['userName']]]);
 
-            if($info){
+            if ($info) {
                 return $this->error('Cannot add role with same name');
             }
         }
@@ -101,26 +106,28 @@ class AdminController extends BaseController
             'id' => $data['id'] ?? null,
             'p_id' => $pid,
             'userName' => $data['userName'],
-            'nickname' =>  $data['nickname'] ?? '',
-            'password' =>  bcrypt($data['password']) ?? '',
-            'role_ids' =>  $data['role_ids'] ?? '',
-            'overdue_time' =>  $data['overdue_time'] ?? null,
-            'describe' =>  $data['describe'] ?? '',
-            'status' =>  $data['status'] ?? 0,
+            'nickname' => $data['nickname'] ?? '',
+            'password' => bcrypt($data['password']) ?? '',
+            'role_ids' => $data['role_ids'] ?? '',
+            'overdue_time' => $data['overdue_time'] ?? null,
+            'describe' => $data['describe'] ?? '',
+            'status' => $data['status'] ?? 0,
         ];
 
         $id = AdminUser::saveInfo($from);
         return $this->success($id);
     }
-    public function getHomeStatistics(){
+
+    public function getHomeStatistics()
+    {
 
         $today = Carbon::now();
 //        $startOfDay = $today->startOfDay()->format('Y-m-d H:i:s');
         // 今日最热文章列表
         $currentDay = date('Y-m-d');
-        $where = [['create_time', '=', $currentDay]];
-        $todayIP = count(IPStatistic::getList($where));
-        $todayView = collect(IPStatistic::getList($where))->sum('ip_access');
+        $where = ['create_time' => $currentDay];
+        $todayIP = count(IPStatistic::where($where)->get());
+        $todayView = collect(IPStatistic::where($where)->get())->sum('ip_access');
         $totalIpCurrentYear = IPStatistic::whereBetween('create_time', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
@@ -130,11 +137,25 @@ class AdminController extends BaseController
             Carbon::now()->endOfYear(),
         ])->sum('ip_access');
         $thisYear = date('Y');
-        $groupedPosts = DB::table('ip_statistics')->whereYear('create_time', $thisYear)
-            ->selectRaw('MONTH(create_time) as month, COUNT(*) as count')
+        $groupThisYear = DB::table('ip_statistics')
+            ->whereYear('create_time', $thisYear)
+            ->selectRaw('MONTH(create_time) as month, COUNT(*) as count, SUM(ip_access) as ip_access')
             ->groupBy('month')
             ->get();
-        return $this->success(['todayIp' => $todayIP, 'todayView' => $todayView, 'totalIP' => $totalIpCurrentYear, 'totalViewCurrentYear' => (int)$totalViewCurrentYear]);
+        $previousYear = date("Y", strtotime("-1 year"));
+        $groupPreviousYear = DB::table('ip_statistics')
+            ->whereYear('create_time', $previousYear)
+            ->selectRaw('MONTH(create_time) as month, COUNT(*) as count, SUM(ip_access) as ip_access')
+            ->groupBy('month')
+            ->get();
+        return $this->success([
+            'todayIp' => $todayIP,
+            'todayView' => $todayView,
+            'totalIP' => $totalIpCurrentYear,
+            'totalViewCurrentYear' => (int)$totalViewCurrentYear,
+            'groupThisYear' => $groupThisYear,
+            'groupPreviousYear' => $groupPreviousYear,
+        ]);
 
         // 获取今年总数据
 //        $yearStart = Carbon::now()->startOfYear()->format('Y-m-d H:i:s');
@@ -152,10 +173,12 @@ class AdminController extends BaseController
 //        }
 //        return $this->success(['articleList' => $list,'historyHotList' => $historyList,'allTotal' => $allTotal , 'allTotalLimit' => $allTotalLimit,'statistics' => $statistics,'statisticsIp' => $statisticsIp,'yearAllTotal' => $yearAllTotal,'yearAllTotalLimit' => $yearAllTotalLimit,'configuration' => $configForKey]);
     }
+
     // 存储角色信息
-    function deleteAdmin(Request $request){
-        $id = $request->input('id' , null);
-        if($id == 1) return $this->error('Disable deletion of super administrator');
+    function deleteAdmin(Request $request)
+    {
+        $id = $request->input('id', null);
+        if ($id == 1) return $this->error('Disable deletion of super administrator');
         AdminUser::deleteInfo($id);
         return $this->success($id);
     }

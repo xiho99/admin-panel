@@ -204,7 +204,7 @@ const initLineChart = () => {
 			x: 'left',
 			textStyle: { fontSize: '15', color: state.charts.color },
 		},
-		grid: { top:70, right: 20, bottom: 30, left: 30 },
+		grid: { top:70, right: 20, bottom: 30, left: 50 },
 		tooltip: { trigger: 'axis' },
 		legend: { data: [t('message.previousYear'), t('message.thisYear')], right: 0 },
 		xAxis: {
@@ -237,7 +237,7 @@ const initLineChart = () => {
 				symbolSize: 6,
 				symbol: 'circle',
 				smooth: true,
-				data: [0, 41.1, 30.4, 65.1, 53.3, 53.3, 53.3, 41.1, 30.4, 65.1, 53.3, 10],
+				data: inLineChart.value?.previewYear,
 				lineStyle: { color: '#fe9a8b' },
 				itemStyle: { color: '#fe9a8b', borderColor: '#fe9a8b' },
 				areaStyle: {
@@ -253,7 +253,7 @@ const initLineChart = () => {
 				symbolSize: 6,
 				symbol: 'circle',
 				smooth: true,
-				data: [0, 24.1, 7.2, 15.5, 42.4, 42.4, 42.4, 24.1, 7.2, 15.5, 42.4, 0],
+				data: inLineChart.value?.thisYear,
 				lineStyle: { color: '#9E87FF' },
 				itemStyle: { color: '#9E87FF', borderColor: '#9E87FF' },
 				areaStyle: {
@@ -292,17 +292,25 @@ const initLineChart = () => {
 const initPieChart = () => {
 	if (!state.global.dispose.some((b: any) => b === state.global.homeChartTwo)) state.global.homeChartTwo.dispose();
 	state.global.homeChartTwo = markRaw(echarts.init(homePieRef.value, state.charts.theme));
-	var getname = ['房屋及结构物', '专用设备', '通用设备', '文物和陈列品', '图书、档案'];
-	var getvalue = [34.2, 38.87, 17.88, 9.05, 2.05];
+	var getname = [t('message.janToFeb'), t('message.marToApr'), t('message.mayToJun'), t('message.julToAug'), t('message.sepToOct'), t('message.novToDec')];
+  var mapValue = inLineChart.value.thisYear.map((value, index, array) => {
+        if (index % 2 === 0 && index < array.length - 1) {
+          return value + array[index + 1];
+        } else {
+          return null;
+        }
+      })
+      .filter(value => value !== null);
+	var getvalue = mapValue;
 	var data = [];
 	for (var i = 0; i < getname.length; i++) {
 		data.push({ name: getname[i], value: getvalue[i] });
 	}
-	const colorList = ['#51A3FC', '#36C78B', '#FEC279', '#968AF5', '#E790E8'];
+	const colorList = ['#51A3FC', '#36C78B', '#FEC279', '#e772f5', '#E790E8', '#EC6C3DFF'];
 	const option = {
 		backgroundColor: state.charts.bgColor,
 		title: {
-			text: '房屋建筑工程',
+			text: t('message.currentYearEveryTwoMonth'),
 			x: 'left',
 			textStyle: { fontSize: '15', color: state.charts.color },
 		},
@@ -518,6 +526,10 @@ const initEchartsResizeFun = () => {
 const initEchartsResize = () => {
 	window.addEventListener('resize', initEchartsResizeFun);
 };
+const inLineChart = ref({
+  previewYear: [],
+  thisYear: [],
+})
 const getHomeIp = async () => {
   const response = await api.getHomeStatistics();
   if (response.code !== 0) {
@@ -528,6 +540,9 @@ const getHomeIp = async () => {
     state.homeOne[1].num1 = response.data?.todayIp;
     state.homeOne[2].num1 = response.data?.totalViewCurrentYear;
     state.homeOne[3].num1 = response.data?.totalIP;
+    inLineChart.value.previewYear = response.data?.groupPreviousYear.map(obj => obj.ip_access);
+    inLineChart.value.thisYear = response.data?.groupThisYear.map(obj => obj.ip_access);
+
   }
 };
 // 页面加载时

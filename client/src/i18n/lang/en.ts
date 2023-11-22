@@ -337,4 +337,11 @@ export default {
 	tenthMonth: '10Mon',
 	elevenMonth: '11Mon',
 	twelveMonth: '12Mon',
+	janToFeb: 'January to February',
+	marToApr: 'March to April',
+	mayToJun: 'May to Jun',
+	julToAug: 'July to August',
+	sepToOct: 'September to October',
+	novToDec: 'November to December',
+	currentYearEveryTwoMonth: 'Current year in every 2months'
 };

@@ -334,4 +334,11 @@ export default {
 	tenthMonth: '10月',
 	elevenMonth: '11月',
 	twelveMonth: '12月',
+	janToFeb: '一月到二月',
+	marToApr: '三月到四月',
+	mayToJun: '五月到六月',
+	julToAug: '七月到八月',
+	sepToOct: '九月到十月',
+	novToDec: "十一月至十二月",
+	currentYearEveryTwoMonth: '当前年份每 2 个月一次'
 };
