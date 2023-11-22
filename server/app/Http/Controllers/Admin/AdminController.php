@@ -129,6 +129,11 @@ class AdminController extends BaseController
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('ip_access');
+        $thisYear = date('Y');
+        $groupedPosts = DB::table('ip_statistics')->whereYear('create_time', $thisYear)
+            ->selectRaw('MONTH(create_time) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->get();
         return $this->success(['todayIp' => $todayIP, 'todayView' => $todayView, 'totalIP' => $totalIpCurrentYear, 'totalViewCurrentYear' => (int)$totalViewCurrentYear]);
 
         // 获取今年总数据
