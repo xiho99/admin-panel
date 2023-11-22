@@ -5,16 +5,15 @@ namespace App\Http\Middleware;
 use App\Models\IPStatistic;
 use Carbon\Carbon;
 use Closure;
+use Illuminate\Http\Request;
 
 class LogIpAddress
 {
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-
-        $clientIP = request()->ip();
+        $clientIP = $request->ip();
         $today = date('Y-m-d');
         $response = $next($request);
-
         // Get controller and method names
         $controller = $request->route()->getAction('controller');
         list($controller, $method) = explode('@', $controller);
