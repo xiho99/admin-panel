@@ -64,8 +64,7 @@ class ConfigurationController extends BaseController
         }
         $config = Configuration::findOrFail($data['id']);
         if ($data['type'] == 'image' && isset($data['value'])) {
-            $address = $this->fileUpload($data['value'], 'uploads/');
-            $config->value = $address;
+            $config->value = $data['value'];
         }
         if ($data['type'] === 'colorPicker' && isset($data['value'])) {
             $config->value = $data['value'];
@@ -73,6 +72,10 @@ class ConfigurationController extends BaseController
         if ($data['type'] === 'text' && isset($data['value'])) {
             $config->value = $data['value'];
         }
+        if ($data['type'] === 'editor' && isset($data['value'])) {
+            $config->value = $data['value'];
+        }
+
         $config->appName = $data['appName'];
         $config->key = $data['key'];
         $config->type = $data['type'];

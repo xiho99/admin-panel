@@ -1,6 +1,7 @@
 <template>
   <div class="system-user-dialog-container">
-    <el-dialog @close="resetFields"  destroy-on-close v-model="configuration.dialog.isShowDialog" :title="configuration.dialog.title">
+    <el-dialog @close="resetFields" destroy-on-close v-model="configuration.dialog.isShowDialog"
+               :title="configuration.dialog.title">
       <el-form :label-position="'top'"
                ref="ruleFormRef"
                :model="configuration"
@@ -16,6 +17,7 @@
         <el-form-item prop="type" :label="$t('message.type')">
           <el-select v-model="configuration.type" class="w-full" placeholder="Select">
             <el-option value="text" :label="$t('message.text')"/>
+            <el-option value="editor" :label="$t('message.textEditor')"/>
             <el-option value="colorPicker" :label="$t('message.colorPicker')"/>
             <el-option value="image" :label="$t('message.image')"/>
           </el-select>
@@ -23,31 +25,21 @@
         <el-form-item prop="sort" :label="$t('message.sort')">
           <el-input type="number" v-model="configuration.sort"/>
         </el-form-item>
-        <el-form-item prop="value" :label="configuration.type? $t('message.value') : null">
+        <el-form-item prop="value" :label="configuration.type? $t('message.value') : null"
+                      v-if="configuration.type !== 'editor'">
           <div v-if="configuration.type === 'image'">
-            <el-upload
-                v-model:file-list="fileList"
-                ref="upload"
-                action="#"
-                :auto-upload="false"
-                :on-exceed="handleExceed"
-                :on-remove="handleRemove"
-                :on-change="handleChange"
-                list-type="picture-card"
-                accept=".jpeg,.jpg,.png,image/jpeg,image/png"
-                :limit="1"
-            >
-              <el-icon>
-                <ele-Upload/>
-              </el-icon>
-            </el-upload>
+            <uploadFile  v-model:get-file-str="configuration.value"/>
           </div>
           <div v-if="configuration.type === 'colorPicker'">
-            <el-color-picker v-model="configuration.value" />
+            <el-color-picker v-model="configuration.value"/>
           </div>
-          <div  v-if="configuration.type === 'text'" class="w-full">
+          <div v-if="configuration.type === 'text'" class="w-full">
             <el-input type="text" v-model="configuration.value"/>
           </div>
+        </el-form-item>
+        <el-form-item prop="value" class="col-span-2" v-else>
+          <Editor v-model:get-html="state.editor.htmlVal" v-model:get-text="state.editor.textVal"
+                  :placeholder="$t('message.pleaseEnterContent')"/>
         </el-form-item>
         <el-form-item :label="$t('message.is_visible')">
           <div class="flex gap-5">
@@ -70,25 +62,21 @@
   </div>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue";
+import { defineAsyncComponent, reactive } from "vue";
 import { IConfiguration } from "/@/models/IConfiguration";
 import { Hide, View } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
 import formHelper, { IRule } from "/@/libraries/elementUiHelpers/formHelper";
 import useVariable from "/@/composables/useVariables";
-import uploadFileHelper from "/@/libraries/uploadFileHelper";
 import useApi from "/@/api/api";
 import EnumMessageType from "/@/models/enums/enumMessageType";
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
 import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
 
+const uploadFile = defineAsyncComponent(() => import('/@/components/uploadFile/index.vue'));
+const Editor = defineAsyncComponent(() => import('/@/components/editor/index.vue'));
 const api = useApi();
 const { t } = useI18n();
-const {
-  handleExceed, file, upload,
-  handleChange, handleRemove,
-  renderFile,
-} = uploadFileHelper;
 const { isProcessing, ruleFormRef, fileList } = useVariable();
 const configuration = reactive({
   id: 0,
@@ -96,6 +84,7 @@ const configuration = reactive({
   key: '',
   type: '',
   value: '',
+  textVal: '',
   sort: 0,
   is_visible: true,
   dialog: {
@@ -105,6 +94,13 @@ const configuration = reactive({
     isShowDialog: false,
     type: '',
   }
+});
+const state = reactive({
+  editor: {
+    htmlVal: '',
+    textVal: '',
+    disable: false,
+  },
 });
 const emit = defineEmits(['refresh']);
 const resetFields = () => {
@@ -116,8 +112,6 @@ const resetFields = () => {
   configuration.is_visible = true;
   configuration.sort = 0;
   configuration.dialog.isShowDialog = false;
-  file.value = '';
-  fileList.value = []
 }
 const rules: Record<string, IRule> = ({
   appName: { required: true },
@@ -128,11 +122,9 @@ const rules: Record<string, IRule> = ({
 });
 const openDialog = async (type: string, row: IConfiguration) => {
   if (type === 'edit') {
-    fileList.value = [];
-    file.value = '';
-    // 模拟数据，实际请走接口
     fileList.value.push({ name: row.appName, url: row.value });
     Object.assign(configuration, row)
+    state.editor.htmlVal = row.value;
     configuration.dialog.title = t('message.table.edit');
     configuration.dialog.submit = t('message.table.submit');
   } else {
@@ -145,14 +137,13 @@ const openDialog = async (type: string, row: IConfiguration) => {
 
 const submitProcess = async () => {
   isProcessing.value = true;
-  await renderFile()
   try {
     const request = {
       id: configuration.id,
       appName: configuration.appName,
       key: configuration.key,
       type: configuration.type,
-      value: configuration.type === 'image' ? file.value : configuration.value,
+      value: configuration.type === 'editor' ? state.editor.htmlVal : configuration.value,
       sort: configuration.sort,
       is_visible: configuration.is_visible,
     };

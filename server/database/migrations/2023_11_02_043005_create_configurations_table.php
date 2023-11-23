@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('appName');
             $table->string('key');
             $table->string('type');
-            $table->string('value');
+            $table->longText('value');
             $table->integer('sort');
             $table->boolean('is_visible')->default(0);
             $table->boolean('is_delete')->default(0);

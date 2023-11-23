@@ -42,7 +42,6 @@ import { defineAsyncComponent, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import formHelper, { IRule } from "/@/libraries/elementUiHelpers/formHelper";
 import useVariable from "/@/composables/useVariables";
-const uploadFile = defineAsyncComponent(() => import('/@/components/uploadFile/index.vue'));
 import useApi from "/@/api/api";
 import EnumMessageType from "/@/models/enums/enumMessageType";
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
@@ -50,6 +49,7 @@ import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
 import { IAds } from "/@/models/IAds";
 import { Hide, View } from '@element-plus/icons-vue'
 
+const uploadFile = defineAsyncComponent(() => import('/@/components/uploadFile/index.vue'));
 const api = useApi();
 const { isProcessing, ruleFormRef } = useVariable();
 const { t } = useI18n();

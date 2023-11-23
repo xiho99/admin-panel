@@ -343,5 +343,7 @@ export default {
 	julToAug: 'July to August',
 	sepToOct: 'September to October',
 	novToDec: 'November to December',
-	currentYearEveryTwoMonth: 'Current year in every 2months'
+	currentYearEveryTwoMonth: 'Current year in every 2months',
+	textEditor: 'Text editor',
+	pleaseEnterContent: 'Please enter content...',
 };

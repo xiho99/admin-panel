@@ -342,5 +342,7 @@ export default {
 	julToAug: '七月到八月',
 	sepToOct: '九月到十月',
 	novToDec: "十一月至十二月",
-	currentYearEveryTwoMonth: '当前年份每 2 个月一次'
+	currentYearEveryTwoMonth: '当前年份每 2 个月一次',
+	textEditor: '文本编辑器',
+	pleaseEnterContent: '请输入内容...',
 };

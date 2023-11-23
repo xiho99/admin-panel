@@ -18,6 +18,9 @@
             <div v-if="prop.row.type === 'image'">
               <el-image class="w-28 h-14 rounded" :src="prop.row.value" alt="loading.."/>
             </div>
+            <div v-else-if="prop.row.type === 'editor'">
+              <span v-html="prop.row.value"/>
+            </div>
             <div v-else> {{ prop.row.value }}</div>
           </template>
         </el-table-column>
