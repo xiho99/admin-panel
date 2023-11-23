@@ -46,12 +46,7 @@ class ConfigurationController extends BaseController
             'sort' => (int)$data['sort'] ?? 1,
             'is_visible' => $data['is_visible'],
         ];
-        if ($data['type'] == 'image') {
-            $address = $this->fileUpload($data['value'], 'uploads/');
-            $item['value'] = $address;
-        } else {
-            $item['value'] = $data['value'];
-        }
+        $item['value'] = $data['value'];
 
         $id = Configuration::saveInfo($item);
         return $this->success($id);
