@@ -9,11 +9,15 @@
 
 <script setup lang="ts" name="wngEditor">
 // https://www.wangeditor.com/v5/for-frame.html#vue3
+import { i18nChangeLanguage } from '@wangeditor/editor'
 import '@wangeditor/editor/dist/css/style.css';
 import { reactive, shallowRef, watch, onBeforeUnmount } from 'vue';
 import { IDomEditor } from '@wangeditor/editor';
 import { Toolbar, Editor } from '@wangeditor/editor-for-vue';
+import { useThemeConfig} from "/@/stores/themeConfig";
 
+const themeConfig = useThemeConfig();
+i18nChangeLanguage(themeConfig.themeConfig.globalI18n);
 // 定义父组件传过来的值
 const props = defineProps({
   // 是否禁用

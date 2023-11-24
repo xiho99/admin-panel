@@ -216,7 +216,6 @@ const lineChartAndPie = computed(() => {
 const initLineChart = () => {
   if (!state.global.dispose.some((b: any) => b === state.global.homeChartOne)) state.global.homeChartOne.dispose();
   state.global.homeChartOne = markRaw(echarts.init(homeLineRef.value, state.charts.theme));
-  console.log(lineChartAndPie.value.thisYear)
   const option = {
     backgroundColor: state.charts.bgColor,
     title: {
@@ -257,7 +256,7 @@ const initLineChart = () => {
         symbolSize: 6,
         symbol: 'circle',
         smooth: true,
-        data: ['12',22, '33', 44, 55 ,666],
+        data: lineChartAndPie.value?.previousYear,
         lineStyle: { color: '#fe9a8b' },
         itemStyle: { color: '#fe9a8b', borderColor: '#fe9a8b' },
         areaStyle: {
@@ -273,7 +272,7 @@ const initLineChart = () => {
         symbolSize: 6,
         symbol: 'circle',
         smooth: true,
-        data: lineChartAndPie.value.thisYear,
+        data: lineChartAndPie.value?.thisYear,
         lineStyle: { color: '#9E87FF' },
         itemStyle: { color: '#9E87FF', borderColor: '#9E87FF' },
         areaStyle: {

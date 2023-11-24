@@ -14,6 +14,12 @@
         <el-form-item prop="key" :label="$t('message.key')">
           <el-input type="text" v-model="configuration.key"/>
         </el-form-item>
+        <el-form-item prop="link" :label="$t('message.router.link')">
+          <el-input type="text" v-model="configuration.link"/>
+        </el-form-item>
+        <el-form-item prop="sort" :label="$t('message.sort')">
+          <el-input type="number" v-model="configuration.sort"/>
+        </el-form-item>
         <el-form-item prop="type" :label="$t('message.type')">
           <el-select v-model="configuration.type" class="w-full" placeholder="Select">
             <el-option value="text" :label="$t('message.text')"/>
@@ -22,8 +28,14 @@
             <el-option value="image" :label="$t('message.image')"/>
           </el-select>
         </el-form-item>
-        <el-form-item prop="sort" :label="$t('message.sort')">
-          <el-input type="number" v-model="configuration.sort"/>
+        <el-form-item :label="$t('message.is_visible')">
+          <div class="flex gap-5">
+            <el-switch
+                v-model="configuration.is_visible"
+                :active-action-icon="View"
+                :inactive-action-icon="Hide"
+            />
+          </div>
         </el-form-item>
         <el-form-item prop="value" :label="configuration.type? $t('message.value') : null"
                       v-if="configuration.type !== 'editor'">
@@ -40,15 +52,6 @@
         <el-form-item prop="value" class="col-span-2" v-else>
           <Editor v-model:get-html="state.editor.htmlVal" v-model:get-text="state.editor.textVal"
                   :placeholder="$t('message.pleaseEnterContent')"/>
-        </el-form-item>
-        <el-form-item :label="$t('message.is_visible')">
-          <div class="flex gap-5">
-            <el-switch
-                v-model="configuration.is_visible"
-                :active-action-icon="View"
-                :inactive-action-icon="Hide"
-            />
-          </div>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -84,6 +87,7 @@ const configuration = reactive({
   key: '',
   type: '',
   value: '',
+  link: '',
   textVal: '',
   sort: 0,
   is_visible: true,
@@ -109,6 +113,7 @@ const resetFields = () => {
   configuration.key = '';
   configuration.type = '';
   configuration.value = '';
+  configuration.link = '';
   configuration.is_visible = true;
   configuration.sort = 0;
   configuration.dialog.isShowDialog = false;
@@ -145,6 +150,7 @@ const submitProcess = async () => {
       type: configuration.type,
       value: configuration.type === 'editor' ? state.editor.htmlVal : configuration.value,
       sort: configuration.sort,
+      link: configuration.link,
       is_visible: configuration.is_visible,
     };
     const response = request.id !== 0 ? await api.updateConfiguration(request) : await api.addConfiguration(request);

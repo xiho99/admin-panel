@@ -47,11 +47,9 @@
         </el-table-column>
         <el-table-column :label="$t('message.table.operate')" width="100">
           <template #default="scope">
-            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="warning"
-                       @click="onOpenEditUser('edit', scope.row)" :loading="state.tableData.loading"
-            >{{ $t('message.table.edit') }}
-            </el-button
-            >
+            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="warning" @click="onOpenEditUser('edit', scope.row)">
+              {{ $t('message.table.edit') }}
+            </el-button>
             <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="danger"
                        @click="onRowDel(scope.row)">{{ $t('message.table.delete') }}
             </el-button>
@@ -117,6 +115,7 @@ const onOpenAddUser = (type: string) => {
 };
 // 打开修改用户弹窗
 const onOpenEditUser = (type: string, row: RowUserType) => {
+  if (row.userName === 'admin') return;
   userDialogRef.value.openDialog(type, row, state.roleList);
 };
 // 删除用户

@@ -15,6 +15,7 @@ class Configuration extends BaseModel
         'type',
         'value',
         'sort',
+        'link' ,
         'is_delete',
         'is_visible',
     ];

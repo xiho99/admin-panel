@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('type');
             $table->longText('value');
             $table->integer('sort');
+            $table->string('link')->nullable();
             $table->boolean('is_visible')->default(0);
             $table->boolean('is_delete')->default(0);
             $table->timestamps();

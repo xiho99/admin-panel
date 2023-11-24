@@ -11,7 +11,7 @@ class LogIpAddress
 {
     public function handle(Request $request, Closure $next)
     {
-        $clientIP = $request->ip();
+        $clientIP = $request->getClientIp();
         $today = date('Y-m-d');
         $response = $next($request);
         // Get controller and method names
@@ -20,9 +20,10 @@ class LogIpAddress
         // Operator information
 
         $parameters = json_encode($request->all());
-        $where = [['ip', '=', $clientIP]];
+        $orWhere = [['ip', '=', $clientIP, ['create_time', '=', $today]]];
+        $where = [['', 'or', $orWhere]];
         $isExist = IPStatistic::getInfo($where);
-        if (!empty($isExist) && $isExist['create_time'] == $today) {
+        if (!empty($isExist)) {
             IPStatistic::saveInfo([
                 'id' => $isExist['id'],
                 'ip' => $isExist['ip'],

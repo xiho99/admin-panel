@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Models\Configuration;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -45,6 +44,7 @@ class ConfigurationController extends BaseController
             'type' => $data['type'] ?? 1,
             'sort' => (int)$data['sort'] ?? 1,
             'is_visible' => $data['is_visible'],
+            'link' => $data['link'],
         ];
         $item['value'] = $data['value'];
 
@@ -75,6 +75,7 @@ class ConfigurationController extends BaseController
         $config->key = $data['key'];
         $config->type = $data['type'];
         $config->sort = $data['sort'];
+        $config->link = $data['link'];
         $config->is_visible = $data['is_visible'];
         Configuration::updateCacheData($config);
         return $this->success($config, 0, 201);
