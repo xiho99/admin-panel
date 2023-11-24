@@ -126,8 +126,8 @@ class AdminController extends BaseController
         // 今日最热文章列表
         $currentDay = date('Y-m-d');
         $where = ['create_time' => $currentDay];
-        $todayIP = count(IPStatistic::getList($where));
-        $todayView = collect(IPStatistic::getList($where))->sum('ip_access');
+        $todayIP = count(IPStatistic::where($where)->get());
+        $todayView = collect(IPStatistic::where($where)->get())->sum('ip_access');
         $totalIpCurrentYear = IPStatistic::whereBetween('create_time', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
