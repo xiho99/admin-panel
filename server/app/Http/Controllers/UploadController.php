@@ -5,63 +5,55 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
+use Intervention\Image\Facades\Image;
 
 class UploadController extends Controller
 {
     public function upload(Request $request): Response
     {
-        // 验证规则
+        // Validation rules
         $rules = [
             'file' => 'required|file|max:512000', // 1MB 最大文件大小
         ];
 
         $messages = [
-            'file.max' => '文件大小不能超过1MB。',
-            'file.required' => '请上传文件。',
-            'file.file' => '无效的文件。',
+            'file.max' => 'File size cannot exceed 1MB。',
+            'file.required' => 'Please upload files。',
+            'file.file' => 'Invalid file。',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
-
         if ($validator->fails()) {
-            if ($validator->fails()) {
-                return Response([
-                    'code' => 1,
-                    'message' => 'Failed',
-                    'data' => $validator->errors()->first(),
-                    'server_time' => $this->getMsecTime(),
-                    'version' => env('_VERSION')
-                ]);
-            }
+            return Response([
+                'code' => 1,
+                'message' => 'Failed',
+                'data' => $validator->errors()->first(),
+                'server_time' => $this->getMsecTime(),
+                'version' => env('_VERSION')
+            ]);
         }
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-
-            // 验证文件类型
+            // Verify file type
             $allowedTypes = ['jpeg', 'jpg', 'png', 'gif', 'mp4', 'mov']; // 允许的文件类型
             $fileType = $file->getClientOriginalExtension();
-
             if (!in_array($fileType, $allowedTypes)) {
                 return Response([
                     'code' => 1,
-                    'message' => '不允许上传此类型的文件',
+                    'message' => 'Uploading files of this type is not allowed',
                     'data' => $validator->errors()->first(),
                     'server_time' => $this->getMsecTime(),
                     'version' => env('_VERSION')
                 ]);
             }
-
-            // 生成时间戳
+            // Generate timestamp
             $t = date('Y-m-d', strtotime('today'));
-
-            // 构建存储路径
+            // Build storage path
             $path = 'uploads/';
-
-            // 存储文件
+            // Store files
             $file->store($path, 'public');
-
-            // 获取上传后的文件名
+            // Get the uploaded file name
             $fileName = $file->hashName();
         }
         return Response([
@@ -70,7 +62,7 @@ class UploadController extends Controller
             'data' => [
                 'path' => $path,
                 'url' => $path . $fileName,
-                'filename' => $fileName, // 添加文件名称到返回数组
+                'filename' => $fileName, // Add file names to the returned array
             ],
             'server_time' => $this->getMsecTime(),
             'version' => env('_VERSION')
