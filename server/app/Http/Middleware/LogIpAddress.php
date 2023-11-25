@@ -20,9 +20,7 @@ class LogIpAddress
         // Operator information
 
         $parameters = json_encode($request->all());
-        $orWhere = [['ip', '=', $clientIP, ['create_time', '=', $today]]];
-        $where = [['', 'or', $orWhere]];
-        $isExist = IPStatistic::getInfo($where);
+        $isExist = IPStatistic::where([['ip', $clientIP], ['create_time', $today]])->first();
         if (!empty($isExist)) {
             IPStatistic::saveInfo([
                 'id' => $isExist['id'],

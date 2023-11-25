@@ -12,7 +12,7 @@
           <el-input type="text" v-model="configuration.appName"/>
         </el-form-item>
         <el-form-item prop="key" :label="$t('message.key')">
-          <el-input type="text" v-model="configuration.key"/>
+          <el-input type="text" v-model="configuration.key" :disabled="configuration.dialog.type === 'edit'"/>
         </el-form-item>
         <el-form-item prop="link" :label="$t('message.router.link')">
           <el-input type="text" v-model="configuration.link"/>

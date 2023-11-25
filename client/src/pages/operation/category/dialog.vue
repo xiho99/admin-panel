@@ -11,7 +11,7 @@
           <el-input type="text" v-model="formData.name"/>
         </el-form-item>
         <el-form-item prop="key" :label="$t('message.key')">
-          <el-input type="text" v-model="formData.key"/>
+          <el-input type="text" v-model="formData.key" :disabled="formDialog.type === 'edit'"/>
         </el-form-item>
         <el-form-item prop="sort" :label="$t('message.sort')">
           <el-input type="number" v-model="formData.sort"/>
