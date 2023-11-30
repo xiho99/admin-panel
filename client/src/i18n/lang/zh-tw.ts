@@ -343,4 +343,16 @@ export default {
 	currentYearEveryTwoMonth: '当前年份每 2 个月一次',
 	textEditor: '文本编辑器',
 	pleaseEnterContent: '请输入内容...',
+	noData: '暂无数据...',
+	print: "打印",
+	export: "导出",
+	refresh: "刷新",
+	dragToSort: '拖动进行排序',
+	columnToDisplay: '列显示',
+	serialNumber: '序号',
+	multipleChoice: '多选',
+	cannotBeEmpty: '不能为空',
+	pleaseEnterName: '请输入姓名',
+	reset: "重置",
+	pleaseSelectDataToExport: "请先选择要导出的数据"
 };

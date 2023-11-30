@@ -5,11 +5,11 @@
 				<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb10 mt10" v-for="(val, key) in search" :key="key" v-show="key === 0 || state.isToggle">
 					<template v-if="val.type !== ''">
 						<el-form-item
-							:label="val.label"
+              :label="$t(val.label)"
 							:prop="val.prop"
 							:rules="[{ required: val.required, message: `${val.label}不能为空`, trigger: val.type === 'input' ? 'blur' : 'change' }]"
 						>
-							<el-input v-model="state.form[val.prop]" :placeholder="val.placeholder" clearable v-if="val.type === 'input'" style="width: 100%" />
+							<el-input v-model="state.form[val.prop]" :placeholder="$t(val.placeholder)" clearable v-if="val.type === 'input'" style="width: 100%" />
 							<el-date-picker
 								v-model="state.form[val.prop]"
 								type="date"
@@ -32,8 +32,8 @@
 							</div>
 						</template>
 						<div>
-							<el-button size="default" type="primary" @click="onSearch(tableSearchRef)">查询 </el-button>
-							<el-button size="default" type="info" class="ml10" @click="onReset(tableSearchRef)"> 重置 </el-button>
+							<el-button size="default" type="primary" @click="onSearch(tableSearchRef)">{{ $t('message.table.search') }} </el-button>
+							<el-button size="default" type="info" class="ml10" @click="onReset(tableSearchRef)"> {{ $t('message.reset') }} </el-button>
 						</div>
 					</el-form-item>
 				</el-col>

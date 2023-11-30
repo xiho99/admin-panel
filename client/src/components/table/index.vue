@@ -1,129 +1,137 @@
 <template>
-	<div class="table-container">
-		<el-table
-			:data="data"
-			:border="setBorder"
-			v-bind="$attrs"
-			row-key="id"
-			stripe
-			style="width: 100%"
-			v-loading="config.loading"
-			@selection-change="onSelectionChange"
-		>
-			<el-table-column type="selection" :reserve-selection="true" width="30" v-if="config.isSelection" />
-			<el-table-column type="index" label="序号" width="60" />
-			<el-table-column
-				v-for="(item, index) in setHeader"
-				:key="index"
-				show-overflow-tooltip
-				:prop="item.key"
-				:width="item.colWidth"
-				:label="item.title"
-			>
-				<template v-slot="scope">
-					<template v-if="item.type === 'image'">
-						<el-image
-							:style="{ width: `${item.width}px`, height: `${item.height}px` }"
-							:src="scope.row[item.key]"
-							:zoom-rate="1.2"
-							:preview-src-list="[scope.row[item.key]]"
-							preview-teleported
-							fit="cover"
-						/>
-					</template>
-					<template v-else-if="item.type === 'switch'">
-						<el-switch @change="item?.fun && item?.fun(scope.row,$event)" v-model="scope.row[item.key]" inline-prompt :active-text="item.activeText || '是'" :inactive-text="item.activeText || '否'" :active-value="item.activeValue || 1" :inactive-value="item.inactiveValue || 0"></el-switch>
-					</template>
-					<template v-else-if="item.type === 'date'">
-							<div v-if="scope.row[item.key]">{{dayjs(scope.row[item.key]).format('YYYY-MM-DD')}}</div>
-					</template>
-					<template v-else-if="item.type === 'tag'">
-						<el-tag type="success" v-if="scope.row[item.key] == item.activeValue">是</el-tag>
-						<el-tag type="info" v-else>否</el-tag>
-					</template>
-					<template v-else>
-						<div @click="item?.fun && item?.fun(scope.row)" :class="{haveFun:item?.fun}" :style="{color:item.keyArray ? ['blue','green','red'][scope.row[item.key]] : ''}">
-							{{ (item.keyArray && item.keyArray[scope.row[item.key]])?item.keyArray[scope.row[item.key]]: scope.row[item.key] }}
-						</div>
-					</template>
-				</template>
-			</el-table-column>
-			<el-table-column label="操作" min-width="200" v-if="config.isOperate?.length">
-				<template v-slot="scope">
-					<div style="display: flex;">
-							<div v-for="item in config.isOperate" class="mr10">
-								<el-popconfirm v-if="item.type == 'tip'" :title="item.tipTitle" @confirm="onSystem(scope.row,item.key)">
-									<template #reference>
-										<el-button text type="primary">{{item.label}}</el-button>
-									</template>
-								</el-popconfirm>
-								<el-button v-else text type="primary" @click="onSystem(scope.row,item.key)">{{item.label}}</el-button>
-							</div>
-					</div>
-				</template>
-			</el-table-column>
-			<template #empty>
-				<el-empty description="暂无数据" />
-			</template>
-		</el-table>
-		<div class="table-footer mt15">
-			<el-pagination
-				@size-change="onHandleSizeChange"
-				@current-change="onHandleCurrentChange"
-				class="table-footer ml15"
-				:pager-count="5"
-				:page-sizes="[10, 20, 30]"
-				v-model:current-page="state.page.pageNum"
-				background
-				v-model:page-size="state.page.pageSize"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="total"
-			>
-			</el-pagination>
-			<div class="table-footer-tool">
-				<SvgIcon name="iconfont icon-dayin" :size="19" title="打印" @click="onPrintTable" />
-				<SvgIcon name="iconfont icon-yunxiazai_o" :size="22" title="导出" @click="onImportTable" />
-				<SvgIcon name="iconfont icon-shuaxin" :size="22" title="刷新" @click="onRefreshTable" />
-				<el-popover
-					placement="top-end"
-					trigger="click"
-					transition="el-zoom-in-top"
-					popper-class="table-tool-popper"
-					:width="300"
-					:persistent="false"
-					@show="onSetTable"
-				>
-					<template #reference>
-						<SvgIcon name="iconfont icon-quanjushezhi_o" :size="22" title="设置" />
-					</template>
-					<template #default>
-						<div class="tool-box">
-							<el-tooltip content="拖动进行排序" placement="top-start">
-								<SvgIcon name="fa fa-question-circle-o" :size="17" class="ml11" color="#909399" />
-							</el-tooltip>
-							<el-checkbox
-								v-model="state.checkListAll"
-								:indeterminate="state.checkListIndeterminate"
-								class="ml10 mr1"
-								label="列显示"
-								@change="onCheckAllChange"
-							/>
-							<el-checkbox v-model="getConfig.isSerialNo" class="ml12 mr1" label="序号" />
-							<el-checkbox v-model="getConfig.isSelection" class="ml12 mr1" label="多选" />
-						</div>
-						<el-scrollbar>
-							<div ref="toolSetRef" class="tool-sortable">
-								<div class="tool-sortable-item" v-for="v in header" :key="v.key" :data-key="v.key">
-									<i class="fa fa-arrows-alt handle cursor-pointer"></i>
-									<el-checkbox v-model="v.isCheck" size="default" class="ml12 mr8" :label="v.title" @change="onCheckChange" />
-								</div>
-							</div>
-						</el-scrollbar>
-					</template>
-				</el-popover>
-			</div>
-		</div>
-	</div>
+  <el-table
+      :data="filterTableData"
+      :border="setBorder"
+      v-bind="$attrs"
+      row-key="id"
+      stripe
+      style="width: 100%"
+      v-loading="config.loading"
+      @selection-change="onSelectionChange"
+  >
+    <el-table-column type="selection" :reserve-selection="true" width="30" v-if="config.isSelection"/>
+    <el-table-column type="index" :label="$t('message.table.numberSign')" width="60"/>
+    <el-table-column
+        v-for="(item, index) in setHeader"
+        :key="index"
+        show-overflow-tooltip
+        :prop="item.key"
+        :width="item.colWidth"
+        :label="$t(item.title)"
+    >
+      <template v-slot="scope">
+        <template v-if="item.type === 'image'">
+          <el-image
+              :style="{ width: `${item.width}px`, height: `${item.height}px` }"
+              :src="scope.row[item.key]"
+              :zoom-rate="1.2"
+              :preview-src-list="[scope.row[item.key]]"
+              preview-teleported
+              fit="cover"
+          />
+        </template>
+        <template v-else-if="item.type === 'switch'">
+          <el-switch @change="item?.fun && item?.fun(scope.row,$event)" v-model="scope.row[item.key]" inline-prompt
+                     :active-text="item.activeText || '是'" :inactive-text="item.activeText || '否'"
+                     :active-value="item.activeValue || 1" :inactive-value="item.inactiveValue || 0"></el-switch>
+        </template>
+        <template v-else-if="item.type === 'date'">
+          <div v-if="scope.row[item.key]">{{ dayjs(scope.row[item.key]).format('YYYY-MM-DD') }}</div>
+        </template>
+        <template v-else-if="item.type === 'tag'">
+          <el-tag type="success" v-if="scope.row[item.key]">{{ $t('message.yes') }}</el-tag>
+          <el-tag type="info" v-else>{{ $t('message.no') }}</el-tag>
+        </template>
+        <template v-else>
+          <div @click="item?.fun && item?.fun(scope.row)" :class="{haveFun:item?.fun}"
+               :style="{color:item.keyArray ? ['blue','green','red'][scope.row[item.key]] : ''}">
+            {{
+              (item.keyArray && item.keyArray[scope.row[item.key]]) ? item.keyArray[scope.row[item.key]] : scope.row[item.key]
+            }}
+          </div>
+        </template>
+      </template>
+    </el-table-column>
+    <el-table-column :label="$t('message.operate')" min-width="120" v-if="config.isOperate?.length">
+      <template #header>
+        <el-input v-model="state.search" size="default" :placeholder="$t('message.name')"/>
+      </template>
+      <template v-slot="scope">
+        <div style="display: flex;">
+          <div v-for="(item, index) in config.isOperate" class="mr10" :key="index">
+            <el-popconfirm v-if="item.type == 'tip'" :title="$t(item.tipTitle)" @confirm="onSystem(scope.row,item.key)">
+              <template #reference>
+                <el-button size="small" v-if="item.type == 'tip'" text type="danger">{{ $t(item.label) }}</el-button>
+              </template>
+            </el-popconfirm>
+            <el-button size="small" v-else text type="warning" @click="onSystem(scope.row,item.key)">
+              {{ $t(item.label) }}
+            </el-button>
+          </div>
+        </div>
+      </template>
+    </el-table-column>
+    <template #empty>
+      <el-empty :description="$t('message.noData')"/>
+    </template>
+  </el-table>
+  <div class="flex justify-between mt15">
+    <el-pagination
+        @size-change="onHandleSizeChange"
+        @current-change="onHandleCurrentChange"
+        :page-sizes="[10, 25, 50, 75, 100]"
+        :small="true"
+        v-model:current-page="state.page.pageNum"
+        background
+        v-model:page-size="state.page.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+    >
+    </el-pagination>
+    <div class="table-footer-tool">
+      <SvgIcon name="iconfont icon-dayin" :size="19" :title="$t('message.print')" @click="onPrintTable"/>
+      <SvgIcon name="iconfont icon-yunxiazai_o" :size="22" :title="$t('message.export')" @click="onImportTable"/>
+      <SvgIcon name="iconfont icon-shuaxin" :size="22" :title="$t('message.refresh')" @click="onRefreshTable"/>
+      <el-popover
+          placement="top-end"
+          trigger="click"
+          transition="el-zoom-in-top"
+          popper-class="table-tool-popper"
+          :width="300"
+          :persistent="false"
+          @show="onSetTable"
+      >
+        <template #reference>
+          <SvgIcon name="iconfont icon-quanjushezhi_o" :size="22" title="设置"/>
+        </template>
+        <template #default>
+          <div class="tool-box overflow-auto">
+            <el-tooltip :content="$t('message.dragToSort')" placement="top-start">
+              <SvgIcon name="fa fa-question-circle-o" :size="17" class="ml11" color="#909399"/>
+            </el-tooltip>
+            <el-checkbox
+                v-model="state.checkListAll"
+                :indeterminate="state.checkListIndeterminate"
+                class="ml10 mr1"
+                :label="$t('message.columnToDisplay')"
+                @change="onCheckAllChange"
+            />
+            <el-checkbox v-model="getConfig.isSelection" class="ml10 mr1" :label="$t('message.multipleChoice')"/>
+            <el-checkbox v-model="getConfig.isSerialNo" class="ml10 mr1" :label="$t('message.serialNumber')"/>
+          </div>
+          <el-scrollbar>
+            <div ref="toolSetRef" class="tool-sortable">
+              <div class="tool-sortable-item" v-for="v in header" :key="v.key" :data-key="v.key">
+                <i class="fa fa-arrows-alt handle cursor-pointer"></i>
+                <el-checkbox v-model="v.isCheck" size="default" class="ml12 mr8" :label="$t(v.title)"
+                             @change="onCheckChange"/>
+              </div>
+            </div>
+          </el-scrollbar>
+        </template>
+      </el-popover>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts" name="netxTable">
@@ -136,198 +144,197 @@ import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import '/@/theme/tableTool.scss';
 import dayjs from 'dayjs';
+import { useI18n } from "vue-i18n";
 
-// 定义父组件传过来的值
+// Define the value passed by the parent component
 const props = defineProps({
-	// 列表内容
-	data: {
-		type: Array<EmptyObjectType>,
-		default: () => [],
-	},
-	// 表头内容
-	header: {
-		type: Array<EmptyObjectType>,
-		default: () => [],
-	},
-	// 配置项
-	config: {
-		type: Object,
-		default: () => {},
-	},
-	total: {
-		type: Number,
-		default: () => {},
-	},
-	// 打印标题
-	printName: {
-		type: String,
-		default: () => '',
-	},
+  // List content
+  data: {
+    type: Array<EmptyObjectType>,
+    default: () => [],
+  },
+  // Header content
+  header: {
+    type: Array<EmptyObjectType>,
+    default: () => [],
+  },
+  // Configuration items
+  config: {
+    type: Object,
+    default: () => {},
+  },
+  total: {
+    type: Number,
+    default: () => {},
+  },
+  // Print title
+  printName: {
+    type: String,
+    default: () => '',
+  },
 });
 
-// 定义子组件向父组件传值/事件
+const { t } = useI18n();
+// Define child components to pass values to parent components
 const emit = defineEmits(['onSystem', 'pageChange', 'sortHeader']);
 
-// 定义变量内容
+// Define variable content
 const toolSetRef = ref();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const state = reactive({
-	page: {
-		page: 1,
-		pageSize: 10,
-	},
-	selectlist: [] as EmptyObjectType[],
-	checkListAll: true,
-	checkListIndeterminate: false,
+  page: {
+    page: 1,
+    pageSize: 10,
+    pageNum: 1,
+  },
+  search: '',
+  selectList: [] as EmptyObjectType[],
+  checkListAll: true,
+  checkListIndeterminate: false,
 });
-
-// 设置边框显示/隐藏
+// Set border display/hide
 const setBorder = computed(() => {
-	return props.config.isBorder ? true : false;
+  return !!props.config.isBorder;
 });
-// 获取父组件 配置项（必传）
-const getConfig = computed(() => {
-	return props.config;
+// Get parent component configuration items (required)
+const getConfig = computed((): object => {
+  return props.config;
 });
-// 设置 tool header 数据
+// Set tool header data
 const setHeader = computed(() => {
-	return props.header.filter((v) => v.isCheck);
+  return props.header.filter((v) => v.isCheck);
 });
-// tool 列显示全选改变时
+// When tool column display select all changes
 const onCheckAllChange = <T>(val: T) => {
-	if (val) props.header.forEach((v) => (v.isCheck = true));
-	else props.header.forEach((v) => (v.isCheck = false));
-	state.checkListIndeterminate = false;
+  if (val) props.header.forEach((v) => (v.isCheck = true));
+  else props.header.forEach((v) => (v.isCheck = false));
+  state.checkListIndeterminate = false;
 };
-// tool 列显示当前项改变时
+// The tool column displays when the current item changes
 const onCheckChange = () => {
-	const headers = props.header.filter((v) => v.isCheck).length;
-	state.checkListAll = headers === props.header.length;
-	state.checkListIndeterminate = headers > 0 && headers < props.header.length;
+  const headers = props.header.filter((v) => v.isCheck).length;
+  state.checkListAll = headers === props.header.length;
+  state.checkListIndeterminate = headers > 0 && headers < props.header.length;
 };
-// 表格多选改变时，用于导出
+// Used for export when table multi-select changes
 const onSelectionChange = (val: EmptyObjectType[]) => {
-	state.selectlist = val;
+  state.selectList = val;
 };
-// 删除当前项
-const onSystem = (row: EmptyObjectType,key:string) => {
-	emit('onSystem', row,key);
+// Delete current item
+const onSystem = (row: EmptyObjectType, key: string) => {
+  emit('onSystem', row, key);
 };
-// 分页改变
+// Pagination changes
 const onHandleSizeChange = (val: number) => {
-	state.page.pageSize = val;
-	emit('pageChange', state.page);
+  state.page.pageSize = val;
+  emit('pageChange', state.page);
 };
-// 分页改变
+// Pagination changes
 const onHandleCurrentChange = (val: number) => {
-	state.page.page = val;
-	emit('pageChange', state.page);
+  state.page.page = val;
+  emit('pageChange', state.page);
 };
-// 搜索时，分页还原成默认
+// When searching, paging is restored to default
 const pageReset = () => {
-	state.page.page = 1;
-	state.page.pageSize = 10;
-	emit('pageChange', state.page);
+  state.page.page = 1;
+  state.page.pageSize = 10;
+  emit('pageChange', state.page);
 };
-// 打印
+// Print
 const onPrintTable = () => {
-	// https://printjs.crabbly.com/#documentation
-	// 自定义打印
-	let tableTh = '';
-	let tableTrTd = '';
-	let tableTd: any = {};
-	// 表头
-	props.header.forEach((v) => {
-		tableTh += `<th class="table-th">${v.title}</th>`;
-	});
-	// 表格内容
-	props.data.forEach((val, key) => {
-		if (!tableTd[key]) tableTd[key] = [];
-		props.header.forEach((v) => {
-			if (v.type === 'text') {
-				tableTd[key].push(`<td class="table-th table-center">${val[v.key]}</td>`);
-			} else if (v.type === 'image') {
-				tableTd[key].push(`<td class="table-th table-center"><img src="${val[v.key]}" style="width:${v.width}px;height:${v.height}px;"/></td>`);
-			}
-		});
-		tableTrTd += `<tr>${tableTd[key].join('')}</tr>`;
-	});
-	// 打印
-	printJs({
-		printable: `<div style=display:flex;flex-direction:column;text-align:center><h3>${props.printName}</h3></div><table border=1 cellspacing=0><tr>${tableTh}${tableTrTd}</table>`,
-		type: 'raw-html',
-		css: ['//at.alicdn.com/t/c/font_2298093_rnp72ifj3ba.css', '//unpkg.com/element-plus/dist/index.css'],
-		style: `@media print{.mb15{margin-bottom:15px;}.el-button--small i.iconfont{font-size: 12px !important;margin-right: 5px;}}; .table-th{word-break: break-all;white-space: pre-wrap;}.table-center{text-align: center;}`,
-	});
+  // https://printjs.crabbly.com/#documentation
+  // Custom printing
+  let tableTh = '';
+  let tableTrTd = '';
+  let tableTd: any = {};
+  // Header
+  props.header.forEach((v) => {
+    tableTh += `<th class="table-th">${ t(v.title) }</th>`;
+  });
+  // Table content
+  props.data.forEach((val, key) => {
+    if (!tableTd[key]) tableTd[key] = [];
+    props.header.forEach((v) => {
+      if (v.type === 'text') {
+        tableTd[key].push(`<td class="table-th table-center">${ val[v.key] }</td>`);
+      } else if (v.type === 'image') {
+        tableTd[key].push(`<td class="table-th table-center"><img src="${ val[v.key] }" style="width:${ v.width }px;height:${ v.height }px;"/></td>`);
+      } else if (v.type === 'date') {
+        tableTd[key].push(`<td class="table-th table-center">${ dayjs(val[v.key]).format('YYYY-MM-DD') }</td>`);
+      } else {
+        tableTd[key].push(`<td class="table-th table-center">${ val[v.key] }</td>`);
+      }
+    });
+    tableTrTd += `<tr>${ tableTd[key].join('') }</tr>`;
+  });
+  // Print
+  printJs({
+    printable: `<div style=display:flex;flex-direction:column;text-align:center><h3>${ props.printName }</h3></div><table border=1 cellspacing=0><tr>${ tableTh }${ tableTrTd }</table>`,
+    type: 'raw-html',
+    css: ['//at.alicdn.com/t/c/font_2298093_rnp72ifj3ba.css', '//unpkg.com/element-plus/dist/index.css'],
+    style: `@media print{.mb15{margin-bottom:15px;}.el-button--small i.iconfont{font-size: 12px !important;margin-right: 5px;}}; .table-th{word-break: break-all;white-space: pre-wrap;}.table-center{text-align: center;}`,
+  });
 };
-// 导出
+// Export
 const onImportTable = () => {
-	if (state.selectlist.length <= 0) return ElMessage.warning('请先选择要导出的数据');
-	let data = [];
-	props.header?.forEach(e => {
-		let info = e;
-		info.type = info.type == 'image' ? 'image' : 'text';
-		data.push(e);
-	})
-	table2excel(data, state.selectlist, `${themeConfig.value.globalTitle} ${new Date().toLocaleString()}`);
+  if (state.selectList.length <= 0) return ElMessage.warning(t('message.pleaseSelectDataToExport'));
+  let data: [] = [];
+  props.header?.forEach(e => {
+    let info = e;
+    info.title = t(info.title);
+    info.type = info.type == 'image' ? 'image' : 'text';
+    data.push(e);
+  })
+  const stateValue = state.selectList.map(item => {
+    return { ...item, created_at: dayjs(item.created_at).format('YYYY-MM-DD') };
+  });
+  table2excel(data, stateValue, `${ themeConfig.value.globalTitle } ${ new Date().toLocaleString() }`);
 };
-// 刷新
+// refresh
 const onRefreshTable = () => {
-	emit('pageChange', state.page);
+  emit('pageChange', state.page);
 };
-// 设置
+// set up
 const onSetTable = () => {
-	nextTick(() => {
-		const sortable = Sortable.create(toolSetRef.value, {
-			handle: '.handle',
-			dataIdAttr: 'data-key',
-			animation: 150,
-			onEnd: () => {
-				const headerList: EmptyObjectType[] = [];
-				sortable.toArray().forEach((val: string) => {
-					props.header.forEach((v) => {
-						if (v.key === val) headerList.push({ ...v });
-					});
-				});
-				emit('sortHeader', headerList);
-			},
-		});
-	});
+  nextTick(() => {
+    const sortable = Sortable.create(toolSetRef.value, {
+      handle: '.handle',
+      dataIdAttr: 'data-key',
+      animation: 150,
+      onEnd: () => {
+        const headerList: EmptyObjectType[] = [];
+        sortable.toArray().forEach((val: string) => {
+          props.header.forEach((v) => {
+            if (v.key === val) headerList.push({ ...v });
+          });
+        });
+        emit('sortHeader', headerList);
+      },
+    });
+  });
 };
+const filterTableData = computed(() =>
+    props.data.filter(
+        (data) =>
+            !state.search ||
+            data.name.toLowerCase().includes(state.search.toLowerCase())
+    ),
+);
 
-// 暴露变量
+// exposure variable
 defineExpose({
-	pageReset,
+  pageReset,
 });
 </script>
 
 <style scoped lang="scss">
-.table-container {
-	display: flex;
-	flex-direction: column;
-	.el-table {
-		flex: 1;
-	}
-	.table-footer {
-		display: flex;
-		.table-footer-tool {
-			flex: 1;
-			display: flex;
-			align-items: center;
-			justify-content: flex-end;
-			i {
-				margin-right: 10px;
-				cursor: pointer;
-				color: var(--el-text-color-regular);
-				&:last-of-type {
-					margin-right: 0;
-				}
-			}
-		}
-	}
+.haveFun {
+  cursor: pointer;
 }
-.haveFun{
-	cursor: pointer;
+
+.table-footer-tool i {
+  @apply px-1.5;
+  @apply cursor-pointer;
 }
 </style>

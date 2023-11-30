@@ -2,7 +2,7 @@
   <div class="system-user-container layout-padding">
     <el-card shadow="hover" class="layout-padding-auto">
       <div class="system-user-search mb15">
-        <el-input size="default" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"></el-input>
+        <el-input size="default" v-model="state.tableData.search" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"> </el-input>
         <el-button size="default" type="primary" class="ml10">
           <el-icon>
             <ele-Search/>
@@ -92,6 +92,7 @@ const state = reactive({
     data: [],
     total: 0,
     loading: false,
+    search: '',
     param: {
       pageNum: 1,
       pageSize: 10,

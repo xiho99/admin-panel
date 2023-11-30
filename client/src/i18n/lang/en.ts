@@ -346,4 +346,16 @@ export default {
 	currentYearEveryTwoMonth: 'Current year in every 2months',
 	textEditor: 'Text editor',
 	pleaseEnterContent: 'Please enter content...',
+	noData: 'No data...',
+	print: "Print",
+	export: "Export",
+	refresh: "Refresh",
+	dragToSort: 'Drag to sort',
+	columnToDisplay: 'Column display',
+	serialNumber: 'serial number',
+	multipleChoice: 'Multiple choice',
+	cannotBeEmpty: 'Can not be empty',
+	pleaseEnterName: 'Please enter name',
+	reset: 'Reset',
+	pleaseSelectDataToExport: "Please select the data to export first"
 };
