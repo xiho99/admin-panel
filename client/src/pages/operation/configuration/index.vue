@@ -9,52 +9,14 @@
           {{ $t('message.table.new') }}
         </el-button>
       </div>
-      <el-table :data="filterTableData" v-loading.lock="isLoading">
-        <el-table-column type="index" :label="$t('message.table.numberSign')" width="60"/>
-        <el-table-column prop="appName" :label="$t('message.appName')" min-width="120"/>
-        <el-table-column prop="key" :label="$t('message.key')" min-width="120"/>
-        <el-table-column :label="$t('message.type')" min-width="120">
-          <template #default="prop">
-            <div v-if="prop.row.type === 'image'">
-              <el-image class="w-28 h-14 rounded" :src="prop.row.value" alt="loading.."/>
-            </div>
-            <div v-else-if="prop.row.type === 'editor'">
-              <span class="truncate" v-html="prop.row.value"/>
-            </div>
-            <div v-else> {{ prop.row.value }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="sort" :label="$t('message.sort')"/>
-        <el-table-column :label="$t('message.created_at')" min-width="120">
-          <template #default="prop">
-            {{ prop.row.created_at.split('T')[0] }}
-          </template>
-        </el-table-column>
-        <el-table-column label="status" min-width="120">
-          <template #header>
-            <el-input v-model="formData.search" size="default" :placeholder="$t('message.name')"/>
-          </template>
-          <template #default="scope">
-            <el-button link type="warning" size="small" @click.prevent="onOpenEditDialog('edit', scope.row)">
-              {{ $t('message.table.edit') }}
-            </el-button>
-            <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.row)">
-              {{ $t('message.table.delete') }}
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination class="mt15"
-          v-model:current-page="formData.paginate.page"
-          v-model:page-size="formData.paginate.pageSize"
-          :page-sizes="[10, 25, 50, 75, 100]"
-          :small="true"
-          :background="true"
-          layout="sizes, prev, pager, next"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :total="formData.paginate.total"/>
-      <configurationDialog ref="openDialogRef" @refresh="getConfiguration()"/>
+      <Table
+          ref="tableRef"
+          v-bind="state.tableData"
+          class="table-demo"
+          @onSystem="onSystem"
+          @pageChange="onHandlePageChange"
+      />
+      <configurationDialog ref="openDialogRef" @refresh="getTableData()"/>
     </el-card>
   </div>
 </template>
@@ -62,18 +24,14 @@
 import useConfiguration from "/@/composables/useConfiguration";
 import { defineAsyncComponent } from "vue";
 
+const Table = defineAsyncComponent(() => import('/@/components/table/index.vue'));
 const configurationDialog = defineAsyncComponent(() => import('/@/pages/operation/configuration/dialog.vue'));
-
 const {
-  isLoading,
-  formData,
   onOpenAddDialog,
-  onOpenEditDialog,
   openDialogRef,
-  getConfiguration,
-  filterTableData,
-  deleteRow,
-  handleSizeChange,
-  handleCurrentChange
+  getTableData,
+  state,
+  onHandlePageChange,
+  onSystem,
 } = useConfiguration();
 </script>

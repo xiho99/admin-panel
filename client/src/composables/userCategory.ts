@@ -1,16 +1,11 @@
 import { onMounted, reactive } from "vue";
-import useVariable from "/@/composables/useVariables";
-import useApi from "/@/api/api";
 import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
-import { useI18n } from "vue-i18n";
 import EnumMessageType from "/@/models/enums/enumMessageType";
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
 import { ICategory } from "/@/models/ICategory";
+import useVariable from "/@/composables/useVariables";
 
 export default function userCategory() {
-	const { isLoading, openDialogRef, } = useVariable();
-	const api = useApi();
-	const { t } = useI18n();
 	const state = reactive({
 		// Header content (required, pay attention to the format)
 		tableData: {
@@ -23,13 +18,13 @@ export default function userCategory() {
 				// { key: 'updated_at', colWidth: '', title: 'message.updated_at', type: 'date', isCheck: true },
 			],
 			data: <ICategory[]>[],
-			total: 0,
 			page: {
 				page: 1,
 				pageSize: 10,
 			},
+			total: 0,
 			config: {
-				search: '',
+				keySearch: 'name',
 				isBorder: false,
 				isOperate: [
 					{
@@ -47,19 +42,7 @@ export default function userCategory() {
 			},
 		}
 	});
-	const onOpenAddDialog = (type: string) => {
-		openDialogRef.value.openDialog(type);
-	};
-	const onOpenEditDialog = (type: string, row: object) => {
-		openDialogRef.value.openDialog(type, row);
-	};
-	const onSystem = (row: object, key: string) => {
-		if (key === 'edit') {
-			onOpenEditDialog(key, row);
-		} else {
-			deleteRow(row)
-		}
-	};
+	const { t, api, openDialogRef, onOpenAddDialog, onOpenEditDialog } = useVariable();
 	const getTableData = async () => {
 		state.tableData.config.loading = true;
 		const response = await api.getCategory(state.tableData.page);
@@ -81,6 +64,13 @@ export default function userCategory() {
 			messageNotification(response.message, EnumMessageType.Error);
 		}
 	};
+	const onSystem = (row: object, key: string) => {
+		if (key === 'edit') {
+			onOpenEditDialog(key, row);
+		} else {
+			deleteRow(row)
+		}
+	};
 	const onHandlePageChange = (data: any) => {
 		state.tableData.page.pageSize = data.pageSize;
 		state.tableData.page.page = data.page;
@@ -90,7 +80,6 @@ export default function userCategory() {
 		getTableData();
 	})
 	return {
-		isLoading,
 		onOpenAddDialog,
 		onOpenEditDialog,
 		openDialogRef,

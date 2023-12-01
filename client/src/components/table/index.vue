@@ -42,6 +42,22 @@
           <el-tag type="success" v-if="scope.row[item.key]">{{ $t('message.yes') }}</el-tag>
           <el-tag type="info" v-else>{{ $t('message.no') }}</el-tag>
         </template>
+        <template v-else-if="item.type === 'any'">
+          <div v-if="scope.row[item.key] === 'image'">
+            <el-image
+                :style="{ width: `${item.width ? item.width : 120}px`, height: `${item.height ? item.height : 40}px` }"
+                :src="scope.row.value"
+                :zoom-rate="1.2"
+                :preview-src-list="[scope.row.value] as []"
+                preview-teleported
+                fit="cover"
+            />
+          </div>
+          <div v-else-if="scope.row[item.key] === 'editor'">
+            <span class="truncate" v-html="scope.row.value"/>
+          </div>
+          <div v-else> {{ scope.row.value }}</div>
+        </template>
         <template v-else>
           <div @click="item?.fun && item?.fun(scope.row)" :class="{haveFun:item?.fun}"
                :style="{color:item.keyArray ? ['blue','green','red'][scope.row[item.key]] : ''}">
@@ -261,8 +277,21 @@ const onPrintTable = () => {
       } else if (v.type === 'image') {
         tableTd[key].push(`<td class="table-th table-center"><img src="${ val[v.key] }" style="width:${ v.width }px;height:${ v.height }px;"/></td>`);
       } else if (v.type === 'date') {
-        tableTd[key].push(`<td class="table-th table-center">${ dayjs(val[v.key]).format('YYYY-MM-DD') }</td>`);
-      } else {
+        tableTd[key].push(`<td class="table-th table-center" style="width: 100px">${ dayjs(val[v.key]).format('YYYY-MM-DD') }</td>`);
+      } else if (v.type === 'any') {
+          if (val[v.key] === 'image') {
+            tableTd[key].push(`<td class="table-th table-center"> <img
+              style="width:${ v.width ? v.width : 80 }px;height:${ v.height ? v.height : 40 }px;"
+              src="${val.value}" onerror="this.onerror=null; this.src='/empty.png'"
+              zoom-rate="1.2"
+          /></td>`);
+          } else if (val[v.key] === 'editor') {
+            tableTd[key].push(`<td class="table-th table-center"><span v-html="${val.value}"></span></td>`);
+          } else {
+            tableTd[key].push(`<td class="table-th table-center">${val.value}</td>`);
+          }
+      }
+      else {
         tableTd[key].push(`<td class="table-th table-center">${ val[v.key] }</td>`);
       }
     });
@@ -277,7 +306,7 @@ const onPrintTable = () => {
   });
 };
 // Export
-const onImportTable = () => {
+const onImportTable = async () => {
   if (state.selectList.length <= 0) return ElMessage.warning(t('message.pleaseSelectDataToExport'));
   let data: [] = [];
   props.header?.forEach(e => {
@@ -289,7 +318,7 @@ const onImportTable = () => {
   const stateValue = state.selectList.map(item => {
     return { ...item, created_at: dayjs(item.created_at).format('YYYY-MM-DD') };
   });
-  table2excel(data, stateValue, `${ themeConfig.value.globalTitle } ${ new Date().toLocaleString() }`);
+   table2excel(data, stateValue, `${ themeConfig.value.globalTitle } ${ new Date().toLocaleString() }`);
 };
 // refresh
 const onRefreshTable = () => {
@@ -318,7 +347,7 @@ const filterTableData = computed(() =>
     props.data.filter(
         (data) =>
             !state.search ||
-            data.name.toLowerCase().includes(state.search.toLowerCase())
+            data[props.config.keySearch].toLowerCase().includes(state.search.toLowerCase())
     ),
 );
 
