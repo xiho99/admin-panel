@@ -32,8 +32,8 @@
         </template>
         <template v-else-if="item.type === 'switch'">
           <el-switch @change="item?.fun && item?.fun(scope.row,$event)" v-model="scope.row[item.key]" inline-prompt
-                     :active-text="item.activeText || '是'" :inactive-text="item.activeText || '否'"
-                     :active-value="item.activeValue || 1" :inactive-value="item.inactiveValue || 0"></el-switch>
+                     :active-text="item.activeText || $t('message.yes')" :inactive-text="item.activeText || $t('message.no')"
+                     :active-value="!item.activeValue || 0" :inactive-value="item.inactiveValue || 1"></el-switch>
         </template>
         <template v-else-if="item.type === 'date'">
           <div v-if="scope.row[item.key]">{{ dayjs(scope.row[item.key]).format('YYYY-MM-DD') }}</div>
