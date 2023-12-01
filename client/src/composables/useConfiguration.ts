@@ -57,7 +57,7 @@ export default function useConfiguration() {
         state.tableData.config.loading = false;
     };
     const deleteRow = async (row: Object) => {
-        const response = await api.deleteCategory(row)
+        const response = await api.deleteConfiguration(row)
         if (response.code === EnumApiErrorCode.success) {
             messageNotification(t('message.success'), EnumMessageType.Success);
             getTableData();

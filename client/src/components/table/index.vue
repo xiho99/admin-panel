@@ -42,6 +42,14 @@
           <el-tag type="success" v-if="scope.row[item.key]">{{ $t('message.yes') }}</el-tag>
           <el-tag type="info" v-else>{{ $t('message.no') }}</el-tag>
         </template>
+        <template v-else-if="item.type === 'color'">
+          <span :style="{ color: scope.row.color }">
+                {{ scope.row.color }}
+          </span>
+        </template>
+        <template v-else-if="item.type === 'link'">
+          <el-link type="primary" :underline="false"> {{ scope.row.link }}</el-link>
+        </template>
         <template v-else-if="item.type === 'any'">
           <div v-if="scope.row[item.key] === 'image'">
             <el-image
