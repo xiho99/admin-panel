@@ -1,78 +1,90 @@
 import { onMounted, reactive } from "vue";
 import useVariable from "/@/composables/useVariables";
-import useApi from "/@/api/api";
 import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
 import { IAds } from "/@/models/IAds";
-import messageBoxHelper from "/@/libraries/elementUiHelpers/messageBoxHelper";
-import { useI18n } from "vue-i18n";
 import EnumMessageType from "/@/models/enums/enumMessageType";
 import { messageNotification } from "/@/libraries/elementUiHelpers/notificationHelper";
 export default function useAdvertisement() {
-    const api = useApi();
-    const { isLoading, openDialogRef, } = useVariable();
-    const { t } = useI18n();
-    const formData = reactive({
-        data: <IAds[]>[],
-        search: '',
-        id: 0,
-        paginate: {
-            page: 1,
-            pageSize: 10,
+    const state = reactive({
+        // Header content (required, pay attention to the format)
+        tableData: {
+            header: [
+                { key: 'image', colWidth: '', title: 'message.image', width: 140, height: 40, type: 'image', isCheck: true, },
+                { key: 'is_visible', colWidth: '', title: 'message.is_visible', type: 'tag', isCheck: true },
+                { key: 'sort', colWidth: '', title: 'message.sort', type: 'text', isCheck: true },
+                { key: 'created_at', colWidth: '', title: 'message.created_at', type: 'date', isCheck: true },
+                // { key: 'updated_at', colWidth: '', title: 'message.updated_at', type: 'date', isCheck: true },
+            ],
+            data: <IAds[]>[],
+            page: {
+                page: 1,
+                pageSize: 10,
+            },
             total: 0,
-        },
+            config: {
+                keySearch: 'name',
+                isBorder: false,
+                isOperate: [
+                    {
+                        label: 'message.table.edit',
+                        key: 'edit',
+                    },
+                    {
+                        label: 'message.table.delete',
+                        key: 'delete',
+                        type: 'tip',
+                        tipTitle: 'message.areYouSure',
+                    }
+                ],
+                loading: false,
+            },
+        }
     });
-    const onOpenAddDialog = (type: string) => {
-        openDialogRef.value.openDialog(type);
-    };
-    const onOpenEditDialog = (type: string, row: object) => {
-        openDialogRef.value.openDialog(type, row);
-    };
-    const getAds = async () => {
-        isLoading.value = true;
-        const response = await api.getAds(formData.paginate);
+    const { t, api, openDialogRef, onOpenAddDialog, onOpenEditDialog } = useVariable();
+    const getTableData = async () => {
+        state.tableData.config.loading = true;
+        const response = await api.getAds(state.tableData.page);
         if (response.code !== EnumApiErrorCode.success) {
             // eslint-disable-next-line no-console
             console.log(response);
         } else {
-            formData.data = response.data.data;
-            formData.paginate.total = response.data.total;
+            state.tableData.data = response.data.data;
+            state.tableData.total = response.data.total;
         }
-        isLoading.value = false;
+        state.tableData.config.loading = false;
     };
-    const deleteProcess = async () => {
-        const request = {
-            id: formData.id
-        }
-        const response = await api.deleteAds(request)
+    const deleteRow = async (row: Object) => {
+        const response = await api.deleteAds(row)
         if (response.code === EnumApiErrorCode.success) {
             messageNotification(t('message.success'), EnumMessageType.Success);
-            getAds();
+            getTableData();
+        } else {
+            messageNotification(response.message, EnumMessageType.Error);
         }
     };
-    const deleteRow = (id: number) => {
-        formData.id = id
-        messageBoxHelper.confirm(EnumMessageType.Warning, deleteProcess, t('message.areYouSure', t('message.yes')))
+    const onSystem = (row: object, key: string) => {
+        if (key === 'edit') {
+            onOpenEditDialog(key, row);
+        } else {
+            deleteRow(row)
+        }
     };
-    const handleCurrentChange = (val: number) => {
-        formData.paginate.page = val;
-        getAds();
-    }
-    const handleSizeChange = (val: number) => {
-        formData.paginate.pageSize = val;
-        getAds();
-    }
+    const onHandlePageChange = (data: any) => {
+        state.tableData.page.pageSize = data.pageSize;
+        state.tableData.page.page = data.page;
+        getTableData();
+    };
     onMounted(() => {
-        getAds();
+        getTableData();
     })
     return {
-        isLoading,
         onOpenAddDialog,
         onOpenEditDialog,
         openDialogRef,
-        formData,
-        getAds,
+        state,
+        getTableData,
         deleteRow,
-        handleSizeChange,
-        handleCurrentChange,
+        onHandlePageChange,
+        onSystem,
     }
 }
