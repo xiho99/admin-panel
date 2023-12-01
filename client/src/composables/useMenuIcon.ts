@@ -10,7 +10,7 @@ export default function useMenuIcon() {
 		// Header content (required, pay attention to the format)
 		tableData: {
 			header: [
-				{ key: 'image', colWidth: '', title: 'message.image', width: 80, height: 40, type: 'image', isCheck: true, },
+				{ key: 'image', colWidth: '', title: 'message.image', width: 60, height: 60, type: 'image', isCheck: true, },
 				{ key: 'name', colWidth: '', title: 'message.name', type: 'text', isCheck: true },
 				{ key: 'link', colWidth: '', title: 'message.router.link', type: 'link', isCheck: true },
 				{ key: 'sort', colWidth: '', title: 'message.sort', type: 'number', isCheck: true },
