@@ -20,14 +20,14 @@ import { Plus } from '@element-plus/icons-vue'
 const props = defineProps({
   limit: {
     type: Number,
-    default: 1
+    default: () => 1,
   },
   getFileStr: {
     type: String,
-    defautl: () => ''
+    default: () => '',
   }
 })
-// 定义子组件向父组件传值/事件
+// Define child components to pass values/events to parent components
 const emit = defineEmits(['update:getFileStr']);
 const state = reactive({
   fileList: [],
@@ -45,7 +45,7 @@ onMounted(() => {
     })
   }
 })
-// 内容发生改变
+// content changed
 watch(() => state.fileList, (e) => {
   let imgStr: any[] = [];
   e.forEach(e => {
