@@ -5,19 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
-use Intervention\Image\Facades\Image;
-
 class UploadController extends Controller
 {
     public function upload(Request $request): Response
     {
         // Validation rules
         $rules = [
-            'file' => 'required|file|max:512000', // 1MB 最大文件大小
+            'file' => 'required|file|max:1024', // 2MB Maximum file size
         ];
-
         $messages = [
-            'file.max' => 'File size cannot exceed 1MB。',
+            'file.max' => 'File size cannot exceed 2MB。',
             'file.required' => 'Please upload files。',
             'file.file' => 'Invalid file。',
         ];
@@ -32,11 +29,10 @@ class UploadController extends Controller
                 'version' => env('_VERSION')
             ]);
         }
-
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             // Verify file type
-            $allowedTypes = ['jpeg', 'jpg', 'png', 'gif', 'mp4', 'mov']; // 允许的文件类型
+            $allowedTypes = ['jpeg', 'jpg', 'png', 'gif', 'mp4', 'mov']; // Allowed file types
             $fileType = $file->getClientOriginalExtension();
             if (!in_array($fileType, $allowedTypes)) {
                 return Response([

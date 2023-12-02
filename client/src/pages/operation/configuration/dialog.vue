@@ -40,7 +40,7 @@
         <el-form-item prop="value" :label="configuration.type? $t('message.value') : null"
                       v-if="configuration.type !== 'editor'">
           <div v-if="configuration.type === 'image'">
-            <uploadFile  v-model:get-file-str="configuration.value"/>
+            <uploadFile v-model:get-file-str="configuration.value"/>
           </div>
           <div v-if="configuration.type === 'colorPicker'">
             <el-color-picker v-model="configuration.value"/>

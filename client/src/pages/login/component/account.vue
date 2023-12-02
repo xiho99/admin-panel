@@ -79,9 +79,9 @@ const router = useRouter();
 const state = reactive({
 	isShowPassword: false,
 	ruleForm: {
-    userName: '',
-		password: '',
-		code: '',
+    userName: import.meta.env.MODE == 'development' ? 'admin' : '',
+		password: import.meta.env.MODE == 'development' ? '1234qwer' : '',
+		code: import.meta.env.MODE == 'development' ? '1234' : '',
 	},
 	loading: {
 		signIn: false,

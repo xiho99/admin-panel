@@ -15,7 +15,8 @@
 
 <script setup lang="ts" name="uploadFile">
 import { onMounted, reactive, ref, watch } from 'vue';
-import { Plus } from '@element-plus/icons-vue'
+import { Plus } from '@element-plus/icons-vue';
+import type { UploadProps } from 'element-plus'
 
 const props = defineProps({
   limit: {
@@ -32,10 +33,12 @@ const emit = defineEmits(['update:getFileStr']);
 const state = reactive({
   fileList: [],
 })
-const uploadSuccess = (e: any) => {
-  // state.fileList[0] = {url:e.data.url,name:'a.jpg'};
+const uploadSuccess: UploadProps['onSuccess'] = (
+    response,
+    uploadFile,
+) => {
   // eslint-disable-next-line no-console
-  console.log(e);
+  console.log(response);
 }
 onMounted(() => {
   if (props.getFileStr) {

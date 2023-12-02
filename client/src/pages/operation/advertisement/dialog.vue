@@ -24,7 +24,7 @@
           />
         </el-form-item>
         <el-form-item :label="$t('message.image')">
-          <uploadFile  v-model:get-file-str="formData.image"/>
+          <uploadFile v-model:get-file-str="formData.image"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -38,7 +38,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineAsyncComponent, reactive } from "vue";
+import { ref, defineAsyncComponent, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import formHelper, { IRule } from "/@/libraries/elementUiHelpers/formHelper";
 import useVariable from "/@/composables/useVariables";
@@ -50,8 +50,9 @@ import { IAds } from "/@/models/IAds";
 import { Hide, View } from '@element-plus/icons-vue'
 
 const uploadFile = defineAsyncComponent(() => import('/@/components/uploadFile/index.vue'));
+// const uploadFile = defineAsyncComponent(() => import('/@/components/uploadFile/index.vue'));
 const api = useApi();
-const { isProcessing, ruleFormRef } = useVariable();
+const { isProcessing, ruleFormRef, renderFunc } = useVariable();
 const { t } = useI18n();
 const formData = reactive({
   id: null,
@@ -98,9 +99,13 @@ const openDialog = async (type: string, row: IAds) => {
   formDialog.type = type;
   formDialog.isShowDialog = true;
 };
-
 const submitProcess = async () => {
-  isProcessing.value = true;
+  // isProcessing.value = true;
+  let file = null;
+  await new Promise<void>(resolve => {
+    resolve(renderFunc.value.renderFile().then((value: string) => file = value));
+  });
+  return console.log(file);
   try {
     const request = {
       id: formData.id,

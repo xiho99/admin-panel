@@ -29,22 +29,6 @@
           </div>
         </el-form-item>
         <el-form-item :label="$t('message.image')">
-<!--          <el-upload-->
-<!--              v-model:file-list="fileList"-->
-<!--              ref="upload"-->
-<!--              action="#"-->
-<!--              :auto-upload="false"-->
-<!--              :on-exceed="handleExceed"-->
-<!--              :on-remove="handleRemove"-->
-<!--              :on-change="handleChange"-->
-<!--              list-type="picture-card"-->
-<!--              accept=".jpeg,.jpg,.png,.gif,.GIF,image/jpeg,image/png"-->
-<!--              :limit="1"-->
-<!--          >-->
-<!--            <el-icon>-->
-<!--              <ele-Upload/>-->
-<!--            </el-icon>-->
-<!--          </el-upload>-->
           <uploadFile v-model:get-file-str="formData.image" />
         </el-form-item>
       </el-form>

@@ -56,7 +56,7 @@ import { IMenu } from "/@/models/IMenu";
 import { Hide, View } from '@element-plus/icons-vue'
 
 const api = useApi();
-const { isProcessing, ruleFormRef, fileList } = useVariable();
+const { isProcessing, ruleFormRef } = useVariable();
 const { t } = useI18n();
 const formData = reactive({
   id: 0,
@@ -91,9 +91,6 @@ const rules: Record<string, IRule> = ({
 });
 const openDialog = async (type: string, row: IMenu) => {
   if (type === 'edit') {
-    fileList.value = [];
-    // 模拟数据，实际请走接口
-    fileList.value.push({ name: row.name, url: row.image });
     Object.assign(formData, row);
     formDialog.title = t('message.table.edit');
     formDialog.submit = t('message.table.submit');

@@ -34,7 +34,6 @@ interface IFiles {
     uid: number,
     url: string,
 }
-const file = ref();
 const files = ref<any>([]);
 const renderFiles = async () => {
     files.value = files.value.filter((item: any) => item !== undefined);
@@ -44,18 +43,23 @@ const renderFiles = async () => {
             /* Make sure file exists */
             if (!files.value) return;
             /* create a reader */
-            const readData = (f: File) => new Promise((resolve) => {
+            const readData = (f: File, ext = 'png') => new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onloadend = () => resolve(reader.result);
                 reader.readAsDataURL(f);
+            }).then((dataURL: any) => {
+                return dataURL.replace(/^data:image\/(png|jpg|jpeg|gif);base64,/, `data:image/${ext};base64,`);
             });
             /* Read data */
-            const data = await readData(compressedFiles);
-            files.value[i] = data;
+            return readData(compressedFiles);
         }
     } catch (error) {
         console.log(error);
     }
+};
+const file = ref();
+const handleChange: UploadProps['onChange'] = async (uploadFile) =>  {
+    file.value = uploadFile.raw;
 };
 const renderFile = async () => {
     try {
@@ -63,30 +67,19 @@ const renderFile = async () => {
         /* Make sure file exists */
         if (!file.value) return;
         /* create a reader */
-        const readData = (f: File, extension = 'png') =>  new Promise((resolve) => {
+        const readData = (f: File, ext = 'png') =>  new Promise((resolve) => {
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result);
             reader.readAsDataURL(f);
         }).then((dataURL: any) => {
-            return dataURL.replace(/^data:image\/(png|jpg|jpeg|gif);base64,/, `data:image/${extension};base64,`);
+            return dataURL.replace(/^data:image\/(png|jpg|jpeg|gif);base64,/, `data:image/${ext};base64,`);
         });
-        // const readData = (f: File) =>  new Promise((resolve) => {
-        //     const reader = new FileReader();
-        //     reader.onloadend = () => resolve(reader.result);
-        //     reader.readAsDataURL(f);
-        //
-        // });
         /* Read data */
-        const data = await readData(compressedFile, file.value.type.split('/')[1]);
-        file.value = data;
-
+        return readData(compressedFile, file.value.type.split('/')[1]);
     } catch (error) {
         console.log(error);
     }
 }
-const handleChange: UploadProps['onChange'] = async (uploadFile) =>  {
-    file.value = uploadFile.raw;
-};
 const multiChange: UploadProps['onChange'] = async (uploadFile, uploadFiles) =>  {
     files.value = uploadFiles.map((item) => item.raw);
 };
@@ -114,12 +107,11 @@ const handlePreview: UploadProps['onPreview'] = (uploadFile) => {
 }
 // const fileUpload = ref<any>()
 const imageProcessing = ref(false);
-
+const fileList = ref([]);
 export default {
     handlePreview,
     handleExceed,
     handleRemove,
-    file,
     upload,
     imageName,
     imageProcessing,
@@ -130,4 +122,5 @@ export default {
     renderFile,
     preview,
     fileForRemove,
+    fileList,
 };

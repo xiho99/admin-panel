@@ -22,6 +22,7 @@ const useVariable = () => {
         openDialogRef.value.openDialog(type, row);
     };
     const fileList = ref([]);
+    const renderFunc = ref();
     return {
         t,
         isLoading,
@@ -34,6 +35,7 @@ const useVariable = () => {
         onOpenAddDialog,
         onOpenEditDialog,
         api,
+        renderFunc,
     };
 };
 
