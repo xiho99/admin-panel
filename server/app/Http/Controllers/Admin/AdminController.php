@@ -67,12 +67,11 @@ class AdminController extends BaseController
 //            DB::enableQueryLog();
 //            $queryLog = DB::getQueryLog();
             $data = AdminUser::getListData($where, ['*'], $page, $pageSize, 'created_at desc');
-
             return $this->success($data);
         }
         $where = [];
         if ($name) {
-            $where[] = ['name', 'like', "%{$name}%"];
+            $where[] = ['userName', 'like', "%{$name}%"];
         }
 
         $data = AdminUser::pageList($where, '*', $page, $pageSize);

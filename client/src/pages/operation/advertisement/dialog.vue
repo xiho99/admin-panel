@@ -29,7 +29,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="onSubmit(ruleFormRef)" :loading="isProcessing">
+          <el-button type="primary" @click="onSubmit(ruleFormRef)" :loading="isLoading">
             {{ $t(formDialog.submit) }}
           </el-button>
         </div>
@@ -38,7 +38,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, defineAsyncComponent, reactive } from "vue";
+import { defineAsyncComponent, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import formHelper, { IRule } from "/@/libraries/elementUiHelpers/formHelper";
 import useVariable from "/@/composables/useVariables";
@@ -52,7 +52,7 @@ import { Hide, View } from '@element-plus/icons-vue'
 const uploadFile = defineAsyncComponent(() => import('/@/components/uploadFile/index.vue'));
 // const uploadFile = defineAsyncComponent(() => import('/@/components/uploadFile/index.vue'));
 const api = useApi();
-const { isProcessing, ruleFormRef, renderFunc } = useVariable();
+const { isLoading, ruleFormRef } = useVariable();
 const { t } = useI18n();
 const formData = reactive({
   id: null,
@@ -100,12 +100,7 @@ const openDialog = async (type: string, row: IAds) => {
   formDialog.isShowDialog = true;
 };
 const submitProcess = async () => {
-  // isProcessing.value = true;
-  let file = null;
-  await new Promise<void>(resolve => {
-    resolve(renderFunc.value.renderFile().then((value: string) => file = value));
-  });
-  return console.log(file);
+  isLoading.value = true;
   try {
     const request = {
       id: formData.id,
@@ -128,7 +123,7 @@ const submitProcess = async () => {
   } catch (e) {
     //TODO handle the exception
   }
-  isProcessing.value = false;
+  isLoading.value = false;
 };
 
 const adsRules = formHelper.getRules(rules);

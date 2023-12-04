@@ -270,6 +270,7 @@ export default {
 	disabled: "残疾人",
 	buttonColor: "按钮颜色",
 	color: "颜色",
+	hint: "暗示",
 	fail: "失败!",
 	youHaveBeenLogOut: "您已退出，请重新登录！",
 	category: '类别',
@@ -356,5 +357,7 @@ export default {
 	cannotBeEmpty: '不能为空',
 	pleaseEnterName: '请输入姓名',
 	reset: "重置",
-	pleaseSelectDataToExport: "请先选择要导出的数据"
+	pleaseSelectDataToExport: "请先选择要导出的数据",
+	thisActionWillPermanentlyDeleteTheAccountName: '此操作将永久删除帐户名',
+	whetherToContinue: '是否继续？',
 };

@@ -9,7 +9,7 @@ export default function useAdvertisement() {
         // Header content (required, pay attention to the format)
         tableData: {
             header: [
-                { key: 'image', colWidth: '', title: 'message.image', width: 140, height: 40, type: 'image', isCheck: true, },
+                { key: 'image', colWidth: '', title: 'message.image',  width: 250, height: 50, type: 'image', isCheck: true, },
                 { key: 'is_visible', colWidth: '', title: 'message.is_visible', type: 'tag', isCheck: true },
                 { key: 'sort', colWidth: '', title: 'message.sort', type: 'text', isCheck: true },
                 { key: 'created_at', colWidth: '', title: 'message.created_at', type: 'date', isCheck: true },

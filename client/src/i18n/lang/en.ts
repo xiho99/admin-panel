@@ -357,5 +357,7 @@ export default {
 	cannotBeEmpty: 'Can not be empty',
 	pleaseEnterName: 'Please enter name',
 	reset: 'Reset',
-	pleaseSelectDataToExport: "Please select the data to export first"
+	pleaseSelectDataToExport: "Please select the data to export first",
+	thisActionWillPermanentlyDeleteTheAccountName: 'This action will permanently delete the account name',
+	whetherToContinue: "Whether to continue?",
 };

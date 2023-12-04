@@ -11,10 +11,10 @@ class UploadController extends Controller
     {
         // Validation rules
         $rules = [
-            'file' => 'required|file|max:1024', // 2MB Maximum file size
+            'file' => 'required|file|max:1024000', // 4MB Maximum file size
         ];
         $messages = [
-            'file.max' => 'File size cannot exceed 2MB。',
+            'file.max' => 'File size cannot exceed 4MB。',
             'file.required' => 'Please upload files。',
             'file.file' => 'Invalid file。',
         ];

@@ -2,8 +2,8 @@
   <div class="system-user-container layout-padding">
     <el-card shadow="hover" class="layout-padding-auto">
       <div class="system-user-search mb15">
-        <el-input size="default" v-model="state.tableData.search" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"> </el-input>
-        <el-button size="default" type="primary" class="ml10">
+        <el-input size="default" v-model="state.tableData.param.name" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"> </el-input>
+        <el-button size="default" type="primary" class="ml10" @click="getTableData">
           <el-icon>
             <ele-Search/>
           </el-icon>
@@ -92,8 +92,8 @@ const state = reactive({
     data: [],
     total: 0,
     loading: false,
-    search: '',
     param: {
+      name: '',
       pageNum: 1,
       pageSize: 10,
     },
@@ -121,7 +121,7 @@ const onOpenEditUser = (type: string, row: RowUserType) => {
 };
 // 删除用户
 const onRowDel = (row: RowUserType) => {
-  ElMessageBox.confirm(`此操作将永久删除账户名称：“${row?.userName}”，是否继续?`, '提示', {
+  ElMessageBox.confirm(`${t('message.thisActionWillPermanentlyDeleteTheAccountName')}：“${row?.userName}”，${t('message.whetherToContinue')}`, t('message.hint'), {
     confirmButtonText: t('message.yes'),
     cancelButtonText: t('message.no'),
     type: 'warning',
