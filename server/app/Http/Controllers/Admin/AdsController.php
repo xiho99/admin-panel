@@ -31,9 +31,8 @@ class AdsController extends BaseController
             return $this->error('Missing required fields');
         }
         if(isset($data['id']) && $data['id'] || !Ads::getInfo([['id' , '=' , $data['id'] ] ])){
-            $self = Ads::getInfo(['id' => $data['id']]);
             $info = Ads::getInfo([['title' , '=' , $data['title'] ] ]);
-            if($info && $info['id'] != $self['id']) {
+            if($info && $info['id'] != $data['id']) {
                 return $this->error('Cannot add name with same name');
             }
         }

@@ -61,7 +61,6 @@
 <script setup lang="ts" name="systemUserDialog">
 	import { reactive, ref } from 'vue';
 	import { saveAdmin } from '/@/api/admin';
-	import { getAllRole } from '/@/api/role';
 	import { ElMessage } from 'element-plus';
   import { useI18n } from "vue-i18n";
   import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";

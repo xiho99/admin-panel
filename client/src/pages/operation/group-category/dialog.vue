@@ -1,6 +1,7 @@
 <template>
   <div class="system-user-dialog-container">
     <el-dialog @close="resetFields" destroy-on-close v-model="formDialog.isShowDialog" :title="formDialog.title">
+      {{ formData }}
       <el-form :label-position="'top'"
                ref="ruleFormRef"
                :model="formData"
@@ -92,6 +93,7 @@ const resetFields = () => {
   formData.image = '';
   formData.sort = 0;
   formData.is_visible = true;
+  fileList.value = [];
 }
 const rules: Record<string, IRule> = ({
   name: { required: true },
@@ -103,10 +105,9 @@ const rules: Record<string, IRule> = ({
 const openDialog = async (type: string, row: IGroup) => {
   if (type === 'edit') {
     // 模拟数据，实际请走接口
-    fileList.value = [];
+    // fileList.value = [];
     fileList.value.push({ name: row.name, url: row.image });
     Object.assign(formData, row)
-    formData.image = ''
     formDialog.title = t('message.table.edit');
     formDialog.submit = t('message.table.submit');
   } else {
@@ -118,10 +119,9 @@ const openDialog = async (type: string, row: IGroup) => {
 };
 
 const submitProcess = async () => {
-  // isProcessing.value = true;
-  let file = null;
+  isProcessing.value = true;
   await new Promise<void>(resolve => {
-    resolve(renderFunc.value.renderFile().then((value: string) => file = value));
+    resolve(renderFunc.value.renderFile().then((value: string) => formData.image = value));
   });
   try {
     const request = {
@@ -129,7 +129,7 @@ const submitProcess = async () => {
       cat_id: formData.cat_id,
       name: formData.name,
       link: formData.link,
-      image: file,
+      image: formData.image ?? '',
       sort: formData.sort,
       is_visible: formData.is_visible,
     };

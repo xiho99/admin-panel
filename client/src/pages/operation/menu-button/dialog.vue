@@ -114,7 +114,9 @@ const submitProcess = async () => {
       sort: formData.sort,
     };
     const response = await api.addMenuButton(request);
-    if (response.code === EnumApiErrorCode.success) {
+    if (response.code !== EnumApiErrorCode.success) {
+      messageNotification(t(response.message), EnumMessageType.Error);
+    } else {
       messageNotification(t('message.success'), EnumMessageType.Success);
       resetFields();
       formDialog.isShowDialog = false;

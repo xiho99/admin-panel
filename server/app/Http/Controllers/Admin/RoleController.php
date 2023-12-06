@@ -42,7 +42,7 @@ class RoleController extends BaseController
         if($name){
             $where[] = ['roleName' , 'like',"%{$name}%"];
         }
-        $data = Role::getListData($where,'*',$page,$pageSize);
+        $data = Role::getListData($where, ['*'],$page,$pageSize);
 
         return $this->success($data);
     }

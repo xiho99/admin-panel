@@ -26,13 +26,12 @@ class MenuIconController extends BaseController
         if($fail){
             return $this->error('Missing required fields');
         }
-        if(isset($data['id']) && $data['id'] || !MenuIcon::getInfo([['id' , '=' , $data['id'] ] ])){
-            $self = MenuIcon::getInfo(['id' => $data['id']]);
-            $info = MenuIcon::getInfo([['name' , '=' , $data['name'] ] ]);
-            if($info && $info['id'] != $self['id']) {
-                return $this->error('Name already exist!');
-            }
-        }
+//        if(isset($data['id']) && $data['id'] || !MenuIcon::getInfo([['id' , '=' , $data['id'] ] ])){
+//            $info = MenuIcon::getInfo([['name' , '=' , $data['name'] ] ]);
+//            if($info && $info['id'] != $data['id']) {
+//                return $this->error('Name already exist!');
+//            }
+//        }
         $from = [
             'id' => $data['id'] ?? null,
             'name' => $data['name'],
