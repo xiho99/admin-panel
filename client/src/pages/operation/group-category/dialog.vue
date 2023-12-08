@@ -1,7 +1,6 @@
 <template>
   <div class="system-user-dialog-container">
     <el-dialog @close="resetFields" destroy-on-close v-model="formDialog.isShowDialog" :title="formDialog.title">
-      {{ formData }}
       <el-form :label-position="'top'"
                ref="ruleFormRef"
                :model="formData"
