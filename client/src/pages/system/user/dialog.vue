@@ -1,47 +1,47 @@
 <template>
 	<div class="system-user-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
-			<el-form ref="userDialogFormRef" :model="state.ruleForm" size="default" label-width="90px">
+		<el-dialog @close="resetFields" destroy-on-close :title="state.dialog.title" v-model="state.dialog.isShowDialog" >
+			<el-form ref="userDialogFormRef" :model="state.ruleForm" size="default" label-width="140px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="账户名称">
-							<el-input v-model="state.ruleForm.username" placeholder="请输入账户名称" clearable></el-input>
+						<el-form-item :label="$t('message.table.accountName')">
+							<el-input v-model="state.ruleForm.userName" :placeholder="$t('message.pleaseEnterAccountName')" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="用户昵称">
-							<el-input v-model="state.ruleForm.nickname" placeholder="请输入用户昵称" clearable></el-input>
+						<el-form-item :label="$t('message.userNickname')">
+							<el-input v-model="state.ruleForm.nickname" :placeholder="$t('message.pleaseEnterUserNickname')" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="关联角色">
-							<el-select v-model="state.ruleForm.role_ids" multiple placeholder="请选择" clearable
+						<el-form-item :label="$t('message.associatedRoles')">
+							<el-select v-model="state.ruleForm.role_ids" multiple :placeholder="$t('message.pleaseChoose')" clearable
 								class="w100">
-								<el-option v-for="ite in state.roleList" :label="ite.roleName" :value="ite.id+''"></el-option>
+								<el-option v-for="(ite, index) in state.roleList" :key="index" :label="$t(`message.${ite.roleName}`)" :value="ite.id+''"/>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="账户密码">
-							<el-input v-model="state.ruleForm.password" placeholder="请输入" type="password"
+						<el-form-item :label="$t('message.accountPassword')">
+							<el-input v-model="state.ruleForm.password" :placeholder="$t('message.pleaseEnter')" type="password"
 								clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="账户过期">
-							<el-date-picker v-model="state.ruleForm.overdueTime" type="date" placeholder="请选择"
+						<el-form-item :label="$t('message.accountExpired')">
+							<el-date-picker v-model="state.ruleForm.overdueTime" type="date" :placeholder="$t('message.pleaseChoose')"
 								class="w100"> </el-date-picker>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="用户状态">
-							<el-switch v-model="state.ruleForm.status" inline-prompt active-text="启"
-								inactive-text="禁"></el-switch>
+						<el-form-item :label="$t('message.userStatus')">
+							<el-switch v-model="state.ruleForm.status" inline-prompt :active-text="$t('message.start')"
+								:inactive-text="$t('message.ban')"></el-switch>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="用户描述">
-							<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入用户描述"
+						<el-form-item :label="$t('message.userDescription')">
+							<el-input v-model="state.ruleForm.describe" type="textarea" :placeholder="$t('message.pleaseEnterUserDescription')"
 								maxlength="150"></el-input>
 						</el-form-item>
 					</el-col>
@@ -49,7 +49,7 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default" :loading="state.dialog.loading">取 消</el-button>
+					<el-button @click="onCancel" size="default" :loading="state.dialog.loading">{{ $t('message.cancel') }}</el-button>
 					<el-button type="primary" @click="onSubmit" size="default"
 						:loading="state.dialog.loading">{{ state.dialog.submitTxt }}</el-button>
 				</span>
@@ -61,12 +61,14 @@
 <script setup lang="ts" name="systemUserDialog">
 	import { reactive, ref } from 'vue';
 	import { saveAdmin } from '/@/api/admin';
-	import { getAllRole } from '/@/api/role';
-	import { ElMessageBox, ElMessage } from 'element-plus';
+	import { ElMessage } from 'element-plus';
+  import { useI18n } from "vue-i18n";
+  import EnumApiErrorCode from "/@/models/enums/enumApiErrorCode";
+  import { Session } from "/@/utils/storage";
 
 	// 定义子组件向父组件传值/事件
 	const emit = defineEmits(['refresh']);
-
+  const { t } = useI18n();
 	// 定义变量内容
 	const userDialogFormRef = ref();
 	const state = reactive({
@@ -88,19 +90,28 @@
 		},
 		roleList: {},
 	});
+  const resetFields = () => {
+    state.ruleForm.userName = '';
+    state.ruleForm.userNickname = '';
+    state.ruleForm.role_ids = [];
+    state.ruleForm.password = '';
+    state.ruleForm.overdueTime = '';
+    state.ruleForm.status = true;
+    state.ruleForm.describe = '';
+  };
 
-	// 打开弹窗
-	const openDialog = async (type : string, row : RowUserType) => {
-		let rows = await getAllRole();
-		state.roleList = rows.data || {};
+	const openDialog = async (type : string, row?: RowUserType, roleList?: any) => {
+    // todo: assign role list
+    Object.assign(state.roleList, roleList || {});
 		if (type === 'edit') {
 			state.ruleForm = JSON.parse(JSON.stringify(row));
 			state.ruleForm.role_ids = state.ruleForm.role_ids?.split(',');
-			state.dialog.title = '修改用户';
-			state.dialog.submitTxt = '修 改';
+			state.dialog.title = t('message.editUser');
+			state.dialog.submitTxt = t('message.submit');
 		} else {
-			state.dialog.title = '新增用户';
-			state.dialog.submitTxt = '新 增';
+			state.dialog.title = t('message.newUser');
+			state.dialog.submitTxt = t('message.submit');
+      state.ruleForm['p_id'] = Session.get('userId')
 			// 清空表单，此项需加表单验证才能使用
 			// nextTick(() => {
 			// 	userDialogFormRef.value.resetFields();
@@ -120,15 +131,20 @@
 	const onSubmit = async () => {
 		state.dialog.loading = true;
 		closeDialog();
-		emit('refresh');
 		try{
-		let form = JSON.parse(JSON.stringify(state.ruleForm));
-		form.role_ids = form.role_ids?.join(',');
-		await saveAdmin(form);
-		ElMessage.success('操作成功');
+      let form = JSON.parse(JSON.stringify(state.ruleForm));
+      form.role_ids = form.role_ids?.join(',');
+      const response = await saveAdmin(form);
+      if (response.code !== EnumApiErrorCode.success) {
+        ElMessage.error(response.message);
+      } else {
+        ElMessage.success(t('message.success'));
+      }
+      resetFields();
 		}catch(e){
 			//TODO handle the exception
 		}
+    emit('refresh');
 		state.dialog.loading = false;
 		// if (state.dialog.type === 'add') { }
 	};

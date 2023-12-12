@@ -8,8 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Menu extends BaseModel
 {
     use HasFactory;
-    protected $fillable = ['menuSuperior','menuSuperiorPath' , 'menuType', 'name', 'component', 'isLink', 'menuSort', 'redirect', 'path', 'meta','is_parent'];
-    protected $rules = [
+    protected $fillable = [
+        'menuSuperior',
+        'menuSuperiorPath' ,
+        'menuType',
+        'name',
+        'component',
+        'isLink',
+        'menuSort',
+        'redirect',
+        'path',
+        'meta',
+        'is_parent',
+        'operation',
+    ];
+   protected $rules = [
         'name' => 'required',
         'path' => 'required',
         'meta' => 'required',

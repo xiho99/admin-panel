@@ -73,7 +73,7 @@ class BaseModel extends Model
                         });
                         break;
                     default:
-                        $objQuery->where($column, $operator, $value);
+                        $objQuery->where($column, $operator, $value, $w);
                         break;
                     // 添加更多操作符的处理
                 }
@@ -127,7 +127,7 @@ class BaseModel extends Model
             $result = Redis::get('Table-'.$model->table.'Redis:'.json_encode([$condition,$join,$field]));
             if ($result) {
                 // 如果缓存中有数据，直接返回它
-                return json_decode($result ,true);
+//                return json_decode($result ,true);
             }
         }
         $objQuery = self::query(); // 创建一个查询构建器
@@ -168,19 +168,7 @@ class BaseModel extends Model
         return $result;
     }
 
-    /**
-     * 获取分页列表数据
-     * @param unknown $where
-     * @param array|string $field
-     * @param string $order
-     * @param int $page
-     * @param string $list_rows
-     * @param string $alias
-     * @param unknown $join
-     * @param string $group
-     * @param string $limit
-     */
-    public static function pageList(array $condition = [], array|string $field = ['*'], int $page = 0, $pageSize = 0, string $order = 'id desc', array $join = [], $group = null, $limit = null){
+    public static function pageList(array $condition = [], array|string $field = ['*'], int $page = 0, $pageSize = 0, $order = 'id desc', array $join = [], $group = null, $limit = null){
         $model = self::initBase();
         // 首先尝试从 Redis 缓存获取数据
         $result = Redis::get('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []),$field]).$page.$pageSize);
@@ -234,7 +222,7 @@ class BaseModel extends Model
         $result = [
             'count' => $count,
             'page_count' => $pageCount,
-            'list' => $resultData,
+            'data' => $resultData,
         ];
         // 将获取到的数据存储到 Redis 缓存
         Redis::set('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []) ,$field]).$page.$pageSize, json_encode($result));
@@ -288,21 +276,21 @@ class BaseModel extends Model
     public static function getInfo($condition = [], $field = '*', $join = null, $data = null)
     {
         $model = self::initBase();
-        // 创建一个查询构建器
+        // Create a query builder
         $objQuery = self::query();
 
         if(in_array('is_delete',$model->fillable)){
                 $objQuery->where('is_delete', '=', 0);
         }
-        // 处理条件
+        // Processing conditions
         $objQuery = $model->handleConditions($objQuery,$condition);
-        // 如果没有 JOIN 条件
+        // If there is no JOIN condition
         if (empty($join)) {
-            // 没有 JOIN 条件，直接查询
+            // There is no JOIN condition, direct query
             $result = $objQuery->select($field)->first();
         } else {
             $objQuery = $model->parseJoin($objQuery, $join);
-            // 获取单条数据
+            // Get a single piece of data
             $result = $objQuery->first();
         }
 
@@ -433,4 +421,74 @@ class BaseModel extends Model
         return $objQuery->value($field, $default, $force);
     }
 
+    public static function getListData($condition = [], $field = ['*'],$page = 0,$pageSize = 0, $order = 'id desc',  $join = [], $group = null, $limit = null)
+    {
+        $model = self::initBase();
+        // First try to get data from Redis cache
+        $result = Redis::get('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []),$field]).$page.$pageSize);
+        // print_r('Table-'.$model->table.'Redis:');die;
+        if ($result) {
+            // If there is data in the cache, return it directly
+            return json_decode($result ,true);
+        }
+        // Create a query builder
+        $objQuery = self::query(); // Create a query builder
+
+        // Processing conditions
+        $condition && $objQuery = $model->handleConditions($objQuery,$condition);
+
+        if(in_array('is_delete',$model->fillable)){
+            $objQuery->where('is_delete', '=', 0);
+        }
+        // Set sort
+        $order && $objQuery->orderByRaw($order);
+
+        // If there is a JOIN condition
+        if (!empty($join)) {
+            $objQuery = $model->parseJoin($objQuery, $join);
+        }
+
+        // If there is a GROUP BY condition
+        if (!empty($group)) {
+            $objQuery->groupBy($group);
+        }
+
+        // If there is a limited quantity
+        if (!empty($limit)) {
+            $objQuery->limit($limit);
+        }
+
+        // Get the total number of records
+        $count = $objQuery->count();
+
+        // If the number of records displayed on each page is 0, query all
+        if ($pageSize == 0) {
+            // $resultData = $objQuery->select($field)->get();
+            $pageSize = 20;
+            $pageCount = 1;
+        }
+
+        // Paging query
+        $resultData = $objQuery->forPage($page, $pageSize)->select($field)->get();
+        $pageCount = ceil($count / $pageSize);
+
+        // Return result array
+        $result = [
+            'total' => $count,
+            'page_count' => $pageCount,
+            'data' => $resultData,
+        ];
+        // Store the obtained data in the Redis cache
+        Redis::set('Table-'.$model->table.'Redis:'.json_encode([($condition ?? []),($join ?? []) ,$field]).$page.$pageSize, json_encode($result));
+        return $result;
+    }
+
+    public static function updateCacheData($record)
+    {
+        $model = self::initBase();
+        // Delete the redis data of this table
+        $id =  $record->save();
+        delRedisPrefix('Table-'.$model->table.'Redis:');
+        return $id;
+    }
 }

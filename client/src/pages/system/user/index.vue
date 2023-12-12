@@ -2,14 +2,14 @@
   <div class="system-user-container layout-padding">
     <el-card shadow="hover" class="layout-padding-auto">
       <div class="system-user-search mb15">
-        <el-input size="default" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"></el-input>
-        <el-button size="default" type="primary" class="ml10">
+        <el-input size="default" v-model="state.tableData.param.name" :placeholder="$t('message.table.enterUserName')" style="max-width: 180px"> </el-input>
+        <el-button size="default" type="primary" class="ml10" @click="getTableData">
           <el-icon>
             <ele-Search/>
           </el-icon>
           {{ $t('message.table.search') }}
         </el-button>
-        <el-button size="default" type="success" class="ml10" @click="onOpenAddUser('add')">
+        <el-button size="default" type="success" class="ml10" @click="onOpenAddUser('add')" :loading="state.tableData.loading">
           <el-icon>
             <ele-FolderAdd/>
           </el-icon>
@@ -28,15 +28,15 @@
           <template #default="scope">
             <span v-for="(ite, index) in (scope.row?.role_ids?.split(',') || [])" :key="index"
                   style="background:#f9d83a;margin:0 5px;padding:3px 5px;border-radius: 4px;">
-              {{ state.roleList[ite]?.roleName }}
+              {{ $t(`message.${state.roleList[ite]?.roleName}`) }}
             </span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('message.table.userStatus')" show-overflow-tooltip>
           <template #default="scope">
-            <!--            {{ scope.row.status }}-->
-            <el-tag type="success" v-if="scope.row.status">启用</el-tag>
-            <el-tag type="info" v-else>禁用</el-tag>
+<!--            {{ scope.row.status }}-->
+            <el-tag type="success" v-if="scope.row.status">{{ $t('message.enabled') }}</el-tag>
+            <el-tag type="info" v-else>{{ $t('message.disabled') }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="describe" :label="$t('message.table.userDescription')" show-overflow-tooltip></el-table-column>
@@ -47,22 +47,19 @@
         </el-table-column>
         <el-table-column :label="$t('message.table.operate')" width="100">
           <template #default="scope">
-            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="warning"
-                       @click="onOpenEditUser('edit', scope.row)"
-            >{{ $t('message.table.edit') }}
-            </el-button
-            >
+            <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="warning" @click="onOpenEditUser('edit', scope.row)">
+              {{ $t('message.table.edit') }}
+            </el-button>
             <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="danger"
                        @click="onRowDel(scope.row)">{{ $t('message.table.delete') }}
             </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
+      <el-pagination class="mt15"
           @size-change="onHandleSizeChange"
           @current-change="onHandleCurrentChange"
-          class="mt15"
-          :pager-count="10"
+          :small="true"
           :page-sizes="[10, 20, 30]"
           v-model:current-page="state.tableData.param.pageNum"
           background
@@ -96,6 +93,7 @@ const state = reactive({
     total: 0,
     loading: false,
     param: {
+      name: '',
       pageNum: 1,
       pageSize: 10,
     },
@@ -107,21 +105,23 @@ const { t } = useI18n();
 const getTableData = async () => {
   state.tableData.loading = true;
   let row = await adminList(state.tableData.param);
-  state.tableData.data = row.data?.list;
-  state.tableData.total = row.data?.count || 0;
+  state.tableData.data = row.data?.data;
+  state.tableData.total = row.data?.total || 0;
   state.tableData.loading = false;
 };
+getTableData();
 // 打开新增用户弹窗
 const onOpenAddUser = (type: string) => {
-  userDialogRef.value.openDialog(type);
+  userDialogRef.value.openDialog(type, null, state.roleList);
 };
 // 打开修改用户弹窗
 const onOpenEditUser = (type: string, row: RowUserType) => {
-  userDialogRef.value.openDialog(type, row);
+  if (row.userName === 'admin') return;
+  userDialogRef.value.openDialog(type, row, state.roleList);
 };
 // 删除用户
 const onRowDel = (row: RowUserType) => {
-  ElMessageBox.confirm(`此操作将永久删除账户名称：“${row?.userName}”，是否继续?`, '提示', {
+  ElMessageBox.confirm(`${t('message.thisActionWillPermanentlyDeleteTheAccountName')}：“${row?.userName}”，${t('message.whetherToContinue')}`, t('message.hint'), {
     confirmButtonText: t('message.yes'),
     cancelButtonText: t('message.no'),
     type: 'warning',
@@ -148,11 +148,18 @@ const onHandleCurrentChange = (val: number) => {
   state.tableData.param.pageNum = val;
   getTableData();
 };
+const getRole = async () => {
+  const response  = await getAllRole();
+  if (response.code !== EnumApiErrorCode.success) {
+    // eslint-disable-next-line no-console
+    console.log(response);
+  } else {
+    state.roleList = response.data || {};
+  }
+};
 // 页面加载时
-onMounted(async () => {
-  let row = await getAllRole();
-  state.roleList = row.data || {};
-  getTableData();
+onMounted(() => {
+  getRole();
 });
 </script>
 

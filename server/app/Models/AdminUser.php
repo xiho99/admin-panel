@@ -9,6 +9,7 @@ class AdminUser extends BaseModel
     protected $table = 'admins';
 
     protected $fillable = [
+        'p_id',
         'userName',
         'password' ,
         'role_ids',
@@ -23,6 +24,9 @@ class AdminUser extends BaseModel
     ];
     protected $hidden = [
         'password'
+    ];
+    protected $casts = [
+        'status' => 'boolean',
     ];
     protected static $initBase;
     public static function initBase(): static

@@ -13,7 +13,7 @@ class MenuController extends BaseController
     public function saveMenu(Request $request) {
 
         $data = $request->all();
-        // 验证信息
+        // verify message
         $fail = Menu::getNotPassValidator($data);
         if($fail){
             return $this->error('Missing required fields');
@@ -35,33 +35,34 @@ class MenuController extends BaseController
             'isLink' =>  $data['isLink'] ? 1 : 0,
             'menuSort' =>  $data['menuSort'] ?? 1,
             'redirect' =>  $data['redirect'] ?? '',
-            'menuSuperior' => '',
+            'menuSuperior' => $data['menuSuperior'],
             'menuSuperiorPath' => '',
+            'operation' =>  $data['operation'] ?? null,
         ];
-        if(!empty($data['menuSuperiorPath']) && $data['menuSuperiorPath']){
-            $from['menuSuperior'] = $data['menuSuperiorPath'][count($data['menuSuperiorPath']) - 1];
+        if(!empty($data['menuSuperiorPath'])){
             $from['menuSuperiorPath'] = implode(',', $data['menuSuperiorPath']);
         }
-        // 给他的父级加个标记
+        // Tag his parent
         if($from['menuSuperior']){
-            $info = Menu::getInfo([['name' , '=' , $from['menuSuperior'] ] ]);
+            $info = Menu::getInfo([['id' , '=' , $from['menuSuperior'] ] ]);
             $info['is_parent'] = 1;
             Menu::saveInfo($info);
         }
+
         $id = Menu::saveInfo($from);
         return $this->success($id);
     }
     // 存储角色信息
     public function deleteMenu(Request $request){
         $id = $request->input('id' , null);
-        $info = Menu::getInfo([['id' , '=' , $id ] ]);
+        $info = Menu::getInfo([['id' , '=' , $id ]]);
         if(!$info) return $this->error();
         Menu::deleteInfo($id);
         // 查看他的父级还有没有子级
         if($info['menuSuperior']){
             $par = Menu::getInfo([['menuSuperior' , '=' , $info['menuSuperior'] ] ]);
             if(!$par){
-                $parent = Menu::getInfo([['name' , '=' , $info['menuSuperior'] ] ]);
+                $parent = Menu::getInfo([['id' , '=' , $info['menuSuperior'] ] ]);
                 $parent['is_parent'] = 0;
                 $id = Menu::saveInfo($parent);
             }
@@ -86,9 +87,9 @@ class MenuController extends BaseController
                     'roleName' => $v['roleName'],
                 ];
                 $menuIds = array_merge($menuIds, explode(',',$v['menu_ids']));
-            }
-            $list1 =  Menu::getList([['id' , 'in' , implode(',',$menuIds)]],'*','menuSort asc');
-            $list2 =  Menu::getList([['is_parent' , '=' , 1]],'*','menuSort asc');
+            };
+            $list1 =  Menu::getList([['id' , 'in' , implode(',',$menuIds)]],['*'],'menuSort asc');
+            $list2 =  Menu::getList([['is_parent' , '=' , 1]],['*'],'menuSort asc');
             $list = [];
             foreach ($list1 as $item) {
                 $list[$item['id']] = $item;
@@ -97,7 +98,7 @@ class MenuController extends BaseController
             // 父级路由
             $menuSuperiors = array_column($list1, 'menuSuperior');
             foreach ($list2 as $key => $item) {
-                if(in_array($item['name'] , $menuSuperiors)){
+                if(in_array($item['id'] , $menuSuperiors)){
                     $list[$item['id']] = $item;
                 }
             }
@@ -116,6 +117,7 @@ class MenuController extends BaseController
             $v['isLink'] = $v['isLink'] ? true : false;
             $v['menuType'] = $v['menuType'] ? 'menu' : 'btn';
         }
+
         return $this->success($list);
     }
 }

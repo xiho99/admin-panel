@@ -12,13 +12,12 @@ class RoleController extends BaseController
         // 验证信息
         $fail = Role::getNotPassValidator($data);
         if($fail){
-            return $this->error('缺少必填字段');
+            return $this->error('Missing required fields');
         }
         if(!isset($data['id']) || !Role::getInfo([['id' , '=' , $data['id'] ] ])){
-
             $info = Role::getInfo([['roleName' , '=' , $data['roleName'] ] ]);
             if($info){
-                return $this->error('无法添加相同名称的角色');
+                return $this->error('Cannot add role with same name');
             }
         }
         $from = [
@@ -40,12 +39,10 @@ class RoleController extends BaseController
         $page = $request->input('page' , 1);
         $pageSize = $request->input('pageSize' , 20);
         $where = [];
-
         if($name){
             $where[] = ['roleName' , 'like',"%{$name}%"];
         }
-
-        $data = Role::pageList($where,'*',$page,$pageSize);
+        $data = Role::getListData($where, ['*'],$page,$pageSize);
 
         return $this->success($data);
     }
@@ -53,7 +50,7 @@ class RoleController extends BaseController
     public function getAllRole(){
 
         $data = Role::select('id','roleName')->get()->pluck(null, 'id');
-        $data[0] = ['id' => 0 , 'roleName' => '超级管理员'];
+        $data[0] = ['id' => 0 , 'roleName' => 'superAdmin'];
         return $this->success($data);
     }
     // 存储角色信息

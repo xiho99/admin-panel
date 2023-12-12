@@ -1,40 +1,40 @@
 <template>
 	<div class="system-role-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" >
-			<el-form ref="roleDialogFormRef" :model="state.ruleForm" size="default" label-width="120px">
+		<el-dialog @close="resetFields" :title="state.dialog.title" v-model="state.dialog.isShowDialog" >
+			<el-form ref="roleDialogFormRef" :model="state.ruleForm" size="default" label-width="140px">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="角色名称">
-							<el-input v-model="state.ruleForm.roleName" placeholder="请输入角色名称" clearable></el-input>
+						<el-form-item :label="$t('message.roleName')">
+							<el-input v-model="state.ruleForm.roleName" :placeholder="$t('message.pleaseEnterRoleName')" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="角色标识">
+						<el-form-item :label="$t('message.roleId')">
 							<template #label>
 								<el-tooltip effect="dark" content="用于 `router/route.ts` meta.roles" placement="top-start">
-									<span>角色标识</span>
+									<span>{{ $t('message.roleId') }}</span>
 								</el-tooltip>
 							</template>
-							<el-input v-model="state.ruleForm.roleSign" placeholder="请输入角色标识" clearable></el-input>
+							<el-input v-model="state.ruleForm.roleSign" :placeholder="$t('message.pleaseEnterRoleId')" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="排序">
+						<el-form-item :label="$t('message.sort')">
 							<el-input-number v-model="state.ruleForm.sort" :min="0" :max="999" controls-position="right" placeholder="请输入排序" class="w100" />
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="角色状态">
-							<el-switch v-model="state.ruleForm.status" inline-prompt active-text="启" inactive-text="禁" :active-value="1" :inactive-value="0"></el-switch>
+						<el-form-item :label="$t('message.characterStatus')">
+							<el-switch v-model="state.ruleForm.status" inline-prompt :active-text="$t('message.start')" :inactive-text="$t('message.ban')" :active-value="1" :inactive-value="0"></el-switch>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="角色描述">
-							<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
+						<el-form-item :label="$t('message.roleDescription')">
+							<el-input v-model="state.ruleForm.describe" type="textarea" :placeholder="$t('message.pleaseEnterRoleDescription')" maxlength="150"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="菜单权限">
+						<el-form-item :label="$t('message.menuPermission')">
 							<el-tree node-key="id" ref="treeRef" :data="state.menuData" :props="state.menuProps" show-checkbox class="menu-data-tree" />
 						</el-form-item>
 					</el-col>
@@ -42,7 +42,7 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default"  :loading="state.dialog.loading">取 消</el-button>
+					<el-button @click="onCancel" size="default"  :loading="state.dialog.loading">{{ $t('message.cancel') }}</el-button>
 					<el-button type="primary" @click="onSubmit" size="default" :loading="state.dialog.loading">{{ state.dialog.submitTxt }}</el-button>
 				</span>
 			</template>
@@ -54,18 +54,19 @@
 import { reactive, ref,nextTick } from 'vue';
 import { saveRole } from '/@/api/role';
 import { useRoutesList } from '/@/stores/routesList';
-import { i18n } from '/@/i18n/index';
+import { i18n } from '/@/i18n';
 import { storeToRefs } from 'pinia';
 import { ElMessage } from 'element-plus';
+import { useI18n } from "vue-i18n";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
-
+const { t } = useI18n();
 // 定义变量内容
 const roleDialogFormRef = ref();
 const state = reactive({
 	ruleForm: {
-		roleName: '', // 角色名称
+    roleName: '', // 角色名称
 		roleSign: '', // 角色标识
 		sort: 0, // 排序
 		status: 1, // 角色状态
@@ -85,6 +86,16 @@ const state = reactive({
 		loading:false
 	},
 });
+const resetFields = () => {
+  state.ruleForm = {
+    roleName: '',
+    roleSign: '',
+    sort: 0,
+    status: 1,
+    describe: '',
+    menu_ids:'',
+  };
+}
 const treeRef = ref();
 const getCheckedKeys = () => {
   return treeRef.value!.getCheckedKeys(false);
@@ -94,16 +105,17 @@ const { routesList } = storeToRefs(stores);
 // 打开弹窗
 const openDialog = (type: string, row: any) => {
 	if (type === 'edit') {
-		state.ruleForm = row;
-		state.dialog.title = '修改角色';
+    Object.assign(state.ruleForm, row);
+		// state.ruleForm = row;
+		state.dialog.title = i18n.global.t('message.editRole');
 		nextTick(() => {
 			treeRef.value!.setCheckedKeys(state.ruleForm.menu_ids.split(','), false);
 		});
-		state.dialog.submitTxt = '修 改';
-		
+		state.dialog.submitTxt = i18n.global.t('message.submit');
+
 	} else {
-		state.dialog.title = '新增角色';
-		state.dialog.submitTxt = '新 增';
+		state.dialog.title = i18n.global.t('message.addNewRole');
+		state.dialog.submitTxt = i18n.global.t('message.submit');
 		// 清空表单，此项需加表单验证才能使用
 		// nextTick(() => {
 		// 	roleDialogFormRef.value.resetFields();
@@ -128,7 +140,8 @@ const onSubmit = async () => {
 	state.ruleForm.menu_ids = getCheckedKeys()?.join(',');
 	try{
 		await saveRole(state.ruleForm);
-		ElMessage.success('操作成功');
+		ElMessage.success(t('message.success'));
+    resetFields();
 	}catch(e){
 		//TODO handle the exception
 	}
