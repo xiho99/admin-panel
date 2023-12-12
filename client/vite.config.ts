@@ -16,7 +16,7 @@ const alias: Record<string, string> = {
 
 const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
-	const isProduction = mode.mode === 'development' ? 'http://192.168.1.117:8000' : 'http://admin.hls69.co'
+	const isProduction = mode.mode === 'development' ? 'http://127.0.0.1:8000' : 'http://admin.hls69.co'
 	return {
 		plugins: [vue(), vueSetupExtend(), viteCompression(), JSON.parse(env.VITE_OPEN_CDN) ? buildConfig.cdn() : null],
 		root: process.cwd(),

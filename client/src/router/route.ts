@@ -24,8 +24,8 @@ export const dynamicRoutes : Array<RouteRecordRaw> = [
 			isKeepAlive: true,
 		},
 		children: [{
-				path: '/index',
-				name: 'index',
+				path: '/home',
+				name: 'home',
 				component: () => import('/@/pages/home/index.vue'),
 				meta: {
 					title: 'message.router.home',
