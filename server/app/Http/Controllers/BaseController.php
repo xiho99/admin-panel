@@ -40,7 +40,10 @@ class BaseController extends FileHelperController
     {
         return auth()->user()->name;
     }
-
+    public function createdByAdmin(): string
+    {
+        return auth('admin')->user()->userName;
+    }
     public function getUser()
     {
         return auth()->user();

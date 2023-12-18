@@ -19,7 +19,7 @@ export const dynamicRoutes : Array<RouteRecordRaw> = [
 		path: '/',
 		name: '/',
 		component: () => import('/@/layout/index.vue'),
-		redirect: '/index',
+		redirect: '/home',
 		meta: {
 			isKeepAlive: true,
 		},
@@ -144,15 +144,15 @@ export const staticRoutes : Array<RouteRecordRaw> = [
 			front: true,
 		},
 	},
-	{
-		path: '/',
-		name: 'homePage',
-		component: () => import('/@/pages/home/index.vue'),
-		meta: {
-			title: 'home-page',
-			front: true,
-		},
-	},
+	// {
+	// 	path: '/',
+	// 	name: 'homePage',
+	// 	component: () => import('/@/pages/home/index.vue'),
+	// 	meta: {
+	// 		title: 'home-page',
+	// 		front: true,
+	// 	},
+	// },
 	/**
 	 * 提示：写在这里的为全屏界面，不建议写在这里
 	 * 请写在 `dynamicRoutes` 路由数组中

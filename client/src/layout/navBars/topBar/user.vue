@@ -37,7 +37,7 @@
 			<i class="icon-skin iconfont" :title="$t('message.user.title3')"></i>
 		</div>
 		<div class="layout-navbars-breadcrumb-user-icon" ref="userNewsBadgeRef" v-click-outside="onUserNewsClick">
-			<el-badge :is-dot="true">
+			<el-badge :is-dot="true" @click="play()">
 				<el-icon :title="$t('message.user.title4')">
 					<ele-Bell />
 				</el-icon>
@@ -222,6 +222,33 @@ onMounted(() => {
 		initI18nOrSize('globalI18n', 'disabledI18n');
 	}
 });
+
+
+import Pusher from 'pusher-js';
+import Cookies from "js-cookie";
+let audio = new Audio('/notification.wav');
+const play = () => {
+  audio.muted
+  // audio.play();
+}
+// Enable pusher logging - don't include this in production
+// Pusher.logToConsole = true;
+const msgNotify = ref('');
+const pusher = new Pusher('b1e3bcf1b1c2ce1de061', {
+  cluster: 'ap1',
+  forceTLS: false,
+});
+
+const channel = pusher.subscribe(`notification-channel-${Cookies.get('userName')}`);
+channel.bind(`notification-event-${Cookies.get('userName')}`, (data) => {
+  msgNotify.value = ''; 
+  // console.log(JSON.stringify(data), '===', data);
+  msgNotify.value = data?.message;
+  ElMessage.success(msgNotify.value);
+  audio.play();
+});
+onMounted(() => play());
+
 </script>
 
 <style scoped lang="scss">

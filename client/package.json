@@ -29,6 +29,7 @@
 		"nprogress": "^0.2.0",
 		"pinia": "^2.0.34",
 		"print-js": "^1.6.0",
+		"pusher-js": "^8.4.0-rc2",
 		"qrcodejs2-fixes": "^0.0.2",
 		"qs": "^6.11.1",
 		"screenfull": "^6.0.2",

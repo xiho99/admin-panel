@@ -25,7 +25,7 @@ class AdminController extends BaseController
         }
         $credentials = $request->only('userName', 'password');
         if (!$token = auth('admin')->attempt($credentials)) {
-            return $this->error('Account password is wrong');
+            return $this->error( 'Account password is wrong');
         }
         $user = auth('admin')->user();
         if ($user->status == 0) {
@@ -37,14 +37,13 @@ class AdminController extends BaseController
             'controller' => 'AdminController',
             'method' => 'login',
             'parameters' => '[]',
-            'start_time' => date('Y-m-d H:i:s', time()),
-            'end_time' => date('Y-m-d H:i:s', time()),
+            'start_time' => date('Y-m-d H:i:s',time()),
+            'end_time' => date('Y-m-d H:i:s',time()),
             'admin_id' => $user['id'],
             'nickname' => $user['nickname'],
         ];
         OperationLog::saveInfo($from);
-
-        return $this->success(['access_token' => 'Bearer ' . $token, 'userName' => $user['nickname'], 'userId' => $user['id']]);
+        return $this->success(['access_token' => 'Bearer ' . $token, 'userName' => $user['userName'], 'userId' => $user['id']]);
     }
 
     public function logout(): Response
