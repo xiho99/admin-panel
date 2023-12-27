@@ -27,10 +27,8 @@ class MenuButtonController extends BaseController
             return $this->error('Missing required fields');
         }
         if(isset($data['id']) && $data['id'] || !MenuButton::getInfo([['id' , '=' , $data['id'] ] ])){
-            $self = MenuButton::getInfo(['id' => $data['id']]);
             $info = MenuButton::getInfo([['name' , '=' , $data['name'] ] ]);
-            if($info && $info['id'] != $self['id']) {
-
+            if($info && $info['id'] != $data['id']) {
                 return $this->error('Cannot add name with same name');
             }
         }
